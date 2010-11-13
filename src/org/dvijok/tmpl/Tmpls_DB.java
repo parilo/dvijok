@@ -1,0 +1,69 @@
+//    dvijok - cms written in gwt
+//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
+//    mailto: forpost78 at gmail dot com
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>
+//
+
+package org.dvijok.tmpl;
+
+import java.util.HashMap;
+
+import org.dvijok.interfaces.DV_Request_Callback;
+import org.dvijok.lib.Http_Client;
+import org.dvijok.lib.Lib;
+
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.Response;
+
+public class Tmpls_DB {
+
+	private HashMap<String,String> tmpls;
+	
+	public Tmpls_DB(){
+		this.tmpls = new HashMap<String,String>();
+	}
+	
+	public void Get_Template(String url, final DV_Request_Callback<String> req){
+		
+		if( this.tmpls.containsKey(url) ){
+			req.Success(this.tmpls.get(url));
+		}
+		else {
+			
+			Http_Client.Do_Get(url, new RequestCallback(){
+	
+				@Override
+				public void onError(Request request, Throwable exception) {
+					Lib.Alert("Tmpls_DB: "+exception.getMessage());
+				}
+	
+				@Override
+				public void onResponseReceived(Request request, Response response) {
+					req.Success(response.getText());
+				}
+				
+			});
+
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+}
