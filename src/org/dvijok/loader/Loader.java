@@ -22,17 +22,23 @@ import java.util.ArrayList;
 
 import org.dvijok.db.DB_Object;
 import org.dvijok.lib.Lib;
+import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.Sub_Panel;
 
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Loader {
 
 	private Dwidget_Factory factory;
+	private boolean loading;
 	
 	public Loader(){
 		
+		this.loading = false;
 		this.factory = new Dwidget_Factory();
 		
 	}
@@ -42,11 +48,16 @@ public class Loader {
 	}
 	
 	private void Do_Load_Widgets(){
-		RootPanel w;
-		while( (w = RootPanel.get("dvijokw")) != null ){
-			String name = w.getElement().getAttribute("name");
-			w.add(this.factory.Get_Dwidget(name, /*p, w*/new Sub_Panel(w)));
-			w.getElement().setAttribute("id", "dvijok_");
+		//protecting from simultaneous loading from different threads
+		if(!this.loading){
+			RootPanel w;
+			this.loading = true;
+			while( (w = RootPanel.get("dvijokw")) != null ){
+				String name = w.getElement().getAttribute("name");
+				w.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)));
+				w.getElement().setAttribute("id", "dvijokw_");
+			}
+			this.loading = false;
 		}
 	}
 	
@@ -57,7 +68,7 @@ public class Loader {
 			while( chel != null ){
 //				Lib.Alert(chel.getNodeName()+" "+chel.getInnerText());
 				if( chel.getNodeName().equals("PARAM") ){ /*Lib.Alert("end el");*/ return param; }
-				param.put(chel.getNodeName(), chel.getInnerText());
+				param.put(chel.getNodeName(), chel.getInnerHTML());
 				chel = chel.getNextSiblingElement();
 			}
 			return param;
@@ -86,8 +97,21 @@ public class Loader {
 		return null;
 	}
 	
-	public void Refresh(){
+	public void Load(){
 		this.Do_Load_Widgets();
+	}
+	
+	public void Load(Dwidget dw){
+
+		com.google.gwt.user.client.Element w;
+		HTMLPanel html = dw.Get_HTMLPanel();
+		
+		while( (w = html.getElementById("dvijokw")) != null ){
+			String name = w.getAttribute("name");
+			html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw");
+			w.setAttribute("id", "dvijokw_");
+		}
+		
 	}
 	
 }

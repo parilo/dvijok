@@ -28,6 +28,7 @@ import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.Dwidget_Creator;
 import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Test;
+import org.dvijok.widgets.content.Content_Hash;
 import org.dvijok.widgets.menu.HMenu;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -45,11 +46,29 @@ public class Dvijok implements EntryPoint {
 		Resources.getInstance().loader = l;
 		Resources.getInstance().tmpls = new Tmpls_DB();
 		
+		this.Register_Dwidgets();
+		
+		l.Load();
+		
+	}
+	
+	private void Register_Dwidgets(){
+		
+		Loader l = Resources.getInstance().loader;
+		
 		l.Get_Dwidget_Factory().Register("hmenu", new Dwidget_Creator(){
 
 			@Override
 			public Dwidget Get_Dwidget(Sub_Panel p) {
 				return new HMenu(p);
+			}
+		});
+		
+		l.Get_Dwidget_Factory().Register("content_hash", new Dwidget_Creator(){
+
+			@Override
+			public Dwidget Get_Dwidget(Sub_Panel p) {
+				return new Content_Hash(p);
 			}
 		});
 		
@@ -60,8 +79,6 @@ public class Dvijok implements EntryPoint {
 				return new Test(p);
 			}
 		});
-		
-		l.Refresh();
 		
 	}
 }
