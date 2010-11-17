@@ -1,21 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
-
-<web-app>
-  
-  <!-- Servlets -->
-  <!-- servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>org.dvijok.server.GreetingServiceImpl</servlet-class>
-  </servlet -->
-  
-  <!-- servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/dvijok/greet</url-pattern>
-  </servlet-mapping -->
-  
+for php under jetty:
+paste in web.xml
   
  <servlet>
    <servlet-name>PHP</servlet-name>
@@ -36,12 +20,3 @@
    <url-pattern>*.php</url-pattern>
    <!-- Any other URL patterns that are needed by your app to be processed by PHP -->
  </servlet-mapping>
-  
-  
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Dvijok.html</welcome-file>
-  </welcome-file-list>
-
-</web-app>

@@ -18,9 +18,7 @@
 
 package org.dvijok.client;
 
-import java.util.ArrayList;
-
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DataBase;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.Resources;
 import org.dvijok.tmpl.Tmpls_DB;
@@ -32,7 +30,6 @@ import org.dvijok.widgets.content.Content_Hash;
 import org.dvijok.widgets.menu.HMenu;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -41,6 +38,9 @@ public class Dvijok implements EntryPoint {
 
 	public void onModuleLoad() {
 
+		DataBase db = new DataBase("http://127.0.0.1:8888/xmlrpcdb/xmlrpcdb.php");
+		db.Get_DB_Objects("", null);
+		
 		Loader l = new Loader();
 
 		Resources.getInstance().loader = l;
