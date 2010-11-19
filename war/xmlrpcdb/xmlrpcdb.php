@@ -17,7 +17,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+require_once "config.php";
+require_once "objdb.php";
 
+$db = new objdb($config['MYSQLHOST'], $config['MYSQLUSER'], $config['MYSQLPASS'], $config['MYSQLDBNAME']);
 
 	/*functions:
 	 * auth (auth, reg, etc.)
@@ -25,20 +28,63 @@
 	 * putObject
 	*/
 
+
+function randhash(){
+	return md5(time()+mt_rand(0,10000));
+}
+
+ function get_client_ip_address(){
+ 	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		return $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else if(isset($_SERVER['REMOTE_ADDR'])) {
+		return $_SERVER['REMOTE_ADDR'];
+	} else {
+		return '0.0.0.0';
+	}
+}
+
+function retarr($str){
+	return array( 'result' => $str );
+}
+
 function hello($method_name, $params, $app_data){
 	return "Hi! I'm dvijok db xmlrpc ^_^";
+}
+
+/*
+ * sessionInit - Session initialization
+ * returns:
+ *   - struct 'objects': struct 'session': sid
+ *   - result: 'success' on success, 'notreg' - company not found, error description on error
+ */
+function sessionInit($method_name, $params, $app_data){
+
+	$db = $app_data[0];
+	$config = $app_data[1];
+	
+	$sid = randhash();
+	$ip = get_client_ip_address();
+	
+	$ret = $db->putSession($sid, $ip, $config['SESSION_EXPIRATION_TIME_ANON']);
+	if( $ret === false ){
+		return retarr($db->getLastError());	
+	} else {
+		return array( 'objects' => array( 'session' => array('sid' => $sid) ), 'result' => 'success');
+	}
+	
 }
 
 
 $xmlrpc_server = xmlrpc_server_create();
 
+xmlrpc_server_register_method($xmlrpc_server, "sessionInit", "sessionInit");
 xmlrpc_server_register_method($xmlrpc_server, "hello", "hello");
 
 $request_xml = $HTTP_RAW_POST_DATA;
 //$GLOBALS['HTTP_RAW_POST_DATA'] 
 
 //system( "echo '$request_xml' > /home/www/saas/lastreq-".date("H-i-s-u")."-".md5($request_xml).".xml" );
-//system( "echo '$request_xml' > /home/www/saas/lastreq.xml" );
+system( "echo '$request_xml' > /home/anton/devel/workspace/dvijok/war/xmlrpcdb/lastreq.xml" );
 
 /*$headers = apache_request_headers();
 
