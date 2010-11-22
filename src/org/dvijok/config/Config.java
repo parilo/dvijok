@@ -18,10 +18,18 @@
 
 package org.dvijok.config;
 
+import java.util.Date;
+
 public class Config {
 
-	/*
-	 * make config upload through json
-	 */
+	public String db_url;
+	public Date sess_exp_time;
+	
+	public Config(){
+
+		this.db_url = "http://127.0.0.1:8888/xmlrpcdb/xmlrpcdb.php";
+		this.sess_exp_time = new Date(365*24*60*60*1000); //cookie exp time
+		
+	}
 	
 }

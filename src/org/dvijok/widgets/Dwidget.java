@@ -21,18 +21,13 @@ package org.dvijok.widgets;
 import java.util.ArrayList;
 
 import org.dvijok.db.DB_Object;
-import org.dvijok.interfaces.DV_Request_Callback;
+import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Dwidget extends Composite {
 	
@@ -56,12 +51,17 @@ public class Dwidget extends Composite {
 		this.Init(templ_url);
 	}
 	
-	private void Init(String templ_url){
-		Resources.getInstance().tmpls.Get_Template(templ_url, new DV_Request_Callback<String>(){
+	private void Init(final String templ_url){
+		Resources.getInstance().tmpls.Get_Template(templ_url, new DV_Request_Handler<String>(){
 			@Override
 			public void Success(String result) {
 				tmpl_url = result;
 				Create_GUI();
+			}
+
+			@Override
+			public void Fail(String message) {
+				Lib.Alert("cannot get template "+templ_url+" : "+message);
 			}
 		});
 		

@@ -19,26 +19,69 @@
 package org.dvijok.db;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.fredhat.gwt.xmlrpc.client.XmlRpcClient;
 import com.fredhat.gwt.xmlrpc.client.XmlRpcRequest;
-import org.dvijok.lib.Lib;
 
+import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.resources.Resources;
+
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class DataBase {
 	
-	private XmlRpcClient clientaa;
+	private DB_Object session;
+	private XmlRpcClient client;
 	
 	public DataBase(String xmlrpcurl) {
 
-		clientaa = new XmlRpcClient(xmlrpcurl);
-		Lib.Alert("client: "+this.clientaa);
+		client = new XmlRpcClient(xmlrpcurl);
+		this.Restore_Session();
 
 	}
+
+	private void Make_Session(){
+		this.Make_Session(null);
+	}
 	
+	private void Make_Session(final DV_Request_Handler<Integer> handler){
+		this.Do_Request("sessionInit", new DB_Object(), new DV_Request_Handler<DB_Object>(){
+			@Override
+			public void Success(DB_Object dbo) {
+//				Lib.Alert("got: "+dbo);
+				session = dbo.Get_DB_Object("objects").Get_DB_Object("session");
+				Store_Session();
+				if( handler != null ) handler.Success(0);
+			}
+
+			@Override
+			public void Fail(String message) {
+				if( handler != null ) handler.Fail(message);
+			}
+		});
+	}
+	
+/*	protected void Check_Session(){
+		this.Request("ifSessionAuth", Config_Client.getInstance().sess, rh);
+	}*/
+	
+	protected void Store_Session(){
+		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sess_exp_time.getTime());
+		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", session.Get_String("sid"), exp_time);
+	}
+	
+	protected void Restore_Session(){
+		String sid = com.google.gwt.user.client.Cookies.getCookie("dvijok.session");
+		if( sid != null ){
+			session = new DB_Object();
+			session.put("sid", sid);
+		} else Make_Session();
+	}
+
 	private String Extract(Object o){
 		String s = (String)o;
 		return s.toUpperCase().equals("NULL")?"":s;
@@ -83,33 +126,78 @@ public class DataBase {
 		return dbo;
 	}
 	
-	public void Get_DB_Objects(String source, DB_Object params) {
+	private void Do_Request(String method, DB_Object params, final DV_Request_Handler<DB_Object> handler) {
 		
-//		System.out.println("source: "+source);
-		
-//	    Object[] xmlrpcparams = new Object[]{params};
-//		DB_Object ret = new DB_Object();
-		
-		String methodName = "hello";
-		Object[] params1 = new Object[]{3, 4};
+		Object[] params_ = new Object[]{params};
 		 
-		XmlRpcRequest<String> request = new XmlRpcRequest<String>(
-		                       clientaa, methodName, params1, new AsyncCallback<String>() {
-		               public void onSuccess(String response) {
-		                       // Handle integer response logic here
-		            	   Lib.Alert("success: "+response);
-		               }
+		XmlRpcRequest<Object> request = new XmlRpcRequest<Object>(
+			client,
+			method,
+			params_,
+			new AsyncCallback<Object>() {
+		    public void onSuccess(Object response) {
+		    	handler.Success(convert(response));
+		    }
 
-		               public void onFailure(Throwable response) {
-		                       String failedMsg = response.getMessage();
-		                       // Put other failed response handling logic here
-			            	   Lib.Alert("fail: "+failedMsg);
-		               }
+		    public void onFailure(Throwable response) {
+		    	String failedMsg = response.getMessage();
+//		    	Lib.Alert("DataBase: Request: request failure: "+failedMsg);
+		    	handler.Fail(failedMsg);
+		    }
 		});
 		request.execute();
 		
+	}
+
+	public void Request(final String method, final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
 		
-		//return ret;
+		if( session != null ){
+		
+		    DB_Object allparams = new DB_Object();
+		    allparams.put("session", session);
+		    if( params != null ){
+		    	allparams.put("objects", params);
+		    }
+		    
+		    this.Do_Request(method, allparams, new DV_Request_Handler<DB_Object>(){
+
+				@Override
+				public void Success(DB_Object result) {
+					if( result.Get_String("result").equals("notsid") ){
+						Make_Session(new DV_Request_Handler<Integer>(){
+
+							@Override
+							public void Success(Integer result) {
+								Request(method, params, handler);
+							}
+
+							@Override
+							public void Fail(String message) {
+								handler.Fail("DataBase: Request: failed to init session: "+message);
+							}
+							
+						});
+					} else handler.Success(result);
+				}
+
+				@Override
+				public void Fail(String message) {
+					handler.Fail(message);
+				}
+		    	
+		    });
+	    
+		} else {
+			Timer t = new Timer(){
+				@Override
+				public void run() {
+					Request(method, params, handler);
+				}
+			};
+			
+			t.schedule(500);
+		}
+		
 	}
 	
 }

@@ -18,6 +18,7 @@
 
 package org.dvijok.client;
 
+import org.dvijok.config.Config;
 import org.dvijok.db.DataBase;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.Resources;
@@ -38,8 +39,8 @@ public class Dvijok implements EntryPoint {
 
 	public void onModuleLoad() {
 
-		DataBase db = new DataBase("http://127.0.0.1:8888/xmlrpcdb/xmlrpcdb.php");
-		db.Get_DB_Objects("", null);
+		Resources.getInstance().conf = new Config();
+		Resources.getInstance().db = new DataBase(Resources.getInstance().conf.db_url);
 		
 		Loader l = new Loader();
 

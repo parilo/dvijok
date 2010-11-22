@@ -116,7 +116,7 @@ CREATE TABLE `session` (
   `end_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sid` (`sid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,6 +125,7 @@ CREATE TABLE `session` (
 
 LOCK TABLES `session` WRITE;
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
+INSERT INTO `session` VALUES (1,'36d67fc874ad6f240492aaa00b06dbe5',1,'127.0.0.1',0,1,'2010-11-22 19:11:14','2010-11-29 19:11:14');
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-19 13:03:59
+-- Dump completed on 2010-11-22 19:12:28

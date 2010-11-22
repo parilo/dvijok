@@ -18,6 +18,9 @@
 
 package org.dvijok.resources;
 
+import org.dvijok.config.Config;
+import org.dvijok.db.DB_Object;
+import org.dvijok.db.DataBase;
 import org.dvijok.loader.Loader;
 import org.dvijok.tmpl.Tmpls_DB;
 
@@ -27,10 +30,14 @@ public class Resources {
 	
 	public Tmpls_DB tmpls;
 	public Loader loader;
+	public Config conf;
+	public DataBase db;
 	
 	public Resources(){
 		this.tmpls = null;
 		this.loader = null;
+		this.conf = null;
+		this.db = null;
 	}
 
 	public static Resources getInstance(){
