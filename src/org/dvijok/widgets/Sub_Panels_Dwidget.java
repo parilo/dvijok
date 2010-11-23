@@ -32,6 +32,13 @@ public abstract class Sub_Panels_Dwidget extends Dwidget {
 		super(templ_url, panel);
 	}
 	
+	protected abstract void Before_Sub_Panels_Loading();
+	
+	@Override
+	protected void Before_Tmpl_Init(){
+		this.Before_Sub_Panels_Loading();
+	}
+	
 	@Override
 	protected void Create_GUI(){
 		this.Init_Tmpl();
@@ -49,7 +56,7 @@ public abstract class Sub_Panels_Dwidget extends Dwidget {
 		while( (w = html.getElementById("dw")) != null ){
 			String name = w.getAttribute("dwname");
 			Widget sw = this.Gen_Sub_Widget(name);
-			if( sw == null ) sw = new Label("Don't know dwname: ->"+name+"<-");
+			if( sw == null ) sw = new Label("Sub_Panels_Dwidget: Don't know dwname: ->"+name+"<-");
 			html.add(sw, "dw");
 			w.setAttribute("id", "dw_");
 		}

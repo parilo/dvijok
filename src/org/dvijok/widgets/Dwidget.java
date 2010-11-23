@@ -33,6 +33,7 @@ public class Dwidget extends Composite {
 	
 	private String tmpl_url;
 	private ArrayList<DB_Object> params;
+	private String dbid;
 	
 	private SimplePanel maincont;
 	private HTMLPanel main;
@@ -40,18 +41,27 @@ public class Dwidget extends Composite {
 	private Sub_Panel panel;
 	
 	public Dwidget(String templ_url) {
+		this.Before_Tmpl_Init();
 		this.Init(templ_url);
 	}
 	
 	public Dwidget(String templ_url, Sub_Panel p) {
 		this.panel = p;
 		this.Read_Params();
+		this.Read_dbid();
 		this.panel.clear();
 		this.panel.getElement().setInnerHTML("");
+		this.Before_Tmpl_Init();
 		this.Init(templ_url);
 	}
 	
+	protected void Before_Tmpl_Init(){}
+	
 	private void Init(final String templ_url){
+		
+		this.maincont = new SimplePanel();
+		this.initWidget(this.maincont);
+		
 		Resources.getInstance().tmpls.Get_Template(templ_url, new DV_Request_Handler<String>(){
 			@Override
 			public void Success(String result) {
@@ -66,9 +76,6 @@ public class Dwidget extends Composite {
 		});
 		
 		this.tmpl_url = templ_url;
-		this.maincont = new SimplePanel();
-
-		this.initWidget(this.maincont);
 	}
 	
 	private void Read_Params(){
@@ -77,6 +84,14 @@ public class Dwidget extends Composite {
 	
 	public ArrayList<DB_Object> Get_Params(){
 		return this.params;
+	}
+	
+	private void Read_dbid(){
+		this.dbid = Resources.getInstance().loader.Get_Attribute(this.panel, "dbid");
+	}
+	
+	public String Get_dbid(){
+		return this.dbid;
 	}
 	
 	public HTMLPanel Get_HTMLPanel(){
@@ -93,8 +108,8 @@ public class Dwidget extends Composite {
 	}
 	
 	protected void Attach_Tmpl(){
-		this.maincont.setWidget(this.main);
 		Resources.getInstance().loader.Load(this);
+		this.maincont.setWidget(this.main);
 	}
 
 }

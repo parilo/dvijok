@@ -36,6 +36,9 @@ public class HMenu extends Sub_Panels_Dwidget {
 	public HMenu(Sub_Panel p){
 		super("/tmpl/widgets/menu/hmenu/hmenu.html", p);
 	}
+
+	@Override
+	protected void Before_Sub_Panels_Loading(){}
 	
 	private Widget Gen_Items(){
 		HorizontalPanel hp = new HorizontalPanel();

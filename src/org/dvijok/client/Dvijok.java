@@ -27,6 +27,7 @@ import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.Dwidget_Creator;
 import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Test;
+import org.dvijok.widgets.content.Article;
 import org.dvijok.widgets.content.Content_Hash;
 import org.dvijok.widgets.menu.HMenu;
 
@@ -70,6 +71,14 @@ public class Dvijok implements EntryPoint {
 			@Override
 			public Dwidget Get_Dwidget(Sub_Panel p) {
 				return new Content_Hash(p);
+			}
+		});
+		
+		l.Get_Dwidget_Factory().Register("article", new Dwidget_Creator(){
+
+			@Override
+			public Dwidget Get_Dwidget(Sub_Panel p) {
+				return new Article(p);
 			}
 		});
 		

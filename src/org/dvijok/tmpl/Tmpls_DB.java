@@ -35,7 +35,7 @@ public class Tmpls_DB {
 		this.tmpls = new HashMap<String,String>();
 	}
 	
-	public void Get_Template(String url, final DV_Request_Handler<String> req){
+	public void Get_Template(final String url, final DV_Request_Handler<String> req){
 		
 		if( this.tmpls.containsKey(url) ){
 			req.Success(this.tmpls.get(url));
@@ -51,7 +51,9 @@ public class Tmpls_DB {
 	
 				@Override
 				public void onResponseReceived(Request request, Response response) {
-					req.Success(response.getText());
+					String text = response.getText();
+					tmpls.put(url, text);
+					req.Success(text);
 				}
 				
 			});

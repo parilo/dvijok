@@ -34,11 +34,13 @@ import com.google.gwt.user.client.ui.Widget;
 public class Loader {
 
 	private Dwidget_Factory factory;
-	private boolean loading;
+	private int loadid;//used for to not mix multithreaded loading
+//	private boolean loading;
 	
 	public Loader(){
 		
-		this.loading = false;
+//		this.loading = false;
+		this.loadid = 0;
 		this.factory = new Dwidget_Factory();
 		
 	}
@@ -48,17 +50,35 @@ public class Loader {
 	}
 	
 	private void Do_Load_Widgets(){
-		//protecting from simultaneous loading from different threads
-		if(!this.loading){
+		
+//Подумать, может быть заменить все это на поиск через HTMLPanel, как-нить туда запихать все боди или по другому...		
+		
+//		//protecting from simultaneous loading from different threads
+//		if(!this.loading){
+			ArrayList<RootPanel> ws = new ArrayList<RootPanel>();
 			RootPanel w;
-			this.loading = true;
+//			this.loading = true;
+			
+			try{
+			
 			while( (w = RootPanel.get("dvijokw")) != null ){
-				String name = w.getElement().getAttribute("name");
-				w.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)));
 				w.getElement().setAttribute("id", "dvijokw_");
+				ws.add(w);
 			}
-			this.loading = false;
-		}
+			
+			} catch(java.lang.AssertionError e){
+				Lib.Alert("error");
+			}
+			
+			for(int i=0; i<ws.size(); i++){
+				w = ws.get(i);
+				String name = w.getElement().getAttribute("name");
+				Lib.Alert("found: "+name);
+				w.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)));
+			}
+			
+//			this.loading = false;
+//		}
 	}
 	
 	private DB_Object Get_Param(com.google.gwt.dom.client.Element pel){
@@ -74,6 +94,10 @@ public class Loader {
 			return param;
 		}
 		return null;
+	}
+	
+	public String Get_Attribute(Sub_Panel p, String name){
+		return p.getElement().getAttribute(name);
 	}
 	
 	public ArrayList<DB_Object> Get_Params(Sub_Panel p){
@@ -101,16 +125,38 @@ public class Loader {
 		this.Do_Load_Widgets();
 	}
 	
+	private int Get_Load_Id(){
+		if( this.loadid > 0xFFFF ) this.loadid = 0;
+		return this.loadid++; 
+	}
+	
 	public void Load(Dwidget dw){
 
+		int id = this.Get_Load_Id();
+		
+		ArrayList<com.google.gwt.user.client.Element> ws = new ArrayList<com.google.gwt.user.client.Element>();
 		com.google.gwt.user.client.Element w;
 		HTMLPanel html = dw.Get_HTMLPanel();
+
+		do{
+			
+			for(int i=0; i<ws.size(); i++){
+				w = ws.get(i);
+				String name = w.getAttribute("name");
+//				Lib.Alert("sub found: "+name);
+				html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw_"+id+"_"+i);
+				w.setAttribute("id", "dvijokw_");
+			}
+			
+			ws.clear();
+			int ii=0;
+			
+			while( (w = html.getElementById("dvijokw")) != null ){
+				w.setAttribute("id", "dvijokw_"+id+"_"+ii);
+				ws.add(w);
+			}
 		
-		while( (w = html.getElementById("dvijokw")) != null ){
-			String name = w.getAttribute("name");
-			html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw");
-			w.setAttribute("id", "dvijokw_");
-		}
+		} while( ws.size()!=0 );
 		
 	}
 	

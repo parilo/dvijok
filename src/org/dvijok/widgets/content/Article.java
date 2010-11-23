@@ -16,31 +16,39 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.widgets;
+package org.dvijok.widgets.content;
 
 import org.dvijok.lib.Lib;
-import org.dvijok.widgets.menu.Menu_Item;
+import org.dvijok.widgets.Sub_Panel;
+import org.dvijok.widgets.Sub_Panels_Dwidget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Test extends Sub_Panels_Dwidget {
+public class Article extends Sub_Panels_Dwidget {
 
-	public Test(Sub_Panel p){
-		super("/tmpl/widgets/test.html", p);
+	private HTML content;
+	
+	public Article(Sub_Panel p){
+		super("/tmpl/widgets/content/article/article.html", p);
+		this.Init_Contents();
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {}
-
+	protected void Before_Sub_Panels_Loading() {
+		this.content = new HTML();
+	}
+	
+	private void Init_Contents(){
+		Lib.Alert("dbid: "+this.Get_dbid());
+	}
+	
 	@Override
-	protected Widget Gen_Sub_Widget(final String dwname){
-		Menu_Item mi = new Menu_Item();
-		mi.Set_Label(dwname);
-		mi.Set_Hash("aaa:"+dwname);
-		return mi;
+	protected Widget Gen_Sub_Widget(String dwname) {
+		if( dwname.equals("content") ){
+			return this.content;
+		} else return null;
 	}
 	
 }

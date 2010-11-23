@@ -32,6 +32,10 @@ public class Menu_Item extends Sub_Panels_Dwidget {
 	
 	public Menu_Item(){
 		super("/tmpl/widgets/menu/menu_item.html");
+	}
+
+	@Override
+	protected void Before_Sub_Panels_Loading() {
 		this.l = new Label();
 	}
 	

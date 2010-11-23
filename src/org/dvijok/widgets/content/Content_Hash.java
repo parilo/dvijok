@@ -44,7 +44,6 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	public Content_Hash(Sub_Panel p){
 		super("/tmpl/widgets/content/content_hash/content_hash.html", p);
 		
-		this.content = new SimplePanel();
 		this.contents = new HashMap<String,HTMLPanel>();
 		this.loaded = new HashMap<String,Boolean>();
 		this.default_hash = "";
@@ -59,6 +58,11 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 			}
 		});
 		
+	}
+
+	@Override
+	protected void Before_Sub_Panels_Loading() {
+		this.content = new SimplePanel();
 	}
 
 	@Override
@@ -99,7 +103,9 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 
 	@Override
 	protected Widget Gen_Sub_Widget(String dwname) {
-		return content;
+		if( dwname.equals("content") ){
+			return this.content;
+		} else return null;
 	}
 	
 }

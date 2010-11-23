@@ -77,12 +77,6 @@ CREATE TABLE `objects` (
   `objid` varchar(256) NOT NULL,
   `uid` int(11) NOT NULL,
   `gid` int(11) NOT NULL,
-  `ru` int(1) NOT NULL COMMENT 'read user',
-  `wu` int(1) NOT NULL COMMENT 'write user',
-  `rg` int(1) NOT NULL COMMENT 'read group',
-  `wg` int(1) NOT NULL COMMENT 'write group',
-  `ro` int(1) NOT NULL COMMENT 'read other',
-  `wo` int(1) NOT NULL COMMENT 'write other',
   PRIMARY KEY (`id`),
   UNIQUE KEY `objid` (`objid`),
   KEY `uid` (`uid`,`gid`)
@@ -164,4 +158,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-22 19:12:28
+-- Dump completed on 2010-11-23 18:50:35
