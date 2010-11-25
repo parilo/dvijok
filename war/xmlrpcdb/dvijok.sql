@@ -53,7 +53,7 @@ CREATE TABLE `object_fields` (
   `value` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_object` (`id_object`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,6 +62,7 @@ CREATE TABLE `object_fields` (
 
 LOCK TABLES `object_fields` WRITE;
 /*!40000 ALTER TABLE `object_fields` DISABLE KEYS */;
+INSERT INTO `object_fields` VALUES (1,1,'html','<h1>Yo ho ho, I\'m Article</h1>');
 /*!40000 ALTER TABLE `object_fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,13 +75,13 @@ DROP TABLE IF EXISTS `objects`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `objects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `objid` varchar(256) NOT NULL,
+  `dbid` varchar(256) NOT NULL,
   `uid` int(11) NOT NULL,
   `gid` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `objid` (`objid`),
+  UNIQUE KEY `objid` (`dbid`),
   KEY `uid` (`uid`,`gid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +90,7 @@ CREATE TABLE `objects` (
 
 LOCK TABLES `objects` WRITE;
 /*!40000 ALTER TABLE `objects` DISABLE KEYS */;
+INSERT INTO `objects` VALUES (1,'home',0,0);
 /*!40000 ALTER TABLE `objects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,6 +126,32 @@ INSERT INTO `session` VALUES (1,'36d67fc874ad6f240492aaa00b06dbe5',1,'127.0.0.1'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_groups`
+--
+
+DROP TABLE IF EXISTS `user_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `gid` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`,`gid`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_groups`
+--
+
+LOCK TABLES `user_groups` WRITE;
+/*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
+INSERT INTO `user_groups` VALUES (2,0,0),(3,1,1);
+/*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -132,10 +160,8 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
-  `gid` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
-  PRIMARY KEY (`uid`),
-  UNIQUE KEY `gid` (`gid`)
+  PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,7 +171,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (0,0,'admin'),(1,1,'guest');
+INSERT INTO `users` VALUES (0,'admin'),(1,'guest');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -158,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-23 18:50:35
+-- Dump completed on 2010-11-25 13:25:32

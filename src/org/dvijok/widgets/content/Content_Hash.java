@@ -44,12 +44,6 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	public Content_Hash(Sub_Panel p){
 		super("/tmpl/widgets/content/content_hash/content_hash.html", p);
 		
-		this.contents = new HashMap<String,HTMLPanel>();
-		this.loaded = new HashMap<String,Boolean>();
-		this.default_hash = "";
-		
-		this.Init_Contents();
-		
 		History.addValueChangeHandler(new ValueChangeHandler<String>(){
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
@@ -63,6 +57,11 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	@Override
 	protected void Before_Sub_Panels_Loading() {
 		this.content = new SimplePanel();
+		this.contents = new HashMap<String,HTMLPanel>();
+		this.loaded = new HashMap<String,Boolean>();
+		this.default_hash = "";
+		
+		this.Init_Contents();
 	}
 
 	@Override
@@ -85,7 +84,7 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	
 	private void Load_Dwidgets(String hash){
 		if(!this.loaded.get(hash)){
-			Resources.getInstance().loader.Load(this);
+			Resources.getInstance().loader.Load_New();
 			this.loaded.put(hash, true);
 		}
 	}

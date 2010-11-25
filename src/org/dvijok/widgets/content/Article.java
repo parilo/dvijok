@@ -18,12 +18,14 @@
 
 package org.dvijok.widgets.content;
 
+import org.dvijok.db.DB_Object;
+import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
+import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Article extends Sub_Panels_Dwidget {
@@ -41,7 +43,20 @@ public class Article extends Sub_Panels_Dwidget {
 	}
 	
 	private void Init_Contents(){
-		Lib.Alert("dbid: "+this.Get_dbid());
+		Resources.getInstance().db.Get_DB_Object(this.Get_dbid(),new DV_Request_Handler<DB_Object>(){
+
+			@Override
+			public void Success(DB_Object result) {
+				Lib.Alert("obj: "+result);
+//				content.setHTML(result.Get_String("html"));
+			}
+
+			@Override
+			public void Fail(String message) {
+				Lib.Alert("failed: "+message);
+			}
+			
+		});
 	}
 	
 	@Override

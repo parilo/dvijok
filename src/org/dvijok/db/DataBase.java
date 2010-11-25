@@ -40,6 +40,7 @@ public class DataBase {
 	public DataBase(String xmlrpcurl) {
 
 		client = new XmlRpcClient(xmlrpcurl);
+		client.setDebugMode(true);
 		this.Restore_Session();
 
 	}
@@ -198,6 +199,26 @@ public class DataBase {
 			t.schedule(500);
 		}
 		
+	}
+	
+	public void Get_DB_Object(String dbid, final DV_Request_Handler<DB_Object> handler){
+		DB_Object dbidobj = new DB_Object();
+		dbidobj.put("dbid", dbid);
+		this.Request("getObject", dbidobj, new DV_Request_Handler<DB_Object>(){
+
+			@Override
+			public void Success(DB_Object result) {
+				String res = result.Get_String("result");
+				if( res.equals("success") ) handler.Success(result.Get_DB_Object("objects"));
+				else handler.Fail(res);
+			}
+
+			@Override
+			public void Fail(String message) {
+				handler.Fail(message);
+			}
+			
+		});
 	}
 	
 }

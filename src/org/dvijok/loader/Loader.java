@@ -34,13 +34,18 @@ import com.google.gwt.user.client.ui.Widget;
 public class Loader {
 
 	private Dwidget_Factory factory;
-	private int loadid;//used for to not mix multithreaded loading
-//	private boolean loading;
+//	private int loadid;//used for to not mix multithreaded loading
+	private HTMLPanel root;
+	
+	private boolean loading;
+	private boolean need_load;
 	
 	public Loader(){
 		
-//		this.loading = false;
-		this.loadid = 0;
+		this.loading = false;
+		this.need_load = false;
+		this.root = null;
+//		this.loadid = 0;
 		this.factory = new Dwidget_Factory();
 		
 	}
@@ -49,12 +54,14 @@ public class Loader {
 		return this.factory;
 	}
 	
-	private void Do_Load_Widgets(){
-		
-//Подумать, может быть заменить все это на поиск через HTMLPanel, как-нить туда запихать все боди или по другому...		
+// old method of loading widgets 		
+/*	private void Do_Load_Widgets(){
 		
 //		//protecting from simultaneous loading from different threads
 //		if(!this.loading){
+		
+			RootPanel.get()
+		
 			ArrayList<RootPanel> ws = new ArrayList<RootPanel>();
 			RootPanel w;
 //			this.loading = true;
@@ -79,7 +86,8 @@ public class Loader {
 			
 //			this.loading = false;
 //		}
-	}
+
+	}*/
 	
 	private DB_Object Get_Param(com.google.gwt.dom.client.Element pel){
 		com.google.gwt.dom.client.Element chel = pel.getNextSiblingElement();
@@ -121,30 +129,77 @@ public class Loader {
 		return null;
 	}
 	
-	public void Load(){
-		this.Do_Load_Widgets();
-	}
-	
-	private int Get_Load_Id(){
+/*	private int Get_Load_Id(){
 		if( this.loadid > 0xFFFF ) this.loadid = 0;
 		return this.loadid++; 
+	}*/
+	
+	private void Init_Root(){
+		RootPanel p = RootPanel.get("dvijokroot");
+		String html = p.getElement().getInnerHTML();
+		p.clear();
+		p.getElement().setInnerHTML("");
+		this.root = new HTMLPanel(html);
+		p.add(root);
 	}
 	
-	public void Load(Dwidget dw){
+	public void Load(){
+		this.Init_Root();
+		this.Load(this.root);
+	}
+	
+	public void Load_New(){
+		this.Load(this.root);
+	}
+	
+	private void Load(HTMLPanel html){
 
-		int id = this.Get_Load_Id();
+//		System.out.println("loading...");
+		
+		//protecting from simultaneous loading from different threads
+		if(!this.loading){
+
+			this.loading = true;
+			
+			com.google.gwt.user.client.Element w;
+			if( (w = html.getElementById("dvijokw")) != null ){
+				w.setAttribute("id", "dvijokw_l");
+				String name = w.getAttribute("name");
+//				Lib.Alert("found: "+name);
+				html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw_l");
+				w.setAttribute("id", "dvijokw_");
+			}
+			
+			this.loading = false;
+
+			if( this.need_load == true ){
+				this.need_load = false;
+				this.Load_New();
+			}
+			
+		} else this.need_load = true;
+		
+		
+	//if will be problems with loading of sub widgets
+	//maybe it is possible to rewrite loading process and Dwidget - to init widgets after loading and placing its to divs
+		
+/*		int id = this.Get_Load_Id();
 		
 		ArrayList<com.google.gwt.user.client.Element> ws = new ArrayList<com.google.gwt.user.client.Element>();
 		com.google.gwt.user.client.Element w;
-		HTMLPanel html = dw.Get_HTMLPanel();
+//		HTMLPanel html = dw.Get_HTMLPanel();
 
 		do{
-			
-			for(int i=0; i<ws.size(); i++){
+					
+			for(int i=ws.size()-1; i>-1; i--){
 				w = ws.get(i);
 				String name = w.getAttribute("name");
-//				Lib.Alert("sub found: "+name);
-				html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw_"+id+"_"+i);
+//				Lib.Alert(id+" sub found: "+name);
+				try{
+					html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw_"+id+"_"+i);
+				} catch (java.util.NoSuchElementException e) {
+					Lib.Alert("not found");
+				}
 				w.setAttribute("id", "dvijokw_");
 			}
 			
@@ -152,11 +207,12 @@ public class Loader {
 			int ii=0;
 			
 			while( (w = html.getElementById("dvijokw")) != null ){
-				w.setAttribute("id", "dvijokw_"+id+"_"+ii);
+				w.setAttribute("id", "dvijokw_"+id+"_"+ii++);
+//				Lib.Alert(id+" dvijokw found : "+w.getAttribute("id"));
 				ws.add(w);
 			}
 		
-		} while( ws.size()!=0 );
+		} while( ws.size()!=0 );*/
 		
 	}
 	

@@ -253,7 +253,7 @@
 				$groupby,
 				$limit
 			);
-		if( $ret === false ) return $this->ret(false,'notreg');
+		if( $ret === false ) return false;
 		
 		$i=0;
 		while( ($d = $this->select_next()) !== false ){

@@ -108,8 +108,8 @@ public class Dwidget extends Composite {
 	}
 	
 	protected void Attach_Tmpl(){
-		Resources.getInstance().loader.Load(this);
 		this.maincont.setWidget(this.main);
+		Resources.getInstance().loader.Load_New();
 	}
 
 }

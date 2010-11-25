@@ -47,10 +47,6 @@ function retarr($str){
 	return array( 'result' => $str );
 }
 
-function hello($method_name, $params, $app_data){
-	return "Hi! I'm dvijok db xmlrpc ^_^";
-}
-
 /*
  * sessionInit - Session initialization
  * returns:
@@ -74,11 +70,61 @@ function sessionInit($method_name, $params, $app_data){
 	
 }
 
+/*
+ * util function for checking session
+ */
+function checkSession($s, $db, $config){
+	$sess = $db->getSession($s['sid']);
+	echo "sid->".$s['sid']."<-->$sess<-";
+	if( $sess === false ){
+		return array( 'result' => 'notsid' );
+	}
+	
+	if( $sess['exp'] > 0 ){
+		prolongSession($sess, $db, $config);
+		return array( 'result' => true, 'sess' => $sess );
+	} else {
+		//mark session not active
+		return array( 'result' => 'notsid' );		
+	}
+	
+}
+
+function prolongSession($sess, $db, $config){
+	//guest uid == 1
+	if( $sess['uid'] != 1 ){
+		if( $sess['store']=='1' ) $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_LONG'] );
+		else $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] );
+	} else {
+		$db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_ANON'] );
+	}
+}
+
+
+/*
+ * getObject - get Object
+ * params:(struct)
+ *   - (session)
+ *   - (objects): dbid - id of object
+ * returns:
+ *   - struct 'objects': struct 'session': sid
+ *   - result: 'success' on success, 'notreg' - company not found, error description on error
+ */
+function getObject($method_name, $params, $app_data){
+
+	$db = $app_data[0];
+	$conf = $app_data[1];
+	$dbid = $params[0]['objects']['dbid'];
+	
+	$sess = checkSession($params[0]['session'], $db, $conf);
+
+	return array("result" => "success", "objects" => $sess/*$db->getObject($dbid)*/);
+}
 
 $xmlrpc_server = xmlrpc_server_create();
 
 xmlrpc_server_register_method($xmlrpc_server, "sessionInit", "sessionInit");
-xmlrpc_server_register_method($xmlrpc_server, "hello", "hello");
+xmlrpc_server_register_method($xmlrpc_server, "getObject", "getObject");
 
 $request_xml = $HTTP_RAW_POST_DATA;
 //$GLOBALS['HTTP_RAW_POST_DATA'] 

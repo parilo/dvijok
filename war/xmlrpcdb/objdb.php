@@ -43,6 +43,62 @@ class objdb extends database {
 		
 	}
 	
+	public function getSession($sid){
+		return $this->select(
+			'session',
+			array('id, sid, uid, comp_id, id_webdata, ip, store, active, begin_date, unix_timestamp(end_date)-unix_timestamp(NOW()) as exp' ),
+			null,
+			array( 'sid' => $sid, 'active' => '1' ),
+			array( 'sid' => 'str', 'active' => 'int' )
+		);
+	}
+	
+	public function prolongSession($sid, $exp_time){
+		return $this->update(
+			'session',
+			null,
+			array( 'end_date' => "DATE_ADD(NOW(), INTERVAL $exp_time MINUTE)" ),
+			array( 'end_date' => 'func' ),
+			array( 'sid' => $sid ),
+			array( 'sid' => 'str' )
+		);
+	}
+	
+	public function getObject($dbid){
+		$obj = $this->select(
+			'objects o',
+			array( 'uid, gid' ),
+			null,
+			array( 'o.dbid' => $dbid ),
+			array( 'o.dbid' => 'str' )
+		);
+
+		if( $obj === false ) return false;
+		
+		$ret = $this->select_bulk(
+			'objects o',
+			array( 'field, value' ),
+			array( 'object_fields f' => array( 'l' => 'o.id', 'r' => 'f.id_object' ) ),
+			array( 'o.dbid' => $dbid ),
+			array( 'o.dbid' => 'str' )
+		);
+		
+		if( $ret === false ) return false;
+		
+		for($i=0; $i<count($ret); $i++ )
+			$obj[$ret[$i]['field']] = $ret[$i]['value'];
+		
+		$obj['dbid'] = $dbid;
+		if( !isset($obj['ur']) ) $obj['ur'] = '1'; //user read
+		if( !isset($obj['uw']) ) $obj['uw'] = '1'; //user write
+		if( !isset($obj['gr']) ) $obj['gr'] = '1'; //group read
+		if( !isset($obj['gw']) ) $obj['gw'] = '0'; //group write
+		if( !isset($obj['or']) ) $obj['or'] = '1'; //other read
+		if( !isset($obj['ow']) ) $obj['ow'] = '0'; //other write
+		
+		return $obj;
+	}
+	
 }
 
- ?>
+?>
