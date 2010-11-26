@@ -232,7 +232,6 @@
 
  	protected function select($table, $cols, $join, $where, $types){
  		$sql = $this->create_select_join($table, $join, $where, $types, $cols);
-// 		echo $sql;
  		return $this->select_query($sql);
  	}
  	

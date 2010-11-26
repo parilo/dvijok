@@ -44,13 +44,30 @@ class objdb extends database {
 	}
 	
 	public function getSession($sid){
-		return $this->select(
+		$sess = $this->select(
 			'session',
-			array('id, sid, uid, comp_id, id_webdata, ip, store, active, begin_date, unix_timestamp(end_date)-unix_timestamp(NOW()) as exp' ),
+			array('id, sid, uid, ip, store, active, begin_date, unix_timestamp(end_date)-unix_timestamp(NOW()) as exp' ),
 			null,
 			array( 'sid' => $sid, 'active' => '1' ),
 			array( 'sid' => 'str', 'active' => 'int' )
 		);
+		
+		if( $sess === false ) return false;
+		
+		$groups = $this->select_bulk(
+			'user_groups',
+			array('gid'),
+			null,
+			array( 'uid' => $sess['uid'] ),
+			array( 'uid' => 'int' )
+		);
+		
+		$sess['groups'] = array();
+		
+		for($i=0; $i<count($groups); $i++ )
+			$sess['groups'][] = $groups[$i]['gid'];
+		
+		return $sess;
 	}
 	
 	public function prolongSession($sid, $exp_time){
@@ -59,6 +76,17 @@ class objdb extends database {
 			null,
 			array( 'end_date' => "DATE_ADD(NOW(), INTERVAL $exp_time MINUTE)" ),
 			array( 'end_date' => 'func' ),
+			array( 'sid' => $sid ),
+			array( 'sid' => 'str' )
+		);
+	}
+	
+	public function markSessionInactive($sid){
+		return $this->update(
+			'session',
+			null,
+			array( 'active' => '0' ),
+			array( 'active' => 'int' ),
 			array( 'sid' => $sid ),
 			array( 'sid' => 'str' )
 		);

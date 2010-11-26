@@ -75,23 +75,22 @@ function sessionInit($method_name, $params, $app_data){
  */
 function checkSession($s, $db, $config){
 	$sess = $db->getSession($s['sid']);
-	echo "sid->".$s['sid']."<-->$sess<-";
 	if( $sess === false ){
-		return array( 'result' => 'notsid' );
+		return false;
 	}
 	
 	if( $sess['exp'] > 0 ){
 		prolongSession($sess, $db, $config);
-		return array( 'result' => true, 'sess' => $sess );
+		return $sess;
 	} else {
-		//mark session not active
-		return array( 'result' => 'notsid' );		
+		$db->markSessionInactive($s['sid']);
+		return false;		
 	}
 	
 }
 
 function prolongSession($sess, $db, $config){
-	//guest uid == 1
+	//uid of guest user == 1
 	if( $sess['uid'] != 1 ){
 		if( $sess['store']=='1' ) $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_LONG'] );
 		else $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] );
@@ -116,7 +115,9 @@ function getObject($method_name, $params, $app_data){
 	$conf = $app_data[1];
 	$dbid = $params[0]['objects']['dbid'];
 	
-	$sess = checkSession($params[0]['session'], $db, $conf);
+	$ret = checkSession($params[0]['session'], $db, $conf);
+	if( $ret === false ) echo array('result' => 'notsid');
+	
 
 	return array("result" => "success", "objects" => $sess/*$db->getObject($dbid)*/);
 }
