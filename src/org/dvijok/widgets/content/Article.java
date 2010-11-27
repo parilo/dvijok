@@ -47,13 +47,12 @@ public class Article extends Sub_Panels_Dwidget {
 
 			@Override
 			public void Success(DB_Object result) {
-				Lib.Alert("obj: "+result);
-//				content.setHTML(result.Get_String("html"));
+				content.setHTML(result.Get_String("html"));
 			}
 
 			@Override
 			public void Fail(String message) {
-				Lib.Alert("failed: "+message);
+				Lib.Alert("article loading failed: "+message);
 			}
 			
 		});

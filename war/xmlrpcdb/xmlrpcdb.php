@@ -115,11 +115,22 @@ function getObject($method_name, $params, $app_data){
 	$conf = $app_data[1];
 	$dbid = $params[0]['objects']['dbid'];
 	
-	$ret = checkSession($params[0]['session'], $db, $conf);
-	if( $ret === false ) echo array('result' => 'notsid');
-	
+	$sess = checkSession($params[0]['session'], $db, $conf);
+	if( $sess === false ) return array('result' => 'notsid');
 
-	return array("result" => "success", "objects" => $sess/*$db->getObject($dbid)*/);
+	$obj = $db->getObject($dbid);
+	if( $obj['uid'] === $sess['uid'] ){
+		return array("result" => "success", "objects" => $obj);
+	} else {
+		
+		if( in_array($obj['gid'], $sess['gids']) ){
+			if( $obj['gr'] === '1' ) return array("result" => "success", "objects" => $obj);
+		}
+		
+		if( $obj['or'] === '1' ) return array("result" => "success", "objects" => $obj);
+		else return array( "result" => "permden" );
+	}
+
 }
 
 $xmlrpc_server = xmlrpc_server_create();

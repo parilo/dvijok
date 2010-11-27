@@ -27,6 +27,7 @@ import com.fredhat.gwt.xmlrpc.client.XmlRpcClient;
 import com.fredhat.gwt.xmlrpc.client.XmlRpcRequest;
 
 import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
 import com.google.gwt.user.client.Timer;
@@ -40,7 +41,7 @@ public class DataBase {
 	public DataBase(String xmlrpcurl) {
 
 		client = new XmlRpcClient(xmlrpcurl);
-		client.setDebugMode(true);
+//		client.setDebugMode(true);
 		this.Restore_Session();
 
 	}
@@ -208,6 +209,7 @@ public class DataBase {
 
 			@Override
 			public void Success(DB_Object result) {
+//				Lib.Alert(""+result);
 				String res = result.Get_String("result");
 				if( res.equals("success") ) handler.Success(result.Get_DB_Object("objects"));
 				else handler.Fail(res);

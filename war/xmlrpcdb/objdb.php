@@ -62,10 +62,11 @@ class objdb extends database {
 			array( 'uid' => 'int' )
 		);
 		
-		$sess['groups'] = array();
+		for($i=0; $i<count($groups); $i++ ){
+			$grps[] = $groups[$i]['gid'];
+		}
 		
-		for($i=0; $i<count($groups); $i++ )
-			$sess['groups'][] = $groups[$i]['gid'];
+		$sess['gids'] = $grps;
 		
 		return $sess;
 	}
