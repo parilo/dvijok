@@ -26,5 +26,6 @@
   <source path='widgets'/>
   <source path='db'/>
   <source path='config'/>
+  <source path='controls'/>
 
 </module>

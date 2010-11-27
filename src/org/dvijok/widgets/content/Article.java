@@ -26,10 +26,12 @@ import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Article extends Sub_Panels_Dwidget {
 
+	private VerticalPanel vp;
 	private HTML content;
 	
 	public Article(Sub_Panel p){
@@ -39,6 +41,7 @@ public class Article extends Sub_Panels_Dwidget {
 
 	@Override
 	protected void Before_Sub_Panels_Loading() {
+		this.vp = new VerticalPanel();
 		this.content = new HTML();
 	}
 	
@@ -47,6 +50,9 @@ public class Article extends Sub_Panels_Dwidget {
 
 			@Override
 			public void Success(DB_Object result) {
+				
+				vp.add(editor);
+
 				content.setHTML(result.Get_String("html"));
 			}
 
@@ -61,7 +67,8 @@ public class Article extends Sub_Panels_Dwidget {
 	@Override
 	protected Widget Gen_Sub_Widget(String dwname) {
 		if( dwname.equals("content") ){
-			return this.content;
+//			return this.content;
+			return this.vp;
 		} else return null;
 	}
 	
