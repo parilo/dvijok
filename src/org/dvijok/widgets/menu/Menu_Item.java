@@ -18,6 +18,11 @@
 
 package org.dvijok.widgets.menu;
 
+import java.util.ArrayList;
+
+import org.dvijok.db.DB_Object;
+import org.dvijok.event.CustomEventListener;
+import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
@@ -29,13 +34,23 @@ import com.google.gwt.user.client.ui.Widget;
 public class Menu_Item extends Sub_Panels_Dwidget {
 
 	private Label l;
+	private CustomEventTool actionET;
 	
 	public Menu_Item(){
-		super("/tmpl/widgets/menu/menu_item.html");
+		super("tmpl/widgets/menu/menu_item.html");
+	}
+	
+	public void addActionListener(CustomEventListener listener){
+		actionET.addCustomEventListener(listener);
+	}
+	
+	public void removeActionListener(CustomEventListener listener){
+		actionET.removeCustomEventListener(listener);
 	}
 
 	@Override
 	protected void Before_Sub_Panels_Loading() {
+		actionET = new CustomEventTool();
 		this.l = new Label();
 	}
 	
@@ -48,12 +63,13 @@ public class Menu_Item extends Sub_Panels_Dwidget {
 			@Override
 			public void onClick(ClickEvent event) {
 				Lib.Change_Hash_Token(hash);
+				actionET.invokeListeners(hash);
 			}
 		});
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(final String dwname){
+	protected Widget Gen_Sub_Widget(final String dwname, ArrayList<DB_Object> params){
 		return this.l;
 	}
 	

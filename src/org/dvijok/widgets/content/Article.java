@@ -18,6 +18,8 @@
 
 package org.dvijok.widgets.content;
 
+import java.util.ArrayList;
+
 import org.dvijok.db.DB_Object;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
@@ -26,33 +28,27 @@ import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Article extends Sub_Panels_Dwidget {
 
-	private VerticalPanel vp;
 	private HTML content;
 	
 	public Article(Sub_Panel p){
-		super("/tmpl/widgets/content/article/article.html", p);
+		super("tmpl/widgets/content/article/article.html", p);
 		this.Init_Contents();
 	}
 
 	@Override
 	protected void Before_Sub_Panels_Loading() {
-		this.vp = new VerticalPanel();
 		this.content = new HTML();
 	}
 	
 	private void Init_Contents(){
-		Resources.getInstance().db.Get_DB_Object(this.Get_dbid(),new DV_Request_Handler<DB_Object>(){
+/*		Resources.getInstance().db.Get_DB_Object(this.Get_dbid(),new DV_Request_Handler<DB_Object>(){
 
 			@Override
 			public void Success(DB_Object result) {
-				
-				vp.add(editor);
-
 				content.setHTML(result.Get_String("html"));
 			}
 
@@ -61,14 +57,13 @@ public class Article extends Sub_Panels_Dwidget {
 				Lib.Alert("article loading failed: "+message);
 			}
 			
-		});
+		});*/
 	}
 	
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
 		if( dwname.equals("content") ){
-//			return this.content;
-			return this.vp;
+			return this.content;
 		} else return null;
 	}
 	

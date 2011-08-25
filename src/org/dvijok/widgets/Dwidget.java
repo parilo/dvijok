@@ -19,6 +19,7 @@
 package org.dvijok.widgets;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.dvijok.db.DB_Object;
 import org.dvijok.interfaces.DV_Request_Handler;
@@ -33,7 +34,9 @@ public class Dwidget extends Composite {
 	
 	private String tmpl_url;
 	private ArrayList<DB_Object> params;
+	private HashMap<String, HTMLPanel> modes;
 	private String dbid;
+	private String dwid;
 	
 	private SimplePanel maincont;
 	private HTMLPanel main;
@@ -41,14 +44,17 @@ public class Dwidget extends Composite {
 	private Sub_Panel panel;
 	
 	public Dwidget(String templ_url) {
+		this.modes = new HashMap<String, HTMLPanel>();
 		this.Before_Tmpl_Init();
 		this.Init(templ_url);
 	}
 	
 	public Dwidget(String templ_url, Sub_Panel p) {
+		this.modes = new HashMap<String, HTMLPanel>();
 		this.panel = p;
 		this.Read_Params();
 		this.Read_dbid();
+		this.Read_dwid();
 		this.panel.clear();
 		this.panel.getElement().setInnerHTML("");
 		this.Before_Tmpl_Init();
@@ -56,13 +62,19 @@ public class Dwidget extends Composite {
 	}
 	
 	protected void Before_Tmpl_Init(){}
+	public void Reinit(){}
 	
 	private void Init(final String templ_url){
 		
 		this.maincont = new SimplePanel();
 		this.initWidget(this.maincont);
+		this.tmpl_url = templ_url;
+		this.Get_Tmpl();
+	}
+	
+	private void Get_Tmpl(){
 		
-		Resources.getInstance().tmpls.Get_Template(templ_url, new DV_Request_Handler<String>(){
+		Resources.getInstance().tmpls.Get_Template(this.tmpl_url, new DV_Request_Handler<String>(){
 			@Override
 			public void Success(String result) {
 				tmpl_url = result;
@@ -71,11 +83,10 @@ public class Dwidget extends Composite {
 
 			@Override
 			public void Fail(String message) {
-				Lib.Alert("cannot get template "+templ_url+" : "+message);
+				Lib.Alert("cannot get template "+tmpl_url+" : "+message);
 			}
 		});
 		
-		this.tmpl_url = templ_url;
 	}
 	
 	private void Read_Params(){
@@ -90,8 +101,16 @@ public class Dwidget extends Composite {
 		this.dbid = Resources.getInstance().loader.Get_Attribute(this.panel, "dbid");
 	}
 	
+	private void Read_dwid(){
+		this.dwid = Resources.getInstance().loader.Get_Attribute(this.panel, "dwid");
+	}
+	
 	public String Get_dbid(){
 		return this.dbid;
+	}
+	
+	public String Get_dwid(){
+		return this.dwid;
 	}
 	
 	public HTMLPanel Get_HTMLPanel(){
@@ -105,11 +124,20 @@ public class Dwidget extends Composite {
 	
 	protected void Init_Tmpl(){
 		this.main = new HTMLPanel(tmpl_url);
+		this.modes.put(this.tmpl_url, this.main);
 	}
 	
 	protected void Attach_Tmpl(){
 		this.maincont.setWidget(this.main);
 		Resources.getInstance().loader.Load_New();
+	}
+	
+	protected void Change_Tmpl(String url){
+		this.tmpl_url = url;
+		if( this.modes.containsKey(url) ){
+			this.main = this.modes.get(url);
+			this.maincont.setWidget(this.main);
+		} else this.Get_Tmpl();
 	}
 
 }

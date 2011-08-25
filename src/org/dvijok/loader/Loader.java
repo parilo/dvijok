@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class Loader {
 
 	private Dwidget_Factory factory;
-//	private int loadid;//used for to not mix multithreaded loading
 	private HTMLPanel root;
 	
 	private boolean loading;
@@ -45,7 +44,6 @@ public class Loader {
 		this.loading = false;
 		this.need_load = false;
 		this.root = null;
-//		this.loadid = 0;
 		this.factory = new Dwidget_Factory();
 		
 	}
@@ -53,41 +51,6 @@ public class Loader {
 	public Dwidget_Factory Get_Dwidget_Factory(){
 		return this.factory;
 	}
-	
-// old method of loading widgets 		
-/*	private void Do_Load_Widgets(){
-		
-//		//protecting from simultaneous loading from different threads
-//		if(!this.loading){
-		
-			RootPanel.get()
-		
-			ArrayList<RootPanel> ws = new ArrayList<RootPanel>();
-			RootPanel w;
-//			this.loading = true;
-			
-			try{
-			
-			while( (w = RootPanel.get("dvijokw")) != null ){
-				w.getElement().setAttribute("id", "dvijokw_");
-				ws.add(w);
-			}
-			
-			} catch(java.lang.AssertionError e){
-				Lib.Alert("error");
-			}
-			
-			for(int i=0; i<ws.size(); i++){
-				w = ws.get(i);
-				String name = w.getElement().getAttribute("name");
-				Lib.Alert("found: "+name);
-				w.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)));
-			}
-			
-//			this.loading = false;
-//		}
-
-	}*/
 	
 	private DB_Object Get_Param(com.google.gwt.dom.client.Element pel){
 		com.google.gwt.dom.client.Element chel = pel.getNextSiblingElement();
@@ -112,7 +75,7 @@ public class Loader {
 		return this.Get_Params(p.getElement());
 	}
 	
-	private ArrayList<DB_Object> Get_Params(Element el){
+	public ArrayList<DB_Object> Get_Params(Element el){
 
 		com.google.gwt.dom.client.Element chel = el.getFirstChildElement();
 		if( chel != null ){
@@ -128,11 +91,6 @@ public class Loader {
 		
 		return null;
 	}
-	
-/*	private int Get_Load_Id(){
-		if( this.loadid > 0xFFFF ) this.loadid = 0;
-		return this.loadid++; 
-	}*/
 	
 	private void Init_Root(){
 		RootPanel p = RootPanel.get("dvijokroot");
@@ -154,8 +112,6 @@ public class Loader {
 	
 	private void Load(HTMLPanel html){
 
-//		System.out.println("loading...");
-		
 		//protecting from simultaneous loading from different threads
 		if(!this.loading){
 
@@ -178,41 +134,6 @@ public class Loader {
 			}
 			
 		} else this.need_load = true;
-		
-		
-	//if will be problems with loading of sub widgets
-	//maybe it is possible to rewrite loading process and Dwidget - to init widgets after loading and placing its to divs
-		
-/*		int id = this.Get_Load_Id();
-		
-		ArrayList<com.google.gwt.user.client.Element> ws = new ArrayList<com.google.gwt.user.client.Element>();
-		com.google.gwt.user.client.Element w;
-//		HTMLPanel html = dw.Get_HTMLPanel();
-
-		do{
-					
-			for(int i=ws.size()-1; i>-1; i--){
-				w = ws.get(i);
-				String name = w.getAttribute("name");
-//				Lib.Alert(id+" sub found: "+name);
-				try{
-					html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw_"+id+"_"+i);
-				} catch (java.util.NoSuchElementException e) {
-					Lib.Alert("not found");
-				}
-				w.setAttribute("id", "dvijokw_");
-			}
-			
-			ws.clear();
-			int ii=0;
-			
-			while( (w = html.getElementById("dvijokw")) != null ){
-				w.setAttribute("id", "dvijokw_"+id+"_"+ii++);
-//				Lib.Alert(id+" dvijokw found : "+w.getAttribute("id"));
-				ws.add(w);
-			}
-		
-		} while( ws.size()!=0 );*/
 		
 	}
 	

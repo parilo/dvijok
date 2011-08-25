@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.dvijok.db.DB_Object;
-import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
@@ -42,7 +41,7 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	private String default_hash;
 	
 	public Content_Hash(Sub_Panel p){
-		super("/tmpl/widgets/content/content_hash/content_hash.html", p);
+		super("tmpl/widgets/content/content_hash/content_hash.html", p);
 		
 		History.addValueChangeHandler(new ValueChangeHandler<String>(){
 			@Override
@@ -101,7 +100,7 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

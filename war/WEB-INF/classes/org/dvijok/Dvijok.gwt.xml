@@ -12,7 +12,6 @@
 
   <!-- Other module inherits                                      -->
   <inherits name='com.fredhat.gwt.xmlrpc.XMLRPC'/>
-  <inherits name='com.gc.gwt.wysiwyg.Editor'/>
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.dvijok.client.Dvijok'/>
@@ -27,5 +26,9 @@
   <source path='widgets'/>
   <source path='db'/>
   <source path='config'/>
+  <source path='controls'/>
+  <source path='event'/>
+  <source path='granat'/>
+
 
 </module>

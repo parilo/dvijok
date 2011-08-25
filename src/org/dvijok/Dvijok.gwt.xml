@@ -27,5 +27,8 @@
   <source path='db'/>
   <source path='config'/>
   <source path='controls'/>
+  <source path='event'/>
+  <source path='granat'/>
+
 
 </module>

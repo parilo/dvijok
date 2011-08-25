@@ -1,0 +1,44 @@
+<style>
+.busyoverlay {
+    text-align: center;
+	position: fixed;
+	margin: auto;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+	background-color:black;
+  filter:alpha(opacity=50);
+  -khtml-opacity:0.5;
+  -moz-opacity:0.50;
+  opacity:0.50;
+}
+
+.busycont{
+    color: white;
+    font-size: 32px;
+    margin: auto;
+	top: 0;
+	left: 0;
+	z-index: 5;
+	background-color:black;
+  filter:alpha(opacity=1);
+  -khtml-opacity:1;
+  -moz-opacity:1;
+  opacity:1;
+}
+</style>
+<div class="busyoverlay">
+<table width="100%" height="100%" align="center" valign="center">
+<tr>
+<td>
+<div class="busycont">
+<img src="tmpl/widgets/busy/loading.gif"></img><br/><br/>
+Подождите...
+</div>
+</td>
+</tr>
+</table>
+
+</div>

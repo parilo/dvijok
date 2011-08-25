@@ -18,17 +18,20 @@
 
 package org.dvijok.lib;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Image;
 
 public class Lib {
+	
+	public static long Get_Long(String s){
+		try{
+			return Long.parseLong(s);
+		} catch (NumberFormatException e){
+			return 0;
+		}
+	}
 
 	public static int Get_Int(String s){
 		try{
@@ -58,8 +61,36 @@ public class Lib {
 		History.newItem(token, issueEvent);
 	}
 	
+	public static String Get_Hash_Token(){
+		return History.getToken();
+	}
+	
 	public static void Alert(String str){
 		com.google.gwt.user.client.Window.alert(str);
 	}
+	
+	public static String getDomain(){
+		return Document.get().getDomain();
+	}
+	
+	public static void Redirect(String url){
+		Window.open(url, "_self", ""); 
+	}
+	
+	public static Image getImageSign(String sign){
+		return getImageSign(sign, false);
+	}
 
+	public static Image getImageSign(String sign, boolean pointer){
+		Image im;
+		if( sign.equals("o") ) im = new Image("images/ok.png");
+		else if( sign.equals("w") ) im = new Image("images/warning.png");
+		else if( sign.equals("e") ) im = new Image("images/error.png");
+		else im = new Image();
+		
+		if( pointer ) im.addStyleName("pointer");
+		
+		return im;
+	}
+	
 }

@@ -21,6 +21,6 @@ package org.dvijok.interfaces;
 public interface DV_Request_Handler<T> {
 
 	public void Success(T result);
-	public void Fail(String message);
+	public void Fail(T result);
 	
 }

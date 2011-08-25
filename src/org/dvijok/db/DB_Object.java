@@ -19,6 +19,7 @@
 package org.dvijok.db;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class DB_Object extends HashMap<String,Serializable> implements Serializa
 
 	public String Get_String(String s){
 		String r = (String)this.get(s);
-		return r.equals("null")?"":r;
+		return r == null?"":r.equals("null")?"":r;
 	}
 	
 	public DB_Object Get_DB_Object(String s){
@@ -54,6 +55,26 @@ public class DB_Object extends HashMap<String,Serializable> implements Serializa
 			return Integer.parseInt(this.Get_String(s));
 		} catch (NumberFormatException e){
 			return 0;
+		}
+	}
+	
+	public long Get_Long(String s){
+		try{
+			return Long.parseLong(this.Get_String(s));
+		} catch (NumberFormatException e){
+			return 0;
+		}
+	}
+	
+	public boolean Get_Boolean(String s){
+		return Get_String(s).equals("1");
+	}
+	
+	public BigDecimal Get_BigDecimal(String s){
+		try{
+			return BigDecimal.valueOf(Double.parseDouble(this.Get_String(s)));
+		} catch (NumberFormatException e){
+			return new BigDecimal(0);
 		}
 	}
 

@@ -18,14 +18,9 @@
 
 package org.dvijok.widgets;
 
-import java.util.ArrayList;
-
-import org.dvijok.db.DB_Object;
-
-import com.google.gwt.user.client.ui.RootPanel;
-
 public interface Dwidget_Creator {
 	
-	public Dwidget Get_Dwidget(/*ArrayList<DB_Object> params,*/ /*RootPanel*/Sub_Panel p);
+	public Dwidget Get_Dwidget(Sub_Panel p);
+	public boolean Need_Auth_Reinit();
 
 }

@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class HMenu extends Sub_Panels_Dwidget {
 	
 	public HMenu(Sub_Panel p){
-		super("/tmpl/widgets/menu/hmenu/hmenu.html", p);
+		super("tmpl/widgets/menu/hmenu/hmenu.html", p);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class HMenu extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
 		if( dwname.equals("items") ) return this.Gen_Items();
 		else return null;
 	}
