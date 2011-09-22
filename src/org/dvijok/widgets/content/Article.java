@@ -20,7 +20,7 @@ package org.dvijok.widgets.content;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
@@ -61,7 +61,7 @@ public class Article extends Sub_Panels_Dwidget {
 	}
 	
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

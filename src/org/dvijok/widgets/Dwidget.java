@@ -21,7 +21,7 @@ package org.dvijok.widgets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class Dwidget extends Composite {
 	
 	private String tmpl_url;
-	private ArrayList<DB_Object> params;
+	private ArrayList<DBObject> params;
 	private HashMap<String, HTMLPanel> modes;
 	private String dbid;
 	private String dwid;
@@ -93,7 +93,7 @@ public class Dwidget extends Composite {
 		this.params = Resources.getInstance().loader.Get_Params(this.panel);
 	}
 	
-	public ArrayList<DB_Object> Get_Params(){
+	public ArrayList<DBObject> Get_Params(){
 		return this.params;
 	}
 	

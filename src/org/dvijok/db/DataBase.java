@@ -22,12 +22,12 @@ import org.dvijok.interfaces.DV_Request_Handler;
 
 public interface DataBase {
 
-	public void Auth(DB_Object params, final DV_Request_Handler<DB_Object> handler);
-	public void Send_Key(DB_Object params, final DV_Request_Handler<DB_Object> handler);
-	public void Logout(DB_Object params, final DV_Request_Handler<DB_Object> handler);
-	public void Get_Object(DB_Object params, final DV_Request_Handler<DB_Object> handler);
-	public void Get_Objects(DB_Object params, final DV_Request_Handler<DB_Object> handler);
-	public void Put_Object(DB_Object params, final DV_Request_Handler<DB_Object> handler);
-	public void Del_Object(DB_Object params, final DV_Request_Handler<DB_Object> handler);
+	public void Auth(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void Send_Key(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void Logout(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void Get_Object(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void Get_Objects(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void Put_Object(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void Del_Object(DBObject params, final DV_Request_Handler<DBObject> handler);
 	
 }

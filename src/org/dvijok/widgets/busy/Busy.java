@@ -20,7 +20,7 @@ package org.dvijok.widgets.busy;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -36,7 +36,7 @@ public class Busy extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		return null;
 	}
 	

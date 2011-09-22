@@ -20,7 +20,7 @@ package org.dvijok.widgets.menu;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.lib.Lib;
 import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
@@ -43,7 +43,7 @@ public class HMenu extends Sub_Panels_Dwidget {
 	private Widget Gen_Items(){
 		HorizontalPanel hp = new HorizontalPanel();
 		
-		ArrayList<DB_Object> params = this.Get_Params();
+		ArrayList<DBObject> params = this.Get_Params();
 		for(int i=0; i<params.size(); i++){
 			Menu_Item item = new Menu_Item();
 			item.Set_Label(params.get(i).Get_String("LABEL"));
@@ -55,7 +55,7 @@ public class HMenu extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("items") ) return this.Gen_Items();
 		else return null;
 	}

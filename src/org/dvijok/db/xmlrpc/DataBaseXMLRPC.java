@@ -26,7 +26,7 @@ import java.util.Iterator;
 import com.fredhat.gwt.xmlrpc.client.XmlRpcClient;
 import com.fredhat.gwt.xmlrpc.client.XmlRpcRequest;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
@@ -39,7 +39,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class DataBaseXMLRPC {
 	
-	private DB_Object session;
+	private DBObject session;
 	private XmlRpcClient client;
 	
 	public DataBaseXMLRPC(String xmlrpcurl) {
@@ -55,9 +55,9 @@ public class DataBaseXMLRPC {
 	}
 	
 	private void Make_Session(final DV_Request_Handler<Integer> handler){
-		this.Do_Request("sessionInit", new DB_Object(), new DV_Request_Handler<DB_Object>(){
+		this.Do_Request("sessionInit", new DBObject(), new DV_Request_Handler<DBObject>(){
 			@Override
-			public void Success(DB_Object dbo) {
+			public void Success(DBObject dbo) {
 //				Lib.Alert("got: "+dbo);
 				session = dbo.Get_DB_Object("objects").Get_DB_Object("session");
 				Store_Session();
@@ -65,7 +65,7 @@ public class DataBaseXMLRPC {
 			}
 
 			@Override
-			public void Fail(DB_Object message) {
+			public void Fail(DBObject message) {
 				if( handler != null ) handler.Fail(0);
 			}
 		});
@@ -83,7 +83,7 @@ public class DataBaseXMLRPC {
 	protected void Restore_Session(){
 		String sid = com.google.gwt.user.client.Cookies.getCookie("dvijok.session");
 		if( sid != null ){
-			session = new DB_Object();
+			session = new DBObject();
 			session.put("sid", sid);
 		} else Make_Session();
 	}
@@ -102,7 +102,7 @@ public class DataBaseXMLRPC {
 		} else if( classname.equals("[Ljava.lang.Object;")) {
 			Object[] array = (Object[])o;
 //			Serializable[] sa = new Serializable[array.length];
-			DB_Object sa = new DB_Object();
+			DBObject sa = new DBObject();
 			
 			for(int ii=0; ii<array.length; ii++){
 //				sa[ii] = this.convert_type(array[ii]);
@@ -117,8 +117,8 @@ public class DataBaseXMLRPC {
 		return null;
 	}
 	
-	private DB_Object convert(Object o){
-		DB_Object dbo = new DB_Object();
+	private DBObject convert(Object o){
+		DBObject dbo = new DBObject();
 		
     	HashMap<String,Object> obs = (HashMap<String,Object>)o;
     	
@@ -132,7 +132,7 @@ public class DataBaseXMLRPC {
 		return dbo;
 	}
 	
-	private void Do_Request(String method, DB_Object params, final DV_Request_Handler<DB_Object> handler) {
+	private void Do_Request(String method, DBObject params, final DV_Request_Handler<DBObject> handler) {
 		
 		Object[] params_ = new Object[]{params};
 		 
@@ -148,27 +148,27 @@ public class DataBaseXMLRPC {
 		    public void onFailure(Throwable response) {
 		    	String failedMsg = response.getMessage();
 //		    	Lib.Alert("DataBase: Request: request failure: "+failedMsg);
-		    	handler.Fail(new DB_Object());
+		    	handler.Fail(new DBObject());
 		    }
 		});
 		request.execute();
 		
 	}
 
-	public void Request(final String method, final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
+	public void Request(final String method, final DBObject params, final DV_Request_Handler<DBObject> handler) {
 		
 		if( session != null ){
 		
-		    DB_Object allparams = new DB_Object();
+		    DBObject allparams = new DBObject();
 		    allparams.put("session", session);
 		    if( params != null ){
 		    	allparams.put("objects", params);
 		    }
 		    
-		    this.Do_Request(method, allparams, new DV_Request_Handler<DB_Object>(){
+		    this.Do_Request(method, allparams, new DV_Request_Handler<DBObject>(){
 
 				@Override
-				public void Success(DB_Object result) {
+				public void Success(DBObject result) {
 					if( result.Get_String("result").equals("notsid") ){
 						Make_Session(new DV_Request_Handler<Integer>(){
 
@@ -180,7 +180,7 @@ public class DataBaseXMLRPC {
 							@Override
 							public void Fail(Integer message) {
 //								handler.Fail("DataBase: Request: failed to init session: "+message);
-								handler.Fail(new DB_Object());
+								handler.Fail(new DBObject());
 							}
 							
 						});
@@ -188,7 +188,7 @@ public class DataBaseXMLRPC {
 				}
 
 				@Override
-				public void Fail(DB_Object message) {
+				public void Fail(DBObject message) {
 					handler.Fail(message);
 				}
 		    	
@@ -207,21 +207,21 @@ public class DataBaseXMLRPC {
 		
 	}
 	
-	public void Get_DB_Object(String dbid, final DV_Request_Handler<DB_Object> handler){
-		DB_Object dbidobj = new DB_Object();
+	public void Get_DB_Object(String dbid, final DV_Request_Handler<DBObject> handler){
+		DBObject dbidobj = new DBObject();
 		dbidobj.put("dbid", dbid);
-		this.Request("getObject", dbidobj, new DV_Request_Handler<DB_Object>(){
+		this.Request("getObject", dbidobj, new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 //				Lib.Alert(""+result);
 				String res = result.Get_String("result");
 				if( res.equals("success") ) handler.Success(result.Get_DB_Object("objects"));
-				else handler.Fail(new DB_Object());
+				else handler.Fail(new DBObject());
 			}
 
 			@Override
-			public void Fail(DB_Object message) {
+			public void Fail(DBObject message) {
 				handler.Fail(message);
 			}
 			

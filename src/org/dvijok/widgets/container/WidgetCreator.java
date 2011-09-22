@@ -18,12 +18,12 @@
 
 package org.dvijok.widgets.container;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 
 import com.google.gwt.user.client.ui.Widget;
 
 public interface WidgetCreator {
 
-	public Widget getWidget(DB_Object dbo);
+	public Widget getWidget(DBObject dbo);
 	
 }

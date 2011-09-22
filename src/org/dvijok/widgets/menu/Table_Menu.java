@@ -21,7 +21,7 @@ package org.dvijok.widgets.menu;
 import java.util.ArrayList;
 
 import org.dvijok.controls.Table;
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
@@ -52,37 +52,37 @@ public class Table_Menu extends Sub_Panels_Dwidget {
 	}
 
 	private void Init_Menu(){
-		DB_Object req = new DB_Object();
+		DBObject req = new DBObject();
 		req.put("dbid", this.Get_dbid());
-		Resources.getInstance().db.Get_Object(req, new DV_Request_Handler<DB_Object>(){
+		Resources.getInstance().db.Get_Object(req, new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
-				DB_Object dbos = result.Get_DB_Object("objects");
+			public void Success(DBObject result) {
+				DBObject dbos = result.Get_DB_Object("objects");
 				if( dbos.containsKey("props") ) Init_Props(dbos.Get_DB_Object("props"));
 				if( dbos.containsKey("items") ) Init_Items(dbos.Get_DB_Object("items"));
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				Lib.Alert("Table_Menu: Init_Menu: fail: "+result);
 			}
 			
 		});
 	}
 	
-	private void Init_Props(DB_Object dbo){
+	private void Init_Props(DBObject dbo){
 		if( dbo.containsKey("horiz_count") ){
 			this.hcount = dbo.Get_Int("horiz_count");
 			this.menu.Set_Column_Number(this.hcount);
 		}
 	}
 	
-	private void Init_Items(DB_Object dbo){
+	private void Init_Items(DBObject dbo){
 		int i=1;
 		String key = "0";
 		while( dbo.containsKey(key) ){
-			DB_Object itdbo = dbo.Get_DB_Object(key);
+			DBObject itdbo = dbo.Get_DB_Object(key);
 			key = Integer.toString(i++);
 			
 			Menu_Item item = new Menu_Item();
@@ -107,7 +107,7 @@ public class Table_Menu extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		return this.menu;
 	}
 	

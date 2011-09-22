@@ -20,7 +20,7 @@ package org.dvijok.loader;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.lib.Lib;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.Sub_Panel;
@@ -52,10 +52,10 @@ public class Loader {
 		return this.factory;
 	}
 	
-	private DB_Object Get_Param(com.google.gwt.dom.client.Element pel){
+	private DBObject Get_Param(com.google.gwt.dom.client.Element pel){
 		com.google.gwt.dom.client.Element chel = pel.getNextSiblingElement();
 		if( chel != null ){
-			DB_Object param = new DB_Object();
+			DBObject param = new DBObject();
 			while( chel != null ){
 //				Lib.Alert(chel.getNodeName()+" "+chel.getInnerText());
 				if( chel.getNodeName().equals("PARAM") ){ /*Lib.Alert("end el");*/ return param; }
@@ -71,15 +71,15 @@ public class Loader {
 		return p.getElement().getAttribute(name);
 	}
 	
-	public ArrayList<DB_Object> Get_Params(Sub_Panel p){
+	public ArrayList<DBObject> Get_Params(Sub_Panel p){
 		return this.Get_Params(p.getElement());
 	}
 	
-	public ArrayList<DB_Object> Get_Params(Element el){
+	public ArrayList<DBObject> Get_Params(Element el){
 
 		com.google.gwt.dom.client.Element chel = el.getFirstChildElement();
 		if( chel != null ){
-			ArrayList<DB_Object> params = new ArrayList<DB_Object>();
+			ArrayList<DBObject> params = new ArrayList<DBObject>();
 			while( chel != null ){
 //				Lib.Alert("loader: "+chel.getNodeName());
 				if( chel.getNodeName().equals("PARAM") ) params.add(this.Get_Param(chel));

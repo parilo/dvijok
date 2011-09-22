@@ -20,7 +20,7 @@ package org.dvijok.widgets.menu;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
@@ -69,7 +69,7 @@ public class Menu_Item extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(final String dwname, ArrayList<DB_Object> params){
+	protected Widget Gen_Sub_Widget(final String dwname, ArrayList<DBObject> params){
 		return this.l;
 	}
 	

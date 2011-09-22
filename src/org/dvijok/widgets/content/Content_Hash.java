@@ -21,7 +21,7 @@ package org.dvijok.widgets.content;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Sub_Panel;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
@@ -89,9 +89,9 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	}
 	
 	private void Init_Contents(){
-		ArrayList<DB_Object> ps = this.Get_Params();
+		ArrayList<DBObject> ps = this.Get_Params();
 		for(int i=0; i<ps.size(); i++){
-			DB_Object p = ps.get(i);
+			DBObject p = ps.get(i);
 			String hash = p.Get_String("HASH");
 			this.contents.put(hash , new HTMLPanel(p.Get_String("VALUE")));
 			this.loaded.put(hash, false);
@@ -100,7 +100,7 @@ public class Content_Hash extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

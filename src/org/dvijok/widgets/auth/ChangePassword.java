@@ -20,7 +20,7 @@ package org.dvijok.widgets.auth;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
@@ -118,21 +118,21 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 		String password = pass.getText();
 		if( password.equals(passconf.getText()) ){
 			
-		DB_Object passdbo = new DB_Object();
+		DBObject passdbo = new DBObject();
 		passdbo.put("password", password);
-		DB_Object dbo = new DB_Object();
+		DBObject dbo = new DBObject();
 		dbo.put("dbid", "password");
 		dbo.put("dbo", passdbo);
 		
-		final DV_Request_Handler<DB_Object> chpassrh = new DV_Request_Handler<DB_Object>(){
+		final DV_Request_Handler<DBObject> chpassrh = new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				onChPassSuccess();
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				onChPassFailed(result, this);
 			}
 			
@@ -148,23 +148,23 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 	
 	private void sendAuthKey(){
 		
-		DB_Object dbo = new DB_Object();
+		DBObject dbo = new DBObject();
 		dbo.put("challange", authkeychal);
 		dbo.put("responce", md5.md5(authkeychal+authkey.getText()));
 		
-		DB_Object reqdbo = new DB_Object();
+		DBObject reqdbo = new DBObject();
 		reqdbo.put("dbid", "seckey");
 		reqdbo.put("dbo", dbo);
 
-		final DV_Request_Handler<DB_Object> authkeyrh = new DV_Request_Handler<DB_Object>(){
+		final DV_Request_Handler<DBObject> authkeyrh = new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				onChPassSuccess();
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				//onChPassFailed(result, this);
 				Lib.Alert("Неверно введен код");
 				authkey.setFocus(true);
@@ -175,7 +175,7 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 		Resources.getInstance().db.Put_Object(reqdbo, authkeyrh);
 	}
 	
-	private void onChPassFailed(DB_Object result, DV_Request_Handler<DB_Object> loginrh){
+	private void onChPassFailed(DBObject result, DV_Request_Handler<DBObject> loginrh){
 
 		String res = result.Get_String("result");
 		
@@ -190,7 +190,7 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("pass") ) return this.pass;
 		else if( dwname.equals("passconf") ) return this.passconf;
 		else if( dwname.equals("dochangepass") ) return this.dochangepass;

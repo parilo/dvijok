@@ -20,7 +20,7 @@ package org.dvijok.widgets.dialog;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.user.client.ui.Button;
@@ -39,7 +39,7 @@ public abstract class DialogDwidget extends DialogBox {
 			}
 			
 			@Override
-			protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params){
+			protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params){
 				return me.Gen_Sub_Widget(dwname, params);
 			}
 		};
@@ -56,6 +56,6 @@ public abstract class DialogDwidget extends DialogBox {
 	}
 
 	protected abstract void Before_Sub_Panels_Loading();
-	protected abstract Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params);
+	protected abstract Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params);
 	
 }

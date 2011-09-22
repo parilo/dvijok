@@ -20,7 +20,7 @@ package org.dvijok.db.gwtrpc;
 
 import java.util.Date;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
@@ -31,7 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class DataBase_GWTRPC implements DataBase {
 
-	private DB_Object session;
+	private DBObject session;
 	
 	private static DataBase_ServiceAsync dataSvc = GWT.create(DataBase_Service.class);
 	
@@ -44,7 +44,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 	
 	private void Make_Session(final DV_Request_Handler<Integer> handler){
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -53,7 +53,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 //				Lib.Alert("sid: "+result.Get_String("sid"));
 				session = result;
 				Store_Session();
@@ -73,19 +73,19 @@ public class DataBase_GWTRPC implements DataBase {
 	protected void Restore_Session(){
 		String sid = com.google.gwt.user.client.Cookies.getCookie("dvijok.session");
 		if( sid != null ){
-			session = new DB_Object();
+			session = new DBObject();
 			session.put("sid", sid);
 		} else Make_Session();
 	}
 	
 	@Override
-	public void Auth(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
+	public void Auth(final DBObject params, final DV_Request_Handler<DBObject> handler) {
 		
-		final DB_Object allparams = new DB_Object();
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -93,7 +93,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") ) handler.Success(result);
 				else if( res.equals("notsid") ){
@@ -121,13 +121,13 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Send_Key(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
+	public void Send_Key(final DBObject params, final DV_Request_Handler<DBObject> handler) {
 		
-		final DB_Object allparams = new DB_Object();
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -135,7 +135,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") )	handler.Success(result);
 				else if( res.equals("notsid") ){
@@ -163,12 +163,12 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Logout(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
-		final DB_Object allparams = new DB_Object();
+	public void Logout(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -176,7 +176,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") || res.equals("notsid") ) handler.Success(result);
 				else handler.Fail(result);
@@ -188,12 +188,12 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Get_Object(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
-		final DB_Object allparams = new DB_Object();
+	public void Get_Object(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -201,7 +201,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") )	handler.Success(result);
 				else if( res.equals("notsid") ){
@@ -229,12 +229,12 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Get_Objects(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
-		final DB_Object allparams = new DB_Object();
+	public void Get_Objects(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -242,7 +242,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") )	handler.Success(result);
 				else if( res.equals("notsid") ){
@@ -270,12 +270,12 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Put_Object(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
-		final DB_Object allparams = new DB_Object();
+	public void Put_Object(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -283,7 +283,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") )	handler.Success(result);
 				else if( res.equals("notsid") ){
@@ -311,12 +311,12 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Del_Object(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
-		final DB_Object allparams = new DB_Object();
+	public void Del_Object(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
 		
-		AsyncCallback<DB_Object> cb = new AsyncCallback<DB_Object>(){
+		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -324,7 +324,7 @@ public class DataBase_GWTRPC implements DataBase {
 			}
 
 			@Override
-			public void onSuccess(DB_Object result) {
+			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
 				if( res.equals("success") )	handler.Success(result);
 				else if( res.equals("notsid") ){

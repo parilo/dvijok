@@ -20,7 +20,7 @@ package org.dvijok.widgets.editor;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -90,7 +90,7 @@ public class EditorCKEditor extends Sub_Panels_Dwidget implements Editor {
 	}-*/;	
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("editor") ){
 			return ed;
 		} else return null;

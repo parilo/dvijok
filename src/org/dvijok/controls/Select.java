@@ -20,7 +20,7 @@ package org.dvijok.controls;
 
 import java.util.HashMap;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.lib.Lib;
 
 import com.google.gwt.user.client.ui.ListBox;
@@ -29,14 +29,14 @@ public class Select extends ListBox {
 
 	private HashMap<String,Integer> valToIdx;
 	private HashMap<String, Integer> labelToIdx;
-	private HashMap<Integer,DB_Object> vals;
-	private HashMap<DB_Object,Integer> valDBOToIdx;
+	private HashMap<Integer,DBObject> vals;
+	private HashMap<DBObject,Integer> valDBOToIdx;
 	private int curIdx = 0;
 	
 	public Select(){
 		valToIdx = new HashMap<String,Integer>();
-		valDBOToIdx = new HashMap<DB_Object,Integer>();
-		vals = new HashMap<Integer,DB_Object>();
+		valDBOToIdx = new HashMap<DBObject,Integer>();
+		vals = new HashMap<Integer,DBObject>();
 		labelToIdx = new HashMap<String, Integer>();
 	}
 	
@@ -45,7 +45,7 @@ public class Select extends ListBox {
 			this.setSelectedIndex(this.valToIdx.get(val));
 	}
 	
-	public void setSelectedVal(DB_Object val){
+	public void setSelectedVal(DBObject val){
 		this.setSelectedIndex(this.valDBOToIdx.get(val));
 	}
 
@@ -56,14 +56,14 @@ public class Select extends ListBox {
 		super.addItem(item, value);
 	}	
 
-	public void addItem(String item, DB_Object value) {
+	public void addItem(String item, DBObject value) {
 		this.vals.put(curIdx, value);
 		this.labelToIdx.put(item, curIdx);
 		this.valDBOToIdx.put(value, curIdx++);
 		super.addItem(item);
 	}
 	
-	public DB_Object getSelectedValue(){
+	public DBObject getSelectedValue(){
 		return this.vals.get(this.getSelectedIndex());
 	}
 	

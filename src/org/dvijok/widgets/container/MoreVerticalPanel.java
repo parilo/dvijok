@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
@@ -62,21 +62,21 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 		
 		Resources.getInstance().setBusy(true);
 		
-		DB_Object reqp = new DB_Object();
+		DBObject reqp = new DBObject();
 		reqp.put("dbid", dbid);
 		reqp.put("beg", Integer.toString(begi));
 		reqp.put("count", Integer.toString(count));
 		
-		Resources.getInstance().db.Get_Objects(reqp, new DV_Request_Handler<DB_Object>(){
+		Resources.getInstance().db.Get_Objects(reqp, new DV_Request_Handler<DBObject>(){
 	
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				load(result.Get_DB_Object("objects"));
 				Resources.getInstance().setBusy(false);
 			}
 	
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				Lib.Alert("Messages: Load_Messages: failed: "+result);
 				Resources.getInstance().setBusy(false);
 			}
@@ -85,19 +85,19 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 	
 	}
 	
-	private void load(DB_Object objs){
+	private void load(DBObject objs){
 		
-		ArrayList<DB_Object> os = new ArrayList<DB_Object>();
+		ArrayList<DBObject> os = new ArrayList<DBObject>();
 		long i=1;
 		while( objs.containsKey(Long.toString(i)) ){
 			String ii = Long.toString(i++);
-			DB_Object obj = objs.Get_DB_Object(ii);
+			DBObject obj = objs.Get_DB_Object(ii);
 			os.add(obj);
 		}
 		begi += os.size();
-		Collections.sort(os, new Comparator<DB_Object>(){
+		Collections.sort(os, new Comparator<DBObject>(){
 			@Override
-			public int compare(DB_Object o1, DB_Object o2) {
+			public int compare(DBObject o1, DBObject o2) {
 				long id1 = o1.Get_Long("id");
 				long id2 = o2.Get_Long("id");
 				return id2>=id1?id2==id1?0:1:-1;
@@ -109,7 +109,7 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 		
 	}
 	
-	public Widget add(DB_Object obj){
+	public Widget add(DBObject obj){
 		Widget w = creator.getWidget(obj);
 		if( content.getWidgetCount() > 0 ) content.insert(w, 0);
 		else content.add(w);
@@ -130,7 +130,7 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return content;
 		} else if( dwname.equals("more") ){

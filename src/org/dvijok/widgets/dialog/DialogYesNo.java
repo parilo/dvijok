@@ -20,7 +20,7 @@ package org.dvijok.widgets.dialog;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 
@@ -82,7 +82,7 @@ public class DialogYesNo extends DialogDwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return cont;
 		} else if( dwname.equals("yes") ){

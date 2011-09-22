@@ -20,7 +20,7 @@ package org.dvijok.widgets;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.resources.Resources;
 
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -51,7 +51,7 @@ public abstract class Sub_Panels_Dwidget extends Dwidget {
 		this.Attach_Tmpl();
 	}
 	
-	protected abstract Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params);
+	protected abstract Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params);
 	
 	private void Load_Sub_Panels(){
 		
@@ -60,7 +60,7 @@ public abstract class Sub_Panels_Dwidget extends Dwidget {
 		
 		while( (w = html.getElementById("dw")) != null ){
 			String name = w.getAttribute("dwname");
-			ArrayList<DB_Object> params = Resources.getInstance().loader.Get_Params(w);
+			ArrayList<DBObject> params = Resources.getInstance().loader.Get_Params(w);
 			w.setInnerHTML("");
 			Widget sw = this.Gen_Sub_Widget(name, params);
 			if( sw == null ) sw = new Label("Sub_Panels_Dwidget: Don't know dwname: ->"+name+"<-");

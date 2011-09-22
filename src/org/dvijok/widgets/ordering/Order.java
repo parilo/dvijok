@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dvijok.controls.Table;
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.widgets.Sub_Panels_Dwidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -138,7 +138,7 @@ public class Order extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("objects") ) {
 			return this.objects;
 		} else if( dwname.equals("up") ) {

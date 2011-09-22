@@ -20,7 +20,7 @@ package org.dvijok.widgets.auth;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
@@ -118,18 +118,18 @@ public class Auth extends Sub_Panels_Dwidget {
 	}
 	
 	private void Do_Login(){
-		DB_Object dbo = new DB_Object();
+		DBObject dbo = new DBObject();
 		dbo.put("login", login.getValue());
 		
-		final DV_Request_Handler<DB_Object> loginrh = new DV_Request_Handler<DB_Object>(){
+		final DV_Request_Handler<DBObject> loginrh = new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				On_Auth_Success();
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				On_Login_Failed(result, this);
 			}
 			
@@ -140,20 +140,20 @@ public class Auth extends Sub_Panels_Dwidget {
 	
 	private void Send_AuthKey(){
 		
-		DB_Object dbo = new DB_Object();
+		DBObject dbo = new DBObject();
 		dbo.put("login", login.getValue());
 		dbo.put("authkey", this.authkey.getValue());
 		dbo.put("response", md5.md5(this.authkeychal+pass.getValue()));
 
-		final DV_Request_Handler<DB_Object> authkeyrh = new DV_Request_Handler<DB_Object>(){
+		final DV_Request_Handler<DBObject> authkeyrh = new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				On_Auth_Success();
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				On_Login_Failed(result, this);
 			}
 			
@@ -162,7 +162,7 @@ public class Auth extends Sub_Panels_Dwidget {
 		Resources.getInstance().db.Send_Key(dbo, authkeyrh);
 	}
 	
-	private void On_Login_Failed(DB_Object result, DV_Request_Handler<DB_Object> loginrh){
+	private void On_Login_Failed(DBObject result, DV_Request_Handler<DBObject> loginrh){
 
 		String res = result.Get_String("result");
 		
@@ -170,7 +170,7 @@ public class Auth extends Sub_Panels_Dwidget {
 
 			String resp = md5.md5(result.Get_DB_Object("objects").Get_String("chal")+pass.getValue());
 			
-			DB_Object dbo = new DB_Object();
+			DBObject dbo = new DBObject();
 			dbo.put("login", login.getValue());
 			dbo.put("response", resp);
 			
@@ -188,7 +188,7 @@ public class Auth extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("login") ) return this.login;
 		else if( dwname.equals("pass") ) return this.pass;
 		else if( dwname.equals("dologin") ){

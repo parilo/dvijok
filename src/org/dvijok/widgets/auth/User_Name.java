@@ -20,7 +20,7 @@ package org.dvijok.widgets.auth;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Sub_Panel;
@@ -79,7 +79,7 @@ public class User_Name extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("username") ) return this.username; 
 		else if( dwname.equals("backtoadm") ) return this.backtoadm; 
 		else return null;

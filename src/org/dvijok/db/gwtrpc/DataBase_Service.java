@@ -21,19 +21,19 @@ package org.dvijok.db.gwtrpc;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 
 @RemoteServiceRelativePath("data")
 public interface DataBase_Service extends RemoteService{
 
-	DB_Object Get_Session();
-	DB_Object Auth(DB_Object params);
-	DB_Object Send_Key(DB_Object params);
-	DB_Object Logout(DB_Object params);
-	DB_Object Get_Object(DB_Object params);
-	DB_Object Get_Objects(DB_Object params);
-	DB_Object Put_Object(DB_Object params);
-	DB_Object Del_Object(DB_Object params);
+	DBObject Get_Session();
+	DBObject Auth(DBObject params);
+	DBObject Send_Key(DBObject params);
+	DBObject Logout(DBObject params);
+	DBObject Get_Object(DBObject params);
+	DBObject Get_Objects(DBObject params);
+	DBObject Put_Object(DBObject params);
+	DBObject Del_Object(DBObject params);
 	
 }

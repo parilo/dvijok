@@ -21,7 +21,7 @@ package org.dvijok.widgets.content;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.interfaces.DV_Request_Handler;
@@ -103,25 +103,25 @@ public class Content_Hash_DB extends Sub_Panels_Dwidget {
 	}
 	
 	private void Init_Contents(){
-		DB_Object req = new DB_Object();
+		DBObject req = new DBObject();
 		req.put("dbid", this.Get_dbid());
-		Resources.getInstance().db.Get_Object(req, new DV_Request_Handler<DB_Object>(){
+		Resources.getInstance().db.Get_Object(req, new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				Init_Contents(result.Get_DB_Object("objects"));
 				Load_Content(Lib.Get_Hash_Token());
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				Lib.Alert("Content_Hash_DB: Init_Contents: fail: "+result);
 			}
 			
 		});
 	}
 	
-	private void Init_Contents(DB_Object dbo){
+	private void Init_Contents(DBObject dbo){
 		for(String hash : dbo.keySet()){
 			String cont = dbo.Get_String(hash);
 			if( hash.equals("#def") ) hash = "def";
@@ -131,7 +131,7 @@ public class Content_Hash_DB extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

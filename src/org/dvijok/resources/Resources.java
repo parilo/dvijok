@@ -19,7 +19,7 @@
 package org.dvijok.resources;
 
 import org.dvijok.config.Config;
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
@@ -41,7 +41,7 @@ public class Resources {
 	public Config conf;
 	public DataBase db;
 	public Dwidgets dwidgets;
-	public DB_Object userInfo = null;
+	public DBObject userInfo = null;
 	private String idUserInfo;
 	public String adminUrl = "http://javadimon.homelinux.net:8081/granatw/";		
 	public String cabUrl = "http://javadimon.homelinux.net:8081/granatcab/";		
@@ -78,20 +78,20 @@ public class Resources {
 	}
 	
 	public void Get_User_Info(final DV_Request_Handler<Integer> handler){
-		DB_Object reqp = new DB_Object();
+		DBObject reqp = new DBObject();
 		reqp.put("dbid", "userinfo");
 		
-		Resources.getInstance().db.Get_Object(reqp, new DV_Request_Handler<DB_Object>(){
+		Resources.getInstance().db.Get_Object(reqp, new DV_Request_Handler<DBObject>(){
 
 			@Override
-			public void Success(DB_Object result) {
+			public void Success(DBObject result) {
 				Resources.getInstance().userInfo = result.Get_DB_Object("objects");
 				Resources.getInstance().idUserInfo = result.Get_String("id");
 				if( handler != null ) handler.Success(0);
 			}
 
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				Lib.Alert("Resources: Get_User_Info: failed: "+result);
 			}
 			
@@ -99,18 +99,18 @@ public class Resources {
 	}
 	
 	public void Save_User_Info(){
-		DB_Object reqp = new DB_Object();
+		DBObject reqp = new DBObject();
 		reqp.put("dbid", "userinfo");
 		reqp.put("id", Resources.getInstance().idUserInfo);
 		reqp.put("dbo", Resources.getInstance().userInfo);
 		
-		Resources.getInstance().db.Put_Object(reqp, new DV_Request_Handler<DB_Object>(){
+		Resources.getInstance().db.Put_Object(reqp, new DV_Request_Handler<DBObject>(){
 			
 			@Override
-			public void Success(DB_Object result) {}
+			public void Success(DBObject result) {}
 			
 			@Override
-			public void Fail(DB_Object result) {
+			public void Fail(DBObject result) {
 				Lib.Alert("Resources: Save_User_Info: failed: "+result);
 			}
 			

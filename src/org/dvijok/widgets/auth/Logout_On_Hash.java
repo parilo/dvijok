@@ -20,7 +20,7 @@ package org.dvijok.widgets.auth;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DB_Object;
+import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DV_Request_Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
@@ -47,18 +47,18 @@ public class Logout_On_Hash extends Sub_Panels_Dwidget {
 				String hash = event.getValue();
 				if( hash.equals("logout") ){
 					
-					DB_Object dbo = new DB_Object();
+					DBObject dbo = new DBObject();
 
-					final DV_Request_Handler<DB_Object> handler = new DV_Request_Handler<DB_Object>(){
+					final DV_Request_Handler<DBObject> handler = new DV_Request_Handler<DBObject>(){
 
 						@Override
-						public void Success(DB_Object result) {
+						public void Success(DBObject result) {
 							//redirect
 							Lib.Redirect("about:blank");
 						}
 
 						@Override
-						public void Fail(DB_Object result) {
+						public void Fail(DBObject result) {
 							Lib.Alert("Logout_On_Hash: Before_Sub_Panels_Loading: logout failed: "+result);
 						}
 						
@@ -72,7 +72,7 @@ public class Logout_On_Hash extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DB_Object> params) {
+	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
 		return null;
 	}
 	
