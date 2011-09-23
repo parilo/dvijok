@@ -22,28 +22,24 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 
-public class HttpClient {
+public class HttpFunctions {
 	
-	private RequestBuilder builderGET;
-	private RequestBuilder builderPOST;
-	
-	public HttpClient(String url){
-		builderGET = new RequestBuilder(RequestBuilder.GET, url);
-		builderPOST = new RequestBuilder(RequestBuilder.POST, url);
-	}
-	
-	  public void doGet(RequestCallback rc) {
+	  public static void doGet(String url, RequestCallback rc) {
+	    RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+
 	    try {
-	      builderGET.sendRequest(null, rc);
+	      builder.sendRequest(null, rc);
 	    } catch (RequestException e) {
-	      Lib.Alert("Lib: HttpClient: doGet: exception: "+e.getMessage());
+	      Lib.Alert("Lib: Http_Client: Do_Get: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
 	  }
 
-	  public void doPost(String data, RequestCallback rc) {
+	  public static void doPost(String url, String data, RequestCallback rc) {
+	    RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
+
 	    try {
-	      builderPOST.sendRequest(data, rc);
+	      builder.sendRequest(data, rc);
 	    } catch (RequestException e) {
 	      Lib.Alert("Lib: HttpClient: doPost: exception: "+e.getMessage());
 	      e.printStackTrace();

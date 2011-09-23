@@ -1,5 +1,5 @@
 //    dvijok - cms written in gwt
-//    Copyright (C) 2010-2011  Pechenko Anton Vladimirovich aka Parilo
+//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -19,9 +19,33 @@
 package org.dvijok.db.dvrpc;
 
 import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.lib.HttpClient;
 
-public interface DVRPCTransport {
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.Response;
+
+public class DVRPCTransportPOST implements DVRPCTransport {
 	
-	public void request(String data, DVRequestHandler<String> handler);
+	private HttpClient httpClient;
+	
+	public DVRPCTransportPOST(String url){
+		httpClient = new HttpClient(url);
+	}
+	
+	public void request(String data, DVRequestHandler<String> handler){
+		
+		httpClient.doPost(data, new RequestCallback(){
+
+			@Override
+			public void onResponseReceived(Request request, Response response) {
+				handler.success(result);
+			}
+
+			@Override
+			public void onError(Request request, Throwable exception) {
+			}});
+		
+	}
 
 }
