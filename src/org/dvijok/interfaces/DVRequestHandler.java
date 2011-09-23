@@ -16,24 +16,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.gwtrpc;
+package org.dvijok.interfaces;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+public interface DVRequestHandler<T> {
 
-import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DVRequestHandler;
-
-@RemoteServiceRelativePath("data")
-public interface DataBase_Service extends RemoteService{
-
-	DBObject Get_Session();
-	DBObject Auth(DBObject params);
-	DBObject Send_Key(DBObject params);
-	DBObject Logout(DBObject params);
-	DBObject Get_Object(DBObject params);
-	DBObject Get_Objects(DBObject params);
-	DBObject Put_Object(DBObject params);
-	DBObject Del_Object(DBObject params);
+	public void success(T result);
+	public void fail(T result);
 	
 }

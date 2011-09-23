@@ -21,7 +21,7 @@ package org.dvijok.widgets.auth;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
@@ -49,22 +49,22 @@ public class Logout_On_Hash extends Sub_Panels_Dwidget {
 					
 					DBObject dbo = new DBObject();
 
-					final DV_Request_Handler<DBObject> handler = new DV_Request_Handler<DBObject>(){
+					final DVRequestHandler<DBObject> handler = new DVRequestHandler<DBObject>(){
 
 						@Override
-						public void Success(DBObject result) {
+						public void success(DBObject result) {
 							//redirect
 							Lib.Redirect("about:blank");
 						}
 
 						@Override
-						public void Fail(DBObject result) {
+						public void fail(DBObject result) {
 							Lib.Alert("Logout_On_Hash: Before_Sub_Panels_Loading: logout failed: "+result);
 						}
 						
 					};
 					
-					Resources.getInstance().db.Logout(dbo, handler);
+					Resources.getInstance().db.logout(dbo, handler);
 					
 				}
 			}

@@ -20,8 +20,8 @@ package org.dvijok.tmpl;
 
 import java.util.HashMap;
 
-import org.dvijok.interfaces.DV_Request_Handler;
-import org.dvijok.lib.Http_Client;
+import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.lib.HttpClient;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
@@ -35,25 +35,25 @@ public class Tmpls_DB {
 		this.tmpls = new HashMap<String,String>();
 	}
 	
-	public void Get_Template(final String url, final DV_Request_Handler<String> req){
+	public void Get_Template(final String url, final DVRequestHandler<String> req){
 		
 		if( this.tmpls.containsKey(url) ){
-			req.Success(this.tmpls.get(url));
+			req.success(this.tmpls.get(url));
 		}
 		else {
 			
-			Http_Client.Do_Get(url, new RequestCallback(){
+			HttpClient.doGet(url, new RequestCallback(){
 	
 				@Override
 				public void onError(Request request, Throwable exception) {
-					req.Fail(exception.getMessage());
+					req.fail(exception.getMessage());
 				}
 	
 				@Override
 				public void onResponseReceived(Request request, Response response) {
 					String text = response.getText();
 					tmpls.put(url, text);
-					req.Success(text);
+					req.success(text);
 				}
 				
 			});

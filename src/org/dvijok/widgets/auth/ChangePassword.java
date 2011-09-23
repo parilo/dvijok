@@ -21,7 +21,7 @@ package org.dvijok.widgets.auth;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
@@ -124,21 +124,21 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 		dbo.put("dbid", "password");
 		dbo.put("dbo", passdbo);
 		
-		final DV_Request_Handler<DBObject> chpassrh = new DV_Request_Handler<DBObject>(){
+		final DVRequestHandler<DBObject> chpassrh = new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 				onChPassSuccess();
 			}
 
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				onChPassFailed(result, this);
 			}
 			
 		};
 		
-		Resources.getInstance().db.Put_Object(dbo, chpassrh);
+		Resources.getInstance().db.putObject(dbo, chpassrh);
 		
 		} else {
 			Lib.Alert("Подтверждение и пароль не совпадают");
@@ -156,15 +156,15 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 		reqdbo.put("dbid", "seckey");
 		reqdbo.put("dbo", dbo);
 
-		final DV_Request_Handler<DBObject> authkeyrh = new DV_Request_Handler<DBObject>(){
+		final DVRequestHandler<DBObject> authkeyrh = new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 				onChPassSuccess();
 			}
 
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				//onChPassFailed(result, this);
 				Lib.Alert("Неверно введен код");
 				authkey.setFocus(true);
@@ -172,10 +172,10 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 			
 		};
 		
-		Resources.getInstance().db.Put_Object(reqdbo, authkeyrh);
+		Resources.getInstance().db.putObject(reqdbo, authkeyrh);
 	}
 	
-	private void onChPassFailed(DBObject result, DV_Request_Handler<DBObject> loginrh){
+	private void onChPassFailed(DBObject result, DVRequestHandler<DBObject> loginrh){
 
 		String res = result.Get_String("result");
 		

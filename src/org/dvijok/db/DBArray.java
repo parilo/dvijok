@@ -22,7 +22,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.dvijok.db.dvrpc.DVDeserializeException;
 import org.dvijok.db.dvrpc.DVSerializable;
+import org.dvijok.lib.Lib;
 
 public class DBArray extends ArrayList<Serializable> implements DVSerializable {
 
@@ -46,6 +48,11 @@ public class DBArray extends ArrayList<Serializable> implements DVSerializable {
 			}
 		}
 		return ret.substring(1);
+	}
+
+	@Override
+	public void dvDeserialize(String str) throws DVDeserializeException {
+		Lib.Alert("DBArray: need deserialize: "+str);
 	}
 
 }

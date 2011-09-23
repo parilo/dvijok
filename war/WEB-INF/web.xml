@@ -26,7 +26,7 @@
    </init-param>
    <!-- init-param>
         <param-name>cgibinResourceBase</param-name>
-        <param-value>/home/anton/devel/workspace/dvijok/xmlrpcdb/</param-value>
+        <param-value>/home/anton/devel/workspace/dvijok/dvrpc/</param-value>
    </init-param -->
    <!-- Path, other ENV_variables including ENV_SystemRoot, ENV_REDIRECT_STATUS on Windows -->
  </servlet>

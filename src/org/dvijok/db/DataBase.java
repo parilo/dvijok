@@ -18,16 +18,18 @@
 
 package org.dvijok.db;
 
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 
 public interface DataBase {
 
-	public void Auth(DBObject params, final DV_Request_Handler<DBObject> handler);
-	public void Send_Key(DBObject params, final DV_Request_Handler<DBObject> handler);
-	public void Logout(DBObject params, final DV_Request_Handler<DBObject> handler);
-	public void Get_Object(DBObject params, final DV_Request_Handler<DBObject> handler);
-	public void Get_Objects(DBObject params, final DV_Request_Handler<DBObject> handler);
-	public void Put_Object(DBObject params, final DV_Request_Handler<DBObject> handler);
-	public void Del_Object(DBObject params, final DV_Request_Handler<DBObject> handler);
+	public void initSession(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void auth(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void sendKey(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void logout(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void getObject(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void getObjects(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void putObject(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void delObject(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void listenForEvents(DBObject params, final DVRequestHandler<DBObject> handler);
 	
 }

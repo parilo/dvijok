@@ -25,7 +25,7 @@ import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Sub_Panel;
@@ -54,17 +54,17 @@ public class Table_Menu extends Sub_Panels_Dwidget {
 	private void Init_Menu(){
 		DBObject req = new DBObject();
 		req.put("dbid", this.Get_dbid());
-		Resources.getInstance().db.Get_Object(req, new DV_Request_Handler<DBObject>(){
+		Resources.getInstance().db.getObject(req, new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 				DBObject dbos = result.Get_DB_Object("objects");
 				if( dbos.containsKey("props") ) Init_Props(dbos.Get_DB_Object("props"));
 				if( dbos.containsKey("items") ) Init_Items(dbos.Get_DB_Object("items"));
 			}
 
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				Lib.Alert("Table_Menu: Init_Menu: fail: "+result);
 			}
 			

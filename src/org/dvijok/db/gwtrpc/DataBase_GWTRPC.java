@@ -22,7 +22,7 @@ import java.util.Date;
 
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
@@ -43,13 +43,13 @@ public class DataBase_GWTRPC implements DataBase {
 		this.Make_Session(null);
 	}
 	
-	private void Make_Session(final DV_Request_Handler<Integer> handler){
+	private void Make_Session(final DVRequestHandler<Integer> handler){
 		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
 				Lib.Alert("DataBase_GWTRPC: make session failed");
-				if( handler != null ) handler.Fail(0);
+				if( handler != null ) handler.fail(0);
 			}
 
 			@Override
@@ -57,7 +57,7 @@ public class DataBase_GWTRPC implements DataBase {
 //				Lib.Alert("sid: "+result.Get_String("sid"));
 				session = result;
 				Store_Session();
-				if( handler != null ) handler.Success(0);
+				if( handler != null ) handler.success(0);
 			}
 			
 		};
@@ -79,7 +79,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 	
 	@Override
-	public void Auth(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void auth(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
@@ -95,24 +95,24 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") ) handler.Success(result);
+				if( res.equals("success") ) handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DV_Request_Handler<Integer>(){
+					Make_Session(new DVRequestHandler<Integer>(){
 
 						@Override
-						public void Success(Integer result) {
-							Auth(params, handler);
+						public void success(Integer result) {
+							auth(params, handler);
 						}
 
 						@Override
-						public void Fail(Integer result) {
+						public void fail(Integer result) {
 							Lib.Alert("DataBase_GWTRPC: Get_CallBack: make session failed");
 						}
 						
 					});
 					
-				} else handler.Fail(result);
+				} else handler.fail(result);
 			}
 			
 		};
@@ -121,7 +121,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Send_Key(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void sendKey(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
@@ -137,24 +137,24 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") )	handler.Success(result);
+				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DV_Request_Handler<Integer>(){
+					Make_Session(new DVRequestHandler<Integer>(){
 
 						@Override
-						public void Success(Integer result) {
-							Send_Key(params, handler);
+						public void success(Integer result) {
+							sendKey(params, handler);
 						}
 
 						@Override
-						public void Fail(Integer result) {
+						public void fail(Integer result) {
 							Lib.Alert("DataBase_GWTRPC: Get_CallBack: make session failed");
 						}
 						
 					});
 					
-				} else handler.Fail(result);
+				} else handler.fail(result);
 			}
 			
 		};
@@ -163,7 +163,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Logout(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void logout(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -178,8 +178,8 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") || res.equals("notsid") ) handler.Success(result);
-				else handler.Fail(result);
+				if( res.equals("success") || res.equals("notsid") ) handler.success(result);
+				else handler.fail(result);
 			}
 			
 		};
@@ -188,7 +188,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Get_Object(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void getObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -203,24 +203,24 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") )	handler.Success(result);
+				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DV_Request_Handler<Integer>(){
+					Make_Session(new DVRequestHandler<Integer>(){
 
 						@Override
-						public void Success(Integer result) {
-							Get_Object(params, handler);
+						public void success(Integer result) {
+							getObject(params, handler);
 						}
 
 						@Override
-						public void Fail(Integer result) {
+						public void fail(Integer result) {
 							Lib.Alert("DataBase_GWTRPC: Get_Object: make session failed");
 						}
 						
 					});
 					
-				} else handler.Fail(result);
+				} else handler.fail(result);
 			}
 			
 		};
@@ -229,7 +229,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Get_Objects(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void getObjects(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -244,24 +244,24 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") )	handler.Success(result);
+				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DV_Request_Handler<Integer>(){
+					Make_Session(new DVRequestHandler<Integer>(){
 
 						@Override
-						public void Success(Integer result) {
-							Get_Objects(params, handler);
+						public void success(Integer result) {
+							getObjects(params, handler);
 						}
 
 						@Override
-						public void Fail(Integer result) {
+						public void fail(Integer result) {
 							Lib.Alert("DataBase_GWTRPC: Put_Object: make session failed");
 						}
 						
 					});
 					
-				} else handler.Fail(result);
+				} else handler.fail(result);
 			}
 			
 		};
@@ -270,7 +270,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Put_Object(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void putObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -285,24 +285,24 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") )	handler.Success(result);
+				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DV_Request_Handler<Integer>(){
+					Make_Session(new DVRequestHandler<Integer>(){
 
 						@Override
-						public void Success(Integer result) {
-							Put_Object(params, handler);
+						public void success(Integer result) {
+							putObject(params, handler);
 						}
 
 						@Override
-						public void Fail(Integer result) {
+						public void fail(Integer result) {
 							Lib.Alert("DataBase_GWTRPC: Put_Object: make session failed");
 						}
 						
 					});
 					
-				} else handler.Fail(result);
+				} else handler.fail(result);
 			}
 			
 		};
@@ -311,7 +311,7 @@ public class DataBase_GWTRPC implements DataBase {
 	}
 
 	@Override
-	public void Del_Object(final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void delObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -326,24 +326,24 @@ public class DataBase_GWTRPC implements DataBase {
 			@Override
 			public void onSuccess(DBObject result) {
 				String res = result.Get_String("result");
-				if( res.equals("success") )	handler.Success(result);
+				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DV_Request_Handler<Integer>(){
+					Make_Session(new DVRequestHandler<Integer>(){
 
 						@Override
-						public void Success(Integer result) {
-							Del_Object(params, handler);
+						public void success(Integer result) {
+							delObject(params, handler);
 						}
 
 						@Override
-						public void Fail(Integer result) {
+						public void fail(Integer result) {
 							Lib.Alert("DataBase_GWTRPC: Put_Object: make session failed");
 						}
 						
 					});
 					
-				} else handler.Fail(result);
+				} else handler.fail(result);
 			}
 			
 		};

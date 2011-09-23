@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
@@ -74,15 +74,15 @@ public class Dwidget extends Composite {
 	
 	private void Get_Tmpl(){
 		
-		Resources.getInstance().tmpls.Get_Template(this.tmpl_url, new DV_Request_Handler<String>(){
+		Resources.getInstance().tmpls.Get_Template(this.tmpl_url, new DVRequestHandler<String>(){
 			@Override
-			public void Success(String result) {
+			public void success(String result) {
 				tmpl_url = result;
 				Create_GUI();
 			}
 
 			@Override
-			public void Fail(String message) {
+			public void fail(String message) {
 				Lib.Alert("cannot get template "+tmpl_url+" : "+message);
 			}
 		});

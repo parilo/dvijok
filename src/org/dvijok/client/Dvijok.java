@@ -22,7 +22,7 @@ import org.dvijok.config.Config;
 import org.dvijok.db.gwtrpc.DataBase_GWTRPC;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;

@@ -27,7 +27,7 @@ import com.fredhat.gwt.xmlrpc.client.XmlRpcClient;
 import com.fredhat.gwt.xmlrpc.client.XmlRpcRequest;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
@@ -54,19 +54,19 @@ public class DataBaseXMLRPC {
 		this.Make_Session(null);
 	}
 	
-	private void Make_Session(final DV_Request_Handler<Integer> handler){
-		this.Do_Request("sessionInit", new DBObject(), new DV_Request_Handler<DBObject>(){
+	private void Make_Session(final DVRequestHandler<Integer> handler){
+		this.Do_Request("sessionInit", new DBObject(), new DVRequestHandler<DBObject>(){
 			@Override
-			public void Success(DBObject dbo) {
+			public void success(DBObject dbo) {
 //				Lib.Alert("got: "+dbo);
 				session = dbo.Get_DB_Object("objects").Get_DB_Object("session");
 				Store_Session();
-				if( handler != null ) handler.Success(0);
+				if( handler != null ) handler.success(0);
 			}
 
 			@Override
-			public void Fail(DBObject message) {
-				if( handler != null ) handler.Fail(0);
+			public void fail(DBObject message) {
+				if( handler != null ) handler.fail(0);
 			}
 		});
 	}
@@ -132,7 +132,7 @@ public class DataBaseXMLRPC {
 		return dbo;
 	}
 	
-	private void Do_Request(String method, DBObject params, final DV_Request_Handler<DBObject> handler) {
+	private void Do_Request(String method, DBObject params, final DVRequestHandler<DBObject> handler) {
 		
 		Object[] params_ = new Object[]{params};
 		 
@@ -142,20 +142,20 @@ public class DataBaseXMLRPC {
 			params_,
 			new AsyncCallback<Object>() {
 		    public void onSuccess(Object response) {
-		    	handler.Success(convert(response));
+		    	handler.success(convert(response));
 		    }
 
 		    public void onFailure(Throwable response) {
 		    	String failedMsg = response.getMessage();
 //		    	Lib.Alert("DataBase: Request: request failure: "+failedMsg);
-		    	handler.Fail(new DBObject());
+		    	handler.fail(new DBObject());
 		    }
 		});
 		request.execute();
 		
 	}
 
-	public void Request(final String method, final DBObject params, final DV_Request_Handler<DBObject> handler) {
+	public void Request(final String method, final DBObject params, final DVRequestHandler<DBObject> handler) {
 		
 		if( session != null ){
 		
@@ -165,31 +165,31 @@ public class DataBaseXMLRPC {
 		    	allparams.put("objects", params);
 		    }
 		    
-		    this.Do_Request(method, allparams, new DV_Request_Handler<DBObject>(){
+		    this.Do_Request(method, allparams, new DVRequestHandler<DBObject>(){
 
 				@Override
-				public void Success(DBObject result) {
+				public void success(DBObject result) {
 					if( result.Get_String("result").equals("notsid") ){
-						Make_Session(new DV_Request_Handler<Integer>(){
+						Make_Session(new DVRequestHandler<Integer>(){
 
 							@Override
-							public void Success(Integer result) {
+							public void success(Integer result) {
 								Request(method, params, handler);
 							}
 
 							@Override
-							public void Fail(Integer message) {
+							public void fail(Integer message) {
 //								handler.Fail("DataBase: Request: failed to init session: "+message);
-								handler.Fail(new DBObject());
+								handler.fail(new DBObject());
 							}
 							
 						});
-					} else handler.Success(result);
+					} else handler.success(result);
 				}
 
 				@Override
-				public void Fail(DBObject message) {
-					handler.Fail(message);
+				public void fail(DBObject message) {
+					handler.fail(message);
 				}
 		    	
 		    });
@@ -207,22 +207,22 @@ public class DataBaseXMLRPC {
 		
 	}
 	
-	public void Get_DB_Object(String dbid, final DV_Request_Handler<DBObject> handler){
+	public void Get_DB_Object(String dbid, final DVRequestHandler<DBObject> handler){
 		DBObject dbidobj = new DBObject();
 		dbidobj.put("dbid", dbid);
-		this.Request("getObject", dbidobj, new DV_Request_Handler<DBObject>(){
+		this.Request("getObject", dbidobj, new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 //				Lib.Alert(""+result);
 				String res = result.Get_String("result");
-				if( res.equals("success") ) handler.Success(result.Get_DB_Object("objects"));
-				else handler.Fail(new DBObject());
+				if( res.equals("success") ) handler.success(result.Get_DB_Object("objects"));
+				else handler.fail(new DBObject());
 			}
 
 			@Override
-			public void Fail(DBObject message) {
-				handler.Fail(message);
+			public void fail(DBObject message) {
+				handler.fail(message);
 			}
 			
 		});

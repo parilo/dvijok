@@ -21,7 +21,7 @@ package org.dvijok.resources;
 import org.dvijok.config.Config;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
@@ -77,21 +77,21 @@ public class Resources {
 		this.Get_User_Info(null);
 	}
 	
-	public void Get_User_Info(final DV_Request_Handler<Integer> handler){
+	public void Get_User_Info(final DVRequestHandler<Integer> handler){
 		DBObject reqp = new DBObject();
 		reqp.put("dbid", "userinfo");
 		
-		Resources.getInstance().db.Get_Object(reqp, new DV_Request_Handler<DBObject>(){
+		Resources.getInstance().db.getObject(reqp, new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 				Resources.getInstance().userInfo = result.Get_DB_Object("objects");
 				Resources.getInstance().idUserInfo = result.Get_String("id");
-				if( handler != null ) handler.Success(0);
+				if( handler != null ) handler.success(0);
 			}
 
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				Lib.Alert("Resources: Get_User_Info: failed: "+result);
 			}
 			
@@ -104,13 +104,13 @@ public class Resources {
 		reqp.put("id", Resources.getInstance().idUserInfo);
 		reqp.put("dbo", Resources.getInstance().userInfo);
 		
-		Resources.getInstance().db.Put_Object(reqp, new DV_Request_Handler<DBObject>(){
+		Resources.getInstance().db.putObject(reqp, new DVRequestHandler<DBObject>(){
 			
 			@Override
-			public void Success(DBObject result) {}
+			public void success(DBObject result) {}
 			
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				Lib.Alert("Resources: Save_User_Info: failed: "+result);
 			}
 			

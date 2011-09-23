@@ -27,6 +27,7 @@ import java.util.Iterator;
 
 import org.dvijok.db.dvrpc.DVDeserializeException;
 import org.dvijok.db.dvrpc.DVSerializable;
+import org.dvijok.lib.Lib;
 
 public class DBObject extends HashMap<String,Serializable> implements Serializable, DVSerializable {
 	
@@ -143,7 +144,7 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 
 	@Override
 	public void dvDeserialize(String str) throws DVDeserializeException {
-		
+		Lib.Alert("DBObject: need deserialize: "+str);
 	}
 
 }

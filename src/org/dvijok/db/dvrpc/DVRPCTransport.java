@@ -1,5 +1,5 @@
 //    dvijok - cms written in gwt
-//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
+//    Copyright (C) 2010-2011  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,10 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.interfaces;
+package org.dvijok.db.dvrpc;
 
-public interface DV_Request_Handler<T> {
-
-	public void Success(T result);
-	public void Fail(T result);
+public interface DVRPCTransport {
 	
+	public send(String data, DVRequestHandler handler)
+
 }

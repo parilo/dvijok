@@ -21,7 +21,7 @@ package org.dvijok.widgets.auth;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DV_Request_Handler;
+import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
@@ -105,15 +105,15 @@ public class Auth extends Sub_Panels_Dwidget {
 	}
 	
 	private void On_Auth_Success(){
-		Resources.getInstance().Get_User_Info(new DV_Request_Handler<Integer>(){
+		Resources.getInstance().Get_User_Info(new DVRequestHandler<Integer>(){
 
 			@Override
-			public void Success(Integer result) {
+			public void success(Integer result) {
 				Resources.getInstance().dwidgets.Auth_Reload();
 			}
 
 			@Override
-			public void Fail(Integer result) {}
+			public void fail(Integer result) {}
 		});
 	}
 	
@@ -121,21 +121,21 @@ public class Auth extends Sub_Panels_Dwidget {
 		DBObject dbo = new DBObject();
 		dbo.put("login", login.getValue());
 		
-		final DV_Request_Handler<DBObject> loginrh = new DV_Request_Handler<DBObject>(){
+		final DVRequestHandler<DBObject> loginrh = new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 				On_Auth_Success();
 			}
 
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				On_Login_Failed(result, this);
 			}
 			
 		};
 		
-		Resources.getInstance().db.Auth(dbo, loginrh);
+		Resources.getInstance().db.auth(dbo, loginrh);
 	}
 	
 	private void Send_AuthKey(){
@@ -145,24 +145,24 @@ public class Auth extends Sub_Panels_Dwidget {
 		dbo.put("authkey", this.authkey.getValue());
 		dbo.put("response", md5.md5(this.authkeychal+pass.getValue()));
 
-		final DV_Request_Handler<DBObject> authkeyrh = new DV_Request_Handler<DBObject>(){
+		final DVRequestHandler<DBObject> authkeyrh = new DVRequestHandler<DBObject>(){
 
 			@Override
-			public void Success(DBObject result) {
+			public void success(DBObject result) {
 				On_Auth_Success();
 			}
 
 			@Override
-			public void Fail(DBObject result) {
+			public void fail(DBObject result) {
 				On_Login_Failed(result, this);
 			}
 			
 		};
 		
-		Resources.getInstance().db.Send_Key(dbo, authkeyrh);
+		Resources.getInstance().db.sendKey(dbo, authkeyrh);
 	}
 	
-	private void On_Login_Failed(DBObject result, DV_Request_Handler<DBObject> loginrh){
+	private void On_Login_Failed(DBObject result, DVRequestHandler<DBObject> loginrh){
 
 		String res = result.Get_String("result");
 		
@@ -174,7 +174,7 @@ public class Auth extends Sub_Panels_Dwidget {
 			dbo.put("login", login.getValue());
 			dbo.put("response", resp);
 			
-			Resources.getInstance().db.Auth( dbo, loginrh );
+			Resources.getInstance().db.auth( dbo, loginrh );
 			
 		} else if( res.equals("authkey") ){
 			this.authkeychal = result.Get_DB_Object("objects").Get_String("chal");
