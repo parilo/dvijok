@@ -18,32 +18,44 @@
 
 package org.dvijok.db.dvrpc;
 
+import org.dvijok.db.DBObject;
+import org.dvijok.db.DBRequest;
 import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.HttpClient;
+import org.dvijok.lib.Lib;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
 
-public class DVRPCTransportPOST implements DVRPCTransport {
+public class DBRequestDVRPC implements DBRequest {
 	
 	private HttpClient httpClient;
 	
-	public DVRPCTransportPOST(String url){
+	public DBRequestDVRPC(String url){
 		httpClient = new HttpClient(url);
 	}
 	
-	public void request(String data, DVRequestHandler<String> handler){
+	public void request(DBObject data, final DVRequestHandler<DBObject> handler){
 		
-		httpClient.doPost(data, new RequestCallback(){
+		httpClient.doPost(data.dvSerialize(), new RequestCallback(){
 
 			@Override
 			public void onResponseReceived(Request request, Response response) {
-				handler.success(result);
+				DBObject obj = new DBObject();
+				try {
+					obj.dvDeserialize(response.getText());
+				} catch (DVDeserializeException e) {
+					Lib.Alert("DVRPCTransportPOST: request: "+e.getMessage());
+				}
+				handler.success(obj);
 			}
 
 			@Override
 			public void onError(Request request, Throwable exception) {
+				DBObject obj = new DBObject();
+				obj.put("result", exception.getMessage());
+				handler.fail(obj);
 			}});
 		
 	}

@@ -19,6 +19,7 @@
 package org.dvijok.client;
 
 import org.dvijok.config.Config;
+import org.dvijok.db.DataBaseImpl;
 import org.dvijok.db.gwtrpc.DataBase_GWTRPC;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
@@ -51,7 +52,7 @@ public class Dvijok implements EntryPoint {
 public void onModuleLoad() {
 
 	Resources.getInstance().conf = new Config();
-	Resources.getInstance().db = new DataBase_GWTRPC();
+	Resources.getInstance().db = new DataBaseImpl();
 	Resources.getInstance().dwidgets = new Dwidgets();
 	
 	Loader l = new Loader();

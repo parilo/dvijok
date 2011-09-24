@@ -139,7 +139,7 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 				ret += key.length()+","+key+"DBA"+dbas.length()+","+dbas;
 			}
 		}
-		return ret.substring(1);
+		return ret;
 	}
 
 	@Override

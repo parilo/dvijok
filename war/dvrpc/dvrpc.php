@@ -53,51 +53,51 @@ function retarr($str){
  *   - struct 'objects': struct 'session': sid
  *   - result: 'success' on success, 'notreg' - company not found, error description on error
  */
-function sessionInit($method_name, $params, $app_data){
+// function sessionInit($method_name, $params, $app_data){
 
-	$db = $app_data[0];
-	$config = $app_data[1];
+// 	$db = $app_data[0];
+// 	$config = $app_data[1];
 	
-	$sid = randhash();
-	$ip = get_client_ip_address();
+// 	$sid = randhash();
+// 	$ip = get_client_ip_address();
 	
-	$ret = $db->putSession($sid, $ip, $config['SESSION_EXPIRATION_TIME_ANON']);
-	if( $ret === false ){
-		return retarr($db->getLastError());	
-	} else {
-		return array( 'objects' => array( 'session' => array('sid' => $sid) ), 'result' => 'success');
-	}
+// 	$ret = $db->putSession($sid, $ip, $config['SESSION_EXPIRATION_TIME_ANON']);
+// 	if( $ret === false ){
+// 		return retarr($db->getLastError());	
+// 	} else {
+// 		return array( 'objects' => array( 'session' => array('sid' => $sid) ), 'result' => 'success');
+// 	}
 	
-}
+// }
 
 /*
  * util function for checking session
  */
-function checkSession($s, $db, $config){
-	$sess = $db->getSession($s['sid']);
-	if( $sess === false ){
-		return false;
-	}
+// function checkSession($s, $db, $config){
+// 	$sess = $db->getSession($s['sid']);
+// 	if( $sess === false ){
+// 		return false;
+// 	}
 	
-	if( $sess['exp'] > 0 ){
-		prolongSession($sess, $db, $config);
-		return $sess;
-	} else {
-		$db->markSessionInactive($s['sid']);
-		return false;		
-	}
+// 	if( $sess['exp'] > 0 ){
+// 		prolongSession($sess, $db, $config);
+// 		return $sess;
+// 	} else {
+// 		$db->markSessionInactive($s['sid']);
+// 		return false;		
+// 	}
 	
-}
+// }
 
-function prolongSession($sess, $db, $config){
-	//uid of guest user == 1
-	if( $sess['uid'] != 1 ){
-		if( $sess['store']=='1' ) $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_LONG'] );
-		else $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] );
-	} else {
-		$db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_ANON'] );
-	}
-}
+// function prolongSession($sess, $db, $config){
+// 	//uid of guest user == 1
+// 	if( $sess['uid'] != 1 ){
+// 		if( $sess['store']=='1' ) $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_LONG'] );
+// 		else $db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] );
+// 	} else {
+// 		$db->prolongSession( $sess['sid'], $config['SESSION_EXPIRATION_TIME_ANON'] );
+// 	}
+// }
 
 
 /*
@@ -109,7 +109,7 @@ function prolongSession($sess, $db, $config){
  *   - struct 'objects': struct 'session': sid
  *   - result: 'success' on success, 'notreg' - company not found, error description on error
  */
-function getObject($method_name, $params, $app_data){
+/*function getObject($method_name, $params, $app_data){
 
 	$db = $app_data[0];
 	$conf = $app_data[1];
@@ -131,18 +131,18 @@ function getObject($method_name, $params, $app_data){
 		else return array( "result" => "permden" );
 	}
 
-}
+}*/
 
-$xmlrpc_server = xmlrpc_server_create();
+#$xmlrpc_server = xmlrpc_server_create();
 
-xmlrpc_server_register_method($xmlrpc_server, "sessionInit", "sessionInit");
-xmlrpc_server_register_method($xmlrpc_server, "getObject", "getObject");
+#xmlrpc_server_register_method($xmlrpc_server, "sessionInit", "sessionInit");
+#xmlrpc_server_register_method($xmlrpc_server, "getObject", "getObject");
 
-$request_xml = $HTTP_RAW_POST_DATA;
+$request_data = $HTTP_RAW_POST_DATA;
 //$GLOBALS['HTTP_RAW_POST_DATA'] 
 
 //system( "echo '$request_xml' > /home/www/saas/lastreq-".date("H-i-s-u")."-".md5($request_xml).".xml" );
-system( "echo '$request_xml' > /home/anton/devel/workspace/dvijok/war/xmlrpcdb/lastreq.xml" );
+system( "echo '$request_data' > /home/anton/devel/workspace/dvijok/war/dvrpc/lastreq.txt" );
 
 /*$headers = apache_request_headers();
 
@@ -151,15 +151,15 @@ foreach ($headers as $header => $value) {
 	system( "echo \"$header: $value\n\" >> /home/www/saas/lastreq.xml" );
 }*/
 
-$response = xmlrpc_server_call_method($xmlrpc_server, $request_xml, array($db, $config), array("encoding" => "utf-8" , 'escaping'=>'markup'));
+// $response = xmlrpc_server_call_method($xmlrpc_server, $request_xml, array($db, $config), array("encoding" => "utf-8" , 'escaping'=>'markup'));
 
 // Now we print the response for the client to read.
-print $response;
+// print $response;
 
 /*
  *	This method frees the resources for the server specified
  *	It takes one argument, a handle of a server created with
  *	xmlrpc_server_create().
  */
-xmlrpc_server_destroy($xmlrpc_server);
+// xmlrpc_server_destroy($xmlrpc_server);
 ?>

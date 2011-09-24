@@ -16,12 +16,12 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.db;
 
 import org.dvijok.interfaces.DVRequestHandler;
 
-public interface DVRPCTransport {
+public interface DBRequest {
 	
-	public void request(String data, DVRequestHandler<String> handler);
+	public void request(DBObject data, DVRequestHandler<DBObject> handler);
 
 }

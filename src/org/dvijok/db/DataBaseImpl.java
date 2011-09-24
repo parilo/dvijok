@@ -16,16 +16,38 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.db;
 
-import org.dvijok.db.DBObject;
-import org.dvijok.db.DataBase;
+import org.dvijok.db.dvrpc.DBRequestDVRPC;
 import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.lib.Lib;
 
-public class DataBaseDVRPC implements DataBase {
+public class DataBaseImpl implements DataBase {
 
-	@Override
-	public void initSession(DBObject params, DVRequestHandler<DBObject> handler) {
+	private DBRequest dbRequest;
+	
+	public DataBaseImpl(){
+		dbRequest = new DBRequestDVRPC("http://127.0.0.1:8888/dvrpc/dvrpc.php");
+		
+		DBObject dbo = new DBObject();
+		dbo.put("func", "initSession");
+		dbo.put("aaa", "1234");
+		dbo.put("bbbbb", "123");
+		initSession(dbo, null);
+	}
+	
+	private void initSession(DBObject params, DVRequestHandler<DBObject> handler) {
+		dbRequest.request(params, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				Lib.Alert("DataBaseDVRPC success: "+result);
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.Alert("DataBaseDVRPC fail: "+result);
+			}});
 	}
 
 	@Override

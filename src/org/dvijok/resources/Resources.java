@@ -58,6 +58,9 @@ public class Resources {
 		this.db = null;
 		this.dwidgets = null;
 		
+		userInfo = new DBObject();
+		userInfo.put("fullname", "guest");
+		userInfo.put("isadmin", "0");
 	}
 
 	public static Resources getInstance(){

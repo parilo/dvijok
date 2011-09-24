@@ -8,6 +8,10 @@ paste in web.xml
         <param-name>commandPrefix</param-name>
         <param-value>/usr/bin/php-cgi</param-value>
    </init-param>
+   <init-param>
+        <param-name>ENV_REDIRECT_STATUS</param-name>
+        <param-value>200</param-value>
+   </init-param>
    <!-- init-param>
         <param-name>cgibinResourceBase</param-name>
         <param-value>/home/anton/devel/workspace/dvijok/xmlrpcdb/</param-value>

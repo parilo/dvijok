@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.HttpClient;
+import org.dvijok.lib.HttpFunctions;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
@@ -39,10 +40,9 @@ public class Tmpls_DB {
 		
 		if( this.tmpls.containsKey(url) ){
 			req.success(this.tmpls.get(url));
-		}
-		else {
+		} else {
 			
-			HttpClient.doGet(url, new RequestCallback(){
+			HttpFunctions.doGet(url, new RequestCallback(){
 	
 				@Override
 				public void onError(Request request, Throwable exception) {

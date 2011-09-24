@@ -22,7 +22,6 @@ import org.dvijok.interfaces.DVRequestHandler;
 
 public interface DataBase {
 
-	public void initSession(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void auth(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void sendKey(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void logout(DBObject params, final DVRequestHandler<DBObject> handler);
