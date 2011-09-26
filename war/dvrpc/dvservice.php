@@ -17,30 +17,29 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once "dvrpcproto.php";
+class DVService {
 
-class DVRPC {
-
-	private $proto; 
-	private $dvservice;
-	
 	public function __construct(){
-		$this->proto = new DVRPCProto();
 	}
 	
-	public function registerService($dvservice){
-		$this->dvservice = $dvservice;
-	}
-	
-	private function requestParse($request){
-		$this->proto->setRequestString($request);
-		$req = $this->proto->requestParse();
+	public function call($obj){
+		print "obj: $obj\n";
 		
-		$ret = $this->dvservice->call($req);
+		$func = $obj['func'];
+		
+		if( $func == "initSession" ){
+			return $this->initSession();
+		}
+		
 	}
 	
-	public function callService($request){
-		$this->requestParse($request);
+	private function initSession(){
+		$ret['ccc'] = "444444444";
+		$ret['ddddddd'] = "8888888888";
+		$a['eeee'] = "123123123"; 
+		$a['fffff'] = "4321";
+		$ret['obj'] = $a;
+		return $ret; 
 	}
 	
 }
