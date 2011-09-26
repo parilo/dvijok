@@ -23,7 +23,6 @@ class DVService {
 	}
 	
 	public function call($obj){
-		print "obj: $obj\n";
 		
 		$func = $obj['func'];
 		

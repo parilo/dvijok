@@ -34,9 +34,12 @@ class DVRPC {
 	
 	private function requestParse($request){
 		$this->proto->setRequestString($request);
-		$req = $this->proto->requestParse();
+		$req = $this->proto->requestDecode();
 		
-		$ret = $this->dvservice->call($req);
+		$retobj = $this->dvservice->call($req);
+		
+		$ret = $this->proto->hashMapCode($retobj);
+		print "$ret\n";
 	}
 	
 	public function callService($request){
