@@ -17,6 +17,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+require_once "dvipcshm.php";
+
 class DVService {
 
 	public function __construct(){
@@ -33,6 +35,11 @@ class DVService {
 	}
 	
 	private function initSession(){
+		
+		$ipc = new DVIPCShm();
+		$event = $ipc->listenForEvent();
+		print "->event<-\n";
+		
 		$ret['ccc'] = "444444444";
 		$ret['ddddddd'] = "8888888888";
 		$a['eeee'] = "123123123"; 

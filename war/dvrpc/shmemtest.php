@@ -17,24 +17,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-//for xmlrpc service database
-#$config['MYSQLHOST'] = "localhost";
-#$config['MYSQLUSER'] = "dvijok";
-#$config['MYSQLPASS'] = "dvijok";
-#$config['MYSQLDBNAME'] = "dvijok";
-
-$config['SESSION_EXPIRATION_TIME_ANON'] = 1440*7; //in minutes //1440 - day
-$config['SESSION_EXPIRATION_TIME_AUTH_LONG'] = 1440*365; //if user checked 'remember me'
-$config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
-
-#$config['CAPTCHA_FAIL'] = 3; // number of wrong passwords before captcha
-#$config['CAPTCHA_TIME'] = 10; // time in sec between wrong passwords
-#$config['CAPTCHA_EXPIRE'] = 10000; // time in sec captcha will not use after
-#$config['CAPTCHA_URL'] = 'http://dvijok/xmlrpcdb/captcha.php';
-#$config['CAPTCHA_SOUND_URL'] = 'http://dvijok/xmlrpcdb/captchasound.php';
-
-$config['shmemkey'] = 100;
-
-date_default_timezone_set('Asia/Omsk');
+$key = 100;
+$shmres = shm_attach($key);
+shm_put_var($shmres, 1, "aaaeventvar");
+sleep(1);
+shm_remove_var($shmres, 1);
 
 ?>
