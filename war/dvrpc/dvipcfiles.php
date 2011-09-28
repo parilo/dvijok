@@ -29,16 +29,24 @@ class DVIPCFiles extends DVIPCResponses {
 	}
 	
 	private function readFromFile($filename){
-		$file = fopen($filename, 'r');
-		$content = fread($file, filesize($filename));
-		fclose($file);
-		return unserialize($content);
+		if( file_exists($filename) ){
+// 			$file = fopen($filename, 'r');
+// 			$content = fread($file, filesize($filename));
+			$content = file_get_contents($filename);
+			print "cont: ->$content<-\n";
+// 			fclose($file);
+			return unserialize($content);
+		} else return false;			
 	}
 	
 	private function writeToFile($filename, $val){
 		$file = fopen($filename, 'w');
-		fwrite($file, serialize($val));
-		fclose($file);
+		$serval = serialize($val);
+		print "write: ->$serval<-\n";
+// 		fwrite($file, $serval);
+// 		fflush($file);
+// 		fclose($file);
+		file_put_contents($filename, $serval);
 	}
 	
 	protected function getEnvFromBus($name){
@@ -61,15 +69,21 @@ class DVIPCFiles extends DVIPCResponses {
 		$queue = $this->readFromFile($fname);
 		if( $queue === false ) return false;
 		$val = array_shift($queue);
-		$this->writeToFile($fname, $queue);
+		if( count($queue) > 0 )	$this->writeToFile($fname, $queue);
+		else unlink($fname);
 		return $val;
 	}
 	
 	protected function putToQueue($name, $val){
 		$fname = $this->dir.'/'.$name.'_queue';
 		$queue = $this->readFromFile($fname);
+		print "q: $queue\n";
 		if( $queue === false ) $queue = array();
 		array_push($queue, $val);
+// 		$queue = unserialize(serialize($queue));
+// 		array_push($queue, "aaa");
+// 		$queue = unserialize(serialize($queue));
+// 		array_push($queue, "bbb");
 		$this->writeToFile($fname, $queue);
 	}
 	
