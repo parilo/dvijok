@@ -17,11 +17,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-interface DVIPC {
-
-	public function listenForEvent();
-	public function invokeEvent($event);
-	
+function randHash(){
+	return md5(time()+mt_rand(0,10000));
 }
 
 ?>

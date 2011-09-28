@@ -17,7 +17,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once "dvipcshm.php";
+require_once "dvipcfiles.php";
 
 class DVService {
 
@@ -36,7 +36,7 @@ class DVService {
 	
 	private function initSession(){
 		
-		$ipc = new DVIPCShm();
+		$ipc = new DVIPCFiles();
 		$event = $ipc->listenForEvent();
 		print "->event<-\n";
 		

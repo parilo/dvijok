@@ -20,6 +20,7 @@
 require_once "dvipc.php";
 require_once "config.php";
 
+//not used now
 class DVIPCShm implements DVIPC {
 
 	private $key;
