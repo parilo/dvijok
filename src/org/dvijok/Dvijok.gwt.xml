@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='dvijok'>
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+
+  <!-- Inherit the default GWT style sheet.  You can change       -->
+  <!-- the theme of your GWT application by uncommenting          -->
+  <!-- any one of the following lines.                            -->
+  <!-- inherits name='com.google.gwt.user.theme.standard.Standard'/ -->
+  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+  <!-- Other module inherits                                      -->
+  <inherits name='com.fredhat.gwt.xmlrpc.XMLRPC'/>
+  
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='org.dvijok.client.Dvijok'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='lib'/>
+  <source path='client'/>
+  <source path='loader'/>
+  <source path='tmpl'/>
+  <source path='interfaces'/>
+  <source path='resources'/>
+  <source path='widgets'/>
+  <source path='db'/>
+  <source path='config'/>
+  <source path='controls'/>
+  <source path='event'/>
+  <source path='granat'/>
+
+
+</module>

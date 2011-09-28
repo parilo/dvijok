@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  
+  <!-- Servlets -->
+  <!-- servlet>
+    <servlet-name>greetServlet</servlet-name>
+    <servlet-class>org.dvijok.server.GreetingServiceImpl</servlet-class>
+  </servlet -->
+  
+  <!-- servlet-mapping>
+    <servlet-name>greetServlet</servlet-name>
+    <url-pattern>/dvijok/greet</url-pattern>
+  </servlet-mapping -->
+  
+  
+ <servlet>
+   <servlet-name>PHP</servlet-name>
+   <servlet-class>org.mortbay.servlet.CGI</servlet-class>
+   <init-param>
+        <param-name>commandPrefix</param-name>
+        <param-value>/usr/bin/php-cgi</param-value>
+   </init-param>
+   <init-param>
+        <param-name>ENV_REDIRECT_STATUS</param-name>
+        <param-value>200</param-value>
+   </init-param>
+   <!-- init-param>
+        <param-name>cgibinResourceBase</param-name>
+        <param-value>/home/anton/devel/workspace/dvijok/dvrpc/</param-value>
+   </init-param -->
+   <!-- Path, other ENV_variables including ENV_SystemRoot, ENV_REDIRECT_STATUS on Windows -->
+ </servlet>
+
+ <servlet-mapping>
+   <servlet-name>PHP</servlet-name>
+   <url-pattern>*.php</url-pattern>
+   <!-- Any other URL patterns that are needed by your app to be processed by PHP -->
+ </servlet-mapping>
+  
+  
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>Dvijok.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

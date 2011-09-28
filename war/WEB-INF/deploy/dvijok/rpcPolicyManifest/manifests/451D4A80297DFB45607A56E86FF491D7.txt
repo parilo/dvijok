@@ -1,0 +1,2 @@
+serviceClass: org.dvijok.db.gwtrpc.DataBase_Service
+path: A41CEE105A00915CCADFB31CB4F171BD.gwt.rpc

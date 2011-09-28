@@ -1,0 +1,26 @@
+for php under jetty:
+paste in web.xml
+  
+ <servlet>
+   <servlet-name>PHP</servlet-name>
+   <servlet-class>org.mortbay.servlet.CGI</servlet-class>
+   <init-param>
+        <param-name>commandPrefix</param-name>
+        <param-value>/usr/bin/php-cgi</param-value>
+   </init-param>
+   <init-param>
+        <param-name>ENV_REDIRECT_STATUS</param-name>
+        <param-value>200</param-value>
+   </init-param>
+   <!-- init-param>
+        <param-name>cgibinResourceBase</param-name>
+        <param-value>/home/anton/devel/workspace/dvijok/xmlrpcdb/</param-value>
+   </init-param -->
+   <!-- Path, other ENV_variables including ENV_SystemRoot, ENV_REDIRECT_STATUS on Windows -->
+ </servlet>
+
+ <servlet-mapping>
+   <servlet-name>PHP</servlet-name>
+   <url-pattern>*.php</url-pattern>
+   <!-- Any other URL patterns that are needed by your app to be processed by PHP -->
+ </servlet-mapping>
