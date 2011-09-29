@@ -27,13 +27,15 @@ public class DataBaseImpl implements DataBase {
 	private DBRequest dbRequest;
 	
 	public DataBaseImpl(){
-		dbRequest = new DBRequestDVRPC("http://127.0.0.1:8888/dvrpc/dvrpc.php");
+		dbRequest = new DBRequestDVRPC("http://127.0.0.1:8888/dvrpc/rpc.php");
 		
-		DBObject dbo = new DBObject();
-		dbo.put("func", "initSession");
-		dbo.put("aaa", "1234");
-		dbo.put("bbbbb", "123");
-		initSession(dbo, null);
+//		DBObject dbo = new DBObject();
+//		dbo.put("func", "initSession");
+//		dbo.put("aaa", "1234");
+//		dbo.put("bbbbb", "123");
+//		initSession(dbo, null);
+		
+		listenForEvents(null, null);
 	}
 	
 	private void initSession(DBObject params, DVRequestHandler<DBObject> handler) {
@@ -80,6 +82,22 @@ public class DataBaseImpl implements DataBase {
 
 	@Override
 	public void listenForEvents(DBObject params, DVRequestHandler<DBObject> handler) {
+		DBObject dbo = new DBObject();
+		dbo.put("func", "listenForEvent");
+		dbo.put("aaa", "1234");
+		dbo.put("bbbbb", "123");
+		
+		dbRequest.request(dbo, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				Lib.Alert("DataBaseDVRPC success: "+result);
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.Alert("DataBaseDVRPC fail: "+result);
+			}});
 	}
 
 }

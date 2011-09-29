@@ -30,10 +30,6 @@ require_once "dvservice.php";
 	*/
 
 
-function randhash(){
-	return md5(time()+mt_rand(0,10000));
-}
-
 function get_client_ip_address(){
 	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 		return $_SERVER['HTTP_X_FORWARDED_FOR'];

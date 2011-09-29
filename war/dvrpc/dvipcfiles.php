@@ -33,7 +33,7 @@ class DVIPCFiles extends DVIPCResponses {
 // 			$file = fopen($filename, 'r');
 // 			$content = fread($file, filesize($filename));
 			$content = file_get_contents($filename);
-			print "cont: ->$content<-\n";
+// 			print "cont: ->$content<-\n";
 // 			fclose($file);
 			return unserialize($content);
 		} else return false;			
@@ -42,7 +42,7 @@ class DVIPCFiles extends DVIPCResponses {
 	private function writeToFile($filename, $val){
 		$file = fopen($filename, 'w');
 		$serval = serialize($val);
-		print "write: ->$serval<-\n";
+// 		print "write: ->$serval<-\n";
 // 		fwrite($file, $serval);
 // 		fflush($file);
 // 		fclose($file);
@@ -77,13 +77,8 @@ class DVIPCFiles extends DVIPCResponses {
 	protected function putToQueue($name, $val){
 		$fname = $this->dir.'/'.$name.'_queue';
 		$queue = $this->readFromFile($fname);
-		print "q: $queue\n";
 		if( $queue === false ) $queue = array();
 		array_push($queue, $val);
-// 		$queue = unserialize(serialize($queue));
-// 		array_push($queue, "aaa");
-// 		$queue = unserialize(serialize($queue));
-// 		array_push($queue, "bbb");
 		$this->writeToFile($fname, $queue);
 	}
 	

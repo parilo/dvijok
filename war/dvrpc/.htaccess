@@ -1,12 +1,12 @@
 Options -Indexes
-DirectoryIndex dvrpc.php
+DirectoryIndex rpc.php
 
 <FilesMatch ".">
     Order Allow,deny
     Deny from all
 </FilesMatch>
 
-<FilesMatch "dvrpc.php$">
+<FilesMatch "rpc.php$">
     Order Allow,deny
     Allow from all
 </FilesMatch>

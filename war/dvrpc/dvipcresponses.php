@@ -28,6 +28,8 @@ abstract class DVIPCResponses implements DVIPC {
 	abstract protected function getFromQueue($name);
 	abstract protected function putToQueue($name, $val);
 	
+	private $sess;
+	
 	private function getSession(){
 		return randHash();
 	}
@@ -35,9 +37,19 @@ abstract class DVIPCResponses implements DVIPC {
 	private function registerOnBus(){
 		$reg = $this->getEnvFromBus('registered'); // this env must be array
 		$sess = $this->getSession();
-		$reg[] += $sess;
+		if( $reg === false ) $reg = array();
+		array_push($reg, $sess);
 		$this->putEnvToBus('registered', $reg);
+		$this->sess = $sess;
 		return $sess;
+	}
+	
+	private function unregisterOnBus(){
+		$reg = $this->getEnvFromBus('registered'); // this env must be array
+		if( is_array($reg) ){
+			unset($reg[array_search($this->sess, $reg)]);
+			$this->putEnvToBus('registered', $reg);
+		}
 	}
 	
 	private function getEventFromBus($sess){
@@ -49,12 +61,11 @@ abstract class DVIPCResponses implements DVIPC {
 		for(;;){
 			$event = $this->getEventFromBus($sess);
 			if( !($event === false) ){
-				print "event1 ->$event<-\n";
 				break;
 			}
 			usleep(100000);
 		}
-		print "event2 ->$event<-\n";
+		$this->unregisterOnBus();
 		return $event;
 	}
 	

@@ -28,23 +28,45 @@ class DVService {
 		
 		$func = $obj['func'];
 		
-		if( $func == "initSession" ){
-			return $this->initSession();
+		if( $func == "listenForEvent" ){
+			return $this->listenForEvent();
+		} else if( $func == "testIPC" ){
+			return $this->testIPC();
 		}
 		
+		$ret['result'] = 'function not found';
+		return $ret;
+		
+	}
+	
+	private function testIPC(){
+		$ipc = new DVIPCFiles();
+		$event = $ipc->invokeEvent("testIPC event :)");
+	}
+	
+	private function listenForEvent(){
+		
+		$ipc = new DVIPCFiles();
+		$event = $ipc->listenForEvent();
+	
+		$ret['event'] = $event;
+		$ret['result'] = 'success';
+		return $ret;
 	}
 	
 	private function initSession(){
 		
 		$ipc = new DVIPCFiles();
 		$event = $ipc->listenForEvent();
-		print "->event<-\n";
-		
-		$ret['ccc'] = "444444444";
-		$ret['ddddddd'] = "8888888888";
-		$a['eeee'] = "123123123"; 
-		$a['fffff'] = "4321";
-		$ret['obj'] = $a;
+// 		print "->$event<-\n";
+
+		$ret['event'] = $event;
+		$ret['result'] = 'success';
+// 		$ret['ccc'] = "444444444";
+// 		$ret['ddddddd'] = "8888888888";
+// 		$a['eeee'] = "123123123"; 
+// 		$a['fffff'] = "4321";
+// 		$ret['obj'] = $a;
 		return $ret; 
 	}
 	

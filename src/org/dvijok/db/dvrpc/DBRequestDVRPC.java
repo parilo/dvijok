@@ -42,6 +42,7 @@ public class DBRequestDVRPC implements DBRequest {
 
 			@Override
 			public void onResponseReceived(Request request, Response response) {
+				Lib.Alert("received: "+response.getText());
 				DBObject obj = new DBObject();
 				try {
 					obj.dvDeserialize(response.getText());
@@ -53,6 +54,7 @@ public class DBRequestDVRPC implements DBRequest {
 
 			@Override
 			public void onError(Request request, Throwable exception) {
+				Lib.Alert("received fail: "+exception.getMessage());
 				DBObject obj = new DBObject();
 				obj.put("result", exception.getMessage());
 				handler.fail(obj);

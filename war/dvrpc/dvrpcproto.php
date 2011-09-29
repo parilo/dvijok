@@ -111,7 +111,7 @@ class DVRPCProto {
 		foreach( $hashMap as $key => $val ){
 			if( is_string($val) ){
 				$ret .= strlen($key).",".$key."STR".strlen($val).",".$val;
-			} else if( is_array($val) && $hashMap['_isarr'] == '1' ){
+			} else if( is_array($val) && array_key_exists('_isarr',$hashMap) ){
 				$str = $this->arrayCode($val);
 				$ret .= strlen($key).",".$key."DBA".strlen($str).",".$str;
 			} else if( is_array($val) ){
