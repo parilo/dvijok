@@ -26,10 +26,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.dvijok.db.dvrpc.DVDeserializeException;
-import org.dvijok.db.dvrpc.DVSerializable;
 import org.dvijok.lib.Lib;
 
-public class DBObject extends HashMap<String,Serializable> implements Serializable, DVSerializable {
+public class DBObject extends HashMap<String,Serializable> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -117,34 +116,6 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 			objs[ii++] = this.Get_DB_Object(i.next());
 		}
 		return objs;
-	}
-
-	@Override
-	public String dvSerialize() {
-		String ret = "";
-		Iterator<String> ki = keySet().iterator();
-		while( ki.hasNext() ){
-			String key = ki.next();
-			Serializable s = get(key);
-			if( s instanceof String ){
-				String str = (String)s;
-				ret += key.length()+","+key+"STR"+str.length()+","+str;
-			} else if( s instanceof DBObject ){
-				DBObject dbo = (DBObject)s;
-				String dbos = dbo.dvSerialize();
-				ret += key.length()+","+key+"DBO"+dbos.length()+","+dbos;
-			} else if( s instanceof DBArray ){
-				DBArray dba = (DBArray)s;
-				String dbas = dba.dvSerialize();
-				ret += key.length()+","+key+"DBA"+dbas.length()+","+dbas;
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public void dvDeserialize(String str) throws DVDeserializeException {
-		Lib.Alert("DBObject: need deserialize: "+str);
 	}
 
 }

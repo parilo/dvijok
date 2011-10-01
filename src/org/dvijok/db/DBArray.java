@@ -23,36 +23,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.dvijok.db.dvrpc.DVDeserializeException;
-import org.dvijok.db.dvrpc.DVSerializable;
 import org.dvijok.lib.Lib;
 
-public class DBArray extends ArrayList<Serializable> implements DVSerializable {
+public class DBArray extends ArrayList<Serializable> implements Serializable {
 
-	@Override
-	public String dvSerialize() {
-		String ret = "";
-		Iterator<Serializable> i = iterator();
-		while( i.hasNext() ){
-			Serializable s = i.next();
-			if( s instanceof String ){
-				String str = (String)s;
-				ret += ",STR,"+str.length()+","+str;
-			} else if( s instanceof DBObject ){
-				DBObject dbo = (DBObject)s;
-				String dboser = dbo.dvSerialize();
-				ret += ",DBO,"+dboser.length()+","+dboser;
-			} else if( s instanceof DBArray ){
-				DBArray dba = (DBArray)s;
-				String dbaser = dba.dvSerialize();
-				ret += ",DBA,"+dbaser.length()+","+dbaser;
-			}
-		}
-		return ret.substring(1);
-	}
-
-	@Override
-	public void dvDeserialize(String str) throws DVDeserializeException {
-		Lib.Alert("DBArray: need deserialize: "+str);
-	}
-
+	private static final long serialVersionUID = 1L;
 }

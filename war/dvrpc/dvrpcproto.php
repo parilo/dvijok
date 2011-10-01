@@ -25,7 +25,7 @@ class DVRPCProto {
 	public function __construct(){
 	}
 	
-	public function setRequestString($request){
+	private function setData($request){
 		$this->req = $request;
 		$this->i = 0;
 	}
@@ -49,61 +49,50 @@ class DVRPCProto {
 		return $ret;
 	}
 	
-	private function requestGetIdent(){
+	private function hashMapGetIdent(){
 		$len = $this->extractLen();
 		if( $len === false ) return false;
-		$ident = $this->extract($len);
-		if( $ident === false ) return false;
-		else return $ident;
+		return $this->extract($len);
 	}
 	
-	private function requestGetType(){
+	private function hashMapGetType(){
 		return $this->extract(3);
 	}
 	
-	private function requestGetVal(){
-		return $this->requestGetIdent();	
+	private function hashMapGetVal(){
+		return $this->hashMapGetIdent();	
 	}
 	
-	public function requestDecode(){
+	public function hashMapDecode($data){
+		$this->setData($data);
 		$ret = array();
 		while(
-			($ident = $this->requestGetIdent()) !== false &&
-			($type = $this->requestGetType()) !== false &&
-			($val = $this->requestGetVal()) !== false
+			($ident = $this->hashMapGetIdent()) !== false &&
+			($type = $this->hashMapGetType()) !== false &&
+			($val = $this->hashMapGetVal()) !== false
 		){
 			if( $type == "STR" ){
 				$ret[$ident] = $val;
 			} else if( $type == "DBO" ){
-				$proto = new DVRPCProto();
-				$proto->setRequestString($val);
-				$ret[$ident] = $proto->hashMapDecode();
+// 				$proto = new DVRPCProto();
+				$currI = $this->i;
+				$currReq = $this->req;
+// 				$this->setData($val);
+				$ret[$ident] = $proto->hashMapDecode($val);
+				$this->i = $currI;
+				$this->req = $currReq;
 			} else if( $type == "DBA" ){
-				$proto = new DVRPCProto();
-				$proto->setRequestString($val);
-				$ret[$ident] = $proto->arrayDecode();
+// 				$proto = new DVRPCProto();
+				$currI = $this->i;
+				$currReq = $this->req;
+// 				$this->setData($val);
+				$ret[$ident] = $proto->arrayDecode($val);
+				$this->i = $currI;
+				$this->req = $currReq;
 			}
 		}
 		
 		return $ret;
-	}
-	
-	//HashMap
-	
-	private function hashMapGetIdent(){
-		return $this->requestGetIdent();
-	}
-	
-	private function hashMapGetType(){
-		return $this->requestGetType();
-	}
-	
-	private function hashMapGetVal(){
-		return $this->requestGetVal();
-	}
-
-	public function hashMapDecode(){
-		return $this->requestDecode();
 	}
 	
 	public function hashMapCode($hashMap){
@@ -122,7 +111,7 @@ class DVRPCProto {
 		return $ret;
 	}
 	
-	public function arrayDecode(){
+	public function arrayDecode($val){
 		$arr['array'] = 'need to parse :) ';
 	}
 	

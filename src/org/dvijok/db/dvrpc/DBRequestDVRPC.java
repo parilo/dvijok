@@ -31,29 +31,26 @@ import com.google.gwt.http.client.Response;
 public class DBRequestDVRPC implements DBRequest {
 	
 	private HttpClient httpClient;
+	private DVRPCProto proto;
 	
 	public DBRequestDVRPC(String url){
 		httpClient = new HttpClient(url);
+		proto = new DVRPCProto();
 	}
 	
 	public void request(DBObject data, final DVRequestHandler<DBObject> handler){
 		
-		httpClient.doPost(data.dvSerialize(), new RequestCallback(){
+		httpClient.doPost( proto.code(data), new RequestCallback(){
 
 			@Override
 			public void onResponseReceived(Request request, Response response) {
-				DBObject obj = new DBObject();
-				try {
-					obj.dvDeserialize(response.getText());
-				} catch (DVDeserializeException e) {
-					Lib.Alert("DVRPCTransportPOST: request: "+e.getMessage());
-				}
-				handler.success(obj);
+				handler.success(proto.decode(response.getText()));
 			}
 
 			@Override
 			public void onError(Request request, Throwable exception) {
 				DBObject obj = new DBObject();
+				Lib.Alert("DBRequestDVRPC: onError: "+exception.getMessage());
 				obj.put("result", "DBRequestDVRPC: onError: "+exception.getMessage());
 				handler.fail(obj);
 			}});

@@ -29,10 +29,13 @@ public class DataBaseImpl implements DataBase {
 	public DataBaseImpl(){
 		dbRequest = new DBRequestDVRPC("http://127.0.0.1:8888/dvrpc/rpc.php");
 		
+		DBObject dbodbo = new DBObject();
+		dbodbo.put("aaa", "111");
+		dbodbo.put("bbb", "222");
+		
 		DBObject dbo = new DBObject();
 		dbo.put("func", "initSession");
-		dbo.put("aaa", "1234");
-		dbo.put("bbbbb", "123");
+		dbo.put("dbo", dbodbo);
 		initSession(dbo, null);
 		
 //		listenForEvents(null, null);
