@@ -63,6 +63,33 @@ class DVService {
 		return $ret; 
 	}
 	
+// 	public abstract [result, sid] initSession ();
+	
+// 	public abstract [result, challange] login (String sid);
+	
+// 	public [result] authResponse (String sid, String response) {
+	
+// 	}
+	
+// 	public abstract [result, challange] sendKey (String sid);
+	
+// 	public [result] sendKeyResponse (String sid, String response) {
+	
+// 	}
+	
+// 	public abstract [result] logout (String sid);
+	
+// 	public abstract [result, DBObject] getObject (String sid, String[] tags);
+	
+// 	public abstract [result, DBObject] getObjectById (String sid, String id);
+	
+// 	public abstract [result, DBObject[]] getObjects (String sid, String[] tags, long count, long offset);
+	
+// 	public abstract [result] putObject (String sid, String[] tags, unix rights rights);
+	
+// 	public abstract [result] delObject (String sid, String id);
+	
+	
 }
 
 ?>
