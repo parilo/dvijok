@@ -25,19 +25,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.dvijok.db.dvrpc.DVDeserializeException;
-import org.dvijok.lib.Lib;
-
 public class DBObject extends HashMap<String,Serializable> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	public String Get_String(String s){
+	public String getString(String s){
 		String r = (String)this.get(s);
 		return r == null?"":r.equals("null")?"":r;
 	}
 	
-	public DBObject Get_DB_Object(String s){
+	public DBObject getDBObject(String s){
 		try{
 			return this.containsKey(s)?(DBObject)this.get(s):null;
 		} catch( java.lang.ClassCastException e ){
@@ -45,54 +42,54 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 		}
 	}
 	
-	public double Get_Double(String s){
+	public double getDouble(String s){
 		try{
-			return Double.parseDouble(this.Get_String(s));
+			return Double.parseDouble(this.getString(s));
 		} catch (NumberFormatException e){
 			return 0;
 		}
 	}
 	
-	public int Get_Int(String s){
+	public int getInt(String s){
 		try{
-			return Integer.parseInt(this.Get_String(s));
+			return Integer.parseInt(this.getString(s));
 		} catch (NumberFormatException e){
 			return 0;
 		}
 	}
 	
-	public long Get_Long(String s){
+	public long getLong(String s){
 		try{
-			return Long.parseLong(this.Get_String(s));
+			return Long.parseLong(this.getString(s));
 		} catch (NumberFormatException e){
 			return 0;
 		}
 	}
 	
-	public boolean Get_Boolean(String s){
-		return Get_String(s).equals("1");
+	public boolean getBoolean(String s){
+		return getString(s).equals("1");
 	}
 	
-	public BigDecimal Get_BigDecimal(String s){
+	public BigDecimal getBigDecimal(String s){
 		try{
-			return BigDecimal.valueOf(Double.parseDouble(this.Get_String(s)));
+			return BigDecimal.valueOf(Double.parseDouble(this.getString(s)));
 		} catch (NumberFormatException e){
 			return new BigDecimal(0);
 		}
 	}
 
 	//sort DB_Object inner DB_Objects by string field 
-	public DBObject[] Get_Sorted_Array_ASC(DBObject dbo, final String field){
-		return this.Get_Sorted_Array(dbo, field, 1);
+	public DBObject[] getSortedArrayASC(DBObject dbo, final String field){
+		return this.getSortedArray(dbo, field, 1);
 	}
 
-	public DBObject[] Get_Sorted_Array_DESC(DBObject dbo, final String field){
-		return this.Get_Sorted_Array(dbo, field, -1);
+	public DBObject[] getSortedArrayDESC(DBObject dbo, final String field){
+		return this.getSortedArray(dbo, field, -1);
 	}
 	
-	private DBObject[] Get_Sorted_Array(DBObject dbo, final String field, final int mult){
+	private DBObject[] getSortedArray(DBObject dbo, final String field, final int mult){
 
-		DBObject[] objs = this.Get_Array();
+		DBObject[] objs = this.getArray();
 		
 		Arrays.sort(objs, new Comparator<DBObject>(){
 			@Override
@@ -105,15 +102,15 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 	}
 		
 	protected int compareTo(DBObject o2, String field) {
-		return this.Get_String(field).compareTo(o2.Get_String(field));
+		return this.getString(field).compareTo(o2.getString(field));
 	}
 
-	private DBObject[] Get_Array(){
+	private DBObject[] getArray(){
 		DBObject[] objs = new DBObject[this.keySet().size()];
 		Iterator<String> i = this.keySet().iterator();
 		int ii=0;
 		while( i.hasNext() ){
-			objs[ii++] = this.Get_DB_Object(i.next());
+			objs[ii++] = this.getDBObject(i.next());
 		}
 		return objs;
 	}

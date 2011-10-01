@@ -20,27 +20,22 @@ package org.dvijok.client;
 
 import org.dvijok.config.Config;
 import org.dvijok.db.DataBaseImpl;
-import org.dvijok.db.gwtrpc.DataBase_GWTRPC;
-import org.dvijok.event.CustomEvent;
-import org.dvijok.event.CustomEventListener;
-import org.dvijok.interfaces.DVRequestHandler;
-import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.Resources;
-import org.dvijok.tmpl.Tmpls_DB;
+import org.dvijok.tmpl.TmplsDB;
 import org.dvijok.widgets.Dwidget;
-import org.dvijok.widgets.Dwidget_Creator;
-import org.dvijok.widgets.Sub_Panel;
+import org.dvijok.widgets.DwidgetCreator;
+import org.dvijok.widgets.SubPanel;
 import org.dvijok.widgets.auth.Auth;
 import org.dvijok.widgets.auth.ChangePassword;
-import org.dvijok.widgets.auth.Logout_On_Hash;
-import org.dvijok.widgets.auth.User_Name;
+import org.dvijok.widgets.auth.LogoutOnHash;
+import org.dvijok.widgets.auth.UserName;
 import org.dvijok.widgets.content.Article;
-import org.dvijok.widgets.content.Content_Hash;
-import org.dvijok.widgets.content.Content_Hash_DB;
+import org.dvijok.widgets.content.ContentHash;
+import org.dvijok.widgets.content.ContentHashDB;
 import org.dvijok.widgets.menu.HMenu;
-import org.dvijok.widgets.menu.Table_Menu;
+import org.dvijok.widgets.menu.TableMenu;
 
 import com.google.gwt.core.client.EntryPoint;
 
@@ -58,15 +53,15 @@ public void onModuleLoad() {
 	Loader l = new Loader();
 
 	Resources.getInstance().loader = l;
-	Resources.getInstance().tmpls = new Tmpls_DB();
+	Resources.getInstance().tmpls = new TmplsDB();
 	
-	this.Register_Dwidgets();
+	this.registerDwidgets();
 	
 //	Resources.getInstance().Get_User_Info(new DV_Request_Handler<Integer>(){
 //
 //		@Override
 //		public void Success(Integer result) {
-			Resources.getInstance().loader.Load();
+			Resources.getInstance().loader.load();
 			Resources.getInstance().init();
 //			String pagehash = Lib.Get_Hash_Token();
 //			if( pagehash.equals("") ){
@@ -102,123 +97,123 @@ public void onModuleLoad() {
 	
 }
 
-private void Register_Dwidgets(){
+private void registerDwidgets(){
 	
 	Loader l = Resources.getInstance().loader;
 	
-	l.Get_Dwidget_Factory().Register("hmenu", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("hmenu", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
+		public Dwidget getDwidget(SubPanel p) {
 			return new HMenu(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return false;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("content_hash", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("content_hash", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
-			return new Content_Hash(p);
+		public Dwidget getDwidget(SubPanel p) {
+			return new ContentHash(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return false;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("content_hash_db", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("content_hash_db", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
-			return new Content_Hash_DB(p);
+		public Dwidget getDwidget(SubPanel p) {
+			return new ContentHashDB(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return true;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("article", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("article", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
+		public Dwidget getDwidget(SubPanel p) {
 			return new Article(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return false;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("auth", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("auth", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
+		public Dwidget getDwidget(SubPanel p) {
 			return new Auth(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return false;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("table_menu", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("table_menu", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
-			return new Table_Menu(p);
+		public Dwidget getDwidget(SubPanel p) {
+			return new TableMenu(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return false;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("logout_on_hash", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("logout_on_hash", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
-			return new Logout_On_Hash(p);
+		public Dwidget getDwidget(SubPanel p) {
+			return new LogoutOnHash(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return false;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("user_name", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("user_name", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
-			return new User_Name(p);
+		public Dwidget getDwidget(SubPanel p) {
+			return new UserName(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return true;
 		}
 	});
 	
-	l.Get_Dwidget_Factory().Register("change_password", new Dwidget_Creator(){
+	l.getDwidgetFactory().register("change_password", new DwidgetCreator(){
 
 		@Override
-		public Dwidget Get_Dwidget(Sub_Panel p) {
+		public Dwidget getDwidget(SubPanel p) {
 			return new ChangePassword(p);
 		}
 
 		@Override
-		public boolean Need_Auth_Reinit() {
+		public boolean needAuthReinit() {
 			return true;
 		}
 	});

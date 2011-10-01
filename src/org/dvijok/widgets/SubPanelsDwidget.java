@@ -27,42 +27,42 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class Sub_Panels_Dwidget extends Dwidget {
+public abstract class SubPanelsDwidget extends Dwidget {
 	
-	public Sub_Panels_Dwidget(String templ_url){
-		super(templ_url);
+	public SubPanelsDwidget(String templUrl){
+		super(templUrl);
 	}
 	
-	public Sub_Panels_Dwidget(String templ_url, Sub_Panel panel){
-		super(templ_url, panel);
+	public SubPanelsDwidget(String templUrl, SubPanel panel){
+		super(templUrl, panel);
 	}
 	
-	protected abstract void Before_Sub_Panels_Loading();
+	protected abstract void beforeSubPanelsLoading();
 	
 	@Override
-	protected void Before_Tmpl_Init(){
-		this.Before_Sub_Panels_Loading();
+	protected void beforeTmplInit(){
+		this.beforeSubPanelsLoading();
 	}
 	
 	@Override
-	protected void Create_GUI(){
-		this.Init_Tmpl();
-		this.Load_Sub_Panels();
-		this.Attach_Tmpl();
+	protected void createGUI(){
+		this.initTmpl();
+		this.loadSubPanels();
+		this.attachTmpl();
 	}
 	
-	protected abstract Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params);
+	protected abstract Widget genSubWidget(String dwname, ArrayList<DBObject> params);
 	
-	private void Load_Sub_Panels(){
+	private void loadSubPanels(){
 		
 		com.google.gwt.user.client.Element w;
-		HTMLPanel html = this.Get_HTMLPanel();
+		HTMLPanel html = this.getHTMLPanel();
 		
 		while( (w = html.getElementById("dw")) != null ){
 			String name = w.getAttribute("dwname");
-			ArrayList<DBObject> params = Resources.getInstance().loader.Get_Params(w);
+			ArrayList<DBObject> params = Resources.getInstance().loader.getParams(w);
 			w.setInnerHTML("");
-			Widget sw = this.Gen_Sub_Widget(name, params);
+			Widget sw = this.genSubWidget(name, params);
 			if( sw == null ) sw = new Label("Sub_Panels_Dwidget: Don't know dwname: ->"+name+"<-");
 			html.add(sw, "dw");
 			w.setAttribute("id", "dw_");

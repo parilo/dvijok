@@ -19,7 +19,6 @@
 package org.dvijok.controls.table;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 
 import org.dvijok.event.CustomEventListener;

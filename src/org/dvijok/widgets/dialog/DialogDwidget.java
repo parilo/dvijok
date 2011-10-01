@@ -21,26 +21,25 @@ package org.dvijok.widgets.dialog;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class DialogDwidget extends DialogBox {
 
-	private Sub_Panels_Dwidget dw;
+	private SubPanelsDwidget dw;
 	public DialogDwidget(String tmpl){
 		final DialogDwidget me = this;
-		dw = new Sub_Panels_Dwidget(tmpl){
+		dw = new SubPanelsDwidget(tmpl){
 			@Override
-			protected void Before_Sub_Panels_Loading() {
-				me.Before_Sub_Panels_Loading();
+			protected void beforeSubPanelsLoading() {
+				me.beforeSubPanelsLoading();
 			}
 			
 			@Override
-			protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params){
-				return me.Gen_Sub_Widget(dwname, params);
+			protected Widget genSubWidget(String dwname, ArrayList<DBObject> params){
+				return me.genSubWidget(dwname, params);
 			}
 		};
 		setWidget(dw);
@@ -55,7 +54,7 @@ public abstract class DialogDwidget extends DialogBox {
 		setText(title);
 	}
 
-	protected abstract void Before_Sub_Panels_Loading();
-	protected abstract Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params);
+	protected abstract void beforeSubPanelsLoading();
+	protected abstract Widget genSubWidget(String dwname, ArrayList<DBObject> params);
 	
 }

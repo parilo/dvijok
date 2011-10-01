@@ -21,22 +21,21 @@ package org.dvijok.tmpl;
 import java.util.HashMap;
 
 import org.dvijok.interfaces.DVRequestHandler;
-import org.dvijok.lib.HttpClient;
 import org.dvijok.lib.HttpFunctions;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
 
-public class Tmpls_DB {
+public class TmplsDB {
 
 	private HashMap<String,String> tmpls;
 	
-	public Tmpls_DB(){
+	public TmplsDB(){
 		this.tmpls = new HashMap<String,String>();
 	}
 	
-	public void Get_Template(final String url, final DVRequestHandler<String> req){
+	public void getTemplate(final String url, final DVRequestHandler<String> req){
 		
 		if( this.tmpls.containsKey(url) ){
 			req.success(this.tmpls.get(url));

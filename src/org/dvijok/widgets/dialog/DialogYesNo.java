@@ -27,7 +27,6 @@ import org.dvijok.event.CustomEventTool;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -59,7 +58,7 @@ public class DialogYesNo extends DialogDwidget {
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		yes = new Button("Да");
 		no = new Button("Нет");
 		cont = new Label("");
@@ -82,7 +81,7 @@ public class DialogYesNo extends DialogDwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return cont;
 		} else if( dwname.equals("yes") ){

@@ -25,8 +25,8 @@ import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panel;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanel;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ChangePassword extends Sub_Panels_Dwidget {
+public class ChangePassword extends SubPanelsDwidget {
 
 	private Label message;
 	private PasswordTextBox pass;
@@ -49,12 +49,12 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 	private Button sendauthkey;
 	private String authkeychal;
 	
-	public ChangePassword(Sub_Panel p){
+	public ChangePassword(SubPanel p){
 		super("tmpl/widgets/auth/change_password/change_password.html", p);
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		
 		KeyDownHandler loginkdh = new KeyDownHandler(){
 			@Override
@@ -107,7 +107,7 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 	}
 	
 	private void onChPassSuccess(){
-		Change_Tmpl("tmpl/widgets/auth/change_password/change_password.html");
+		changeTmpl("tmpl/widgets/auth/change_password/change_password.html");
 		message.setText("Изменение пароля выполнено успешно");
 		pass.setValue("");
 		passconf.setValue("");
@@ -141,7 +141,7 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 		Resources.getInstance().db.putObject(dbo, chpassrh);
 		
 		} else {
-			Lib.Alert("Подтверждение и пароль не совпадают");
+			Lib.alert("Подтверждение и пароль не совпадают");
 			passconf.setFocus(true);
 		}
 	}
@@ -166,7 +166,7 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 			@Override
 			public void fail(DBObject result) {
 				//onChPassFailed(result, this);
-				Lib.Alert("Неверно введен код");
+				Lib.alert("Неверно введен код");
 				authkey.setFocus(true);
 			}
 			
@@ -177,20 +177,20 @@ public class ChangePassword extends Sub_Panels_Dwidget {
 	
 	private void onChPassFailed(DBObject result, DVRequestHandler<DBObject> loginrh){
 
-		String res = result.Get_String("result");
+		String res = result.getString("result");
 		
 		if( res.equals("key") ){
-			this.authkeychal = result.Get_DB_Object("objects").Get_String("chal");
-			Change_Tmpl("tmpl/widgets/auth/change_password/change_password_keymode.html");
+			this.authkeychal = result.getDBObject("objects").getString("chal");
+			changeTmpl("tmpl/widgets/auth/change_password/change_password_keymode.html");
 		} else {
 			message.setText("Ошибка: "+res);
-			Change_Tmpl("tmpl/widgets/auth/change_password/change_password.html");
+			changeTmpl("tmpl/widgets/auth/change_password/change_password.html");
 		}
 		
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("pass") ) return this.pass;
 		else if( dwname.equals("passconf") ) return this.passconf;
 		else if( dwname.equals("dochangepass") ) return this.dochangepass;

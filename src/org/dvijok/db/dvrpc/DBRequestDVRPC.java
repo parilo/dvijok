@@ -50,7 +50,7 @@ public class DBRequestDVRPC implements DBRequest {
 			@Override
 			public void onError(Request request, Throwable exception) {
 				DBObject obj = new DBObject();
-				Lib.Alert("DBRequestDVRPC: onError: "+exception.getMessage());
+				Lib.alert("DBRequestDVRPC: onError: "+exception.getMessage());
 				obj.put("result", "DBRequestDVRPC: onError: "+exception.getMessage());
 				handler.fail(obj);
 			}});

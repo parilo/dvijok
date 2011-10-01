@@ -24,31 +24,30 @@ import java.util.HashMap;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
-import org.dvijok.lib.Lib;
 import org.dvijok.widgets.Dwidget;
 
 public class Dwidgets {
 
-	private ArrayList<Dwidget> on_auth_reinit;
-	private HashMap<String, Dwidget> have_dwid;
+	private ArrayList<Dwidget> onAuthReinit;
+	private HashMap<String, Dwidget> haveDwid;
 	private HashMap<String, CustomEventTool> requestETs;
 	
 	public Dwidgets(){
-		this.on_auth_reinit = new ArrayList<Dwidget>();
-		this.have_dwid = new HashMap<String, Dwidget>();
+		this.onAuthReinit = new ArrayList<Dwidget>();
+		this.haveDwid = new HashMap<String, Dwidget>();
 		requestETs = new HashMap<String, CustomEventTool>();
 	}
 	
-	public void Add_On_Auth_Reload(Dwidget d){
-		this.on_auth_reinit.add(d);
+	public void addOnAuthReload(Dwidget d){
+		this.onAuthReinit.add(d);
 	}
 	
-	public void Auth_Reload(){
-		for(int i=0; i<this.on_auth_reinit.size(); i++) this.on_auth_reinit.get(i).Reinit();
+	public void authReload(){
+		for(int i=0; i<this.onAuthReinit.size(); i++) this.onAuthReinit.get(i).reinit();
 	}
 	
-	public void Add_Dwided_Dwidget(String dwid, Dwidget d){
-		this.have_dwid.put(dwid, d);
+	public void addDwidedDwidget(String dwid, Dwidget d){
+		this.haveDwid.put(dwid, d);
 		if( requestETs.containsKey(dwid) ){
 			CustomEventTool reqET = requestETs.get(dwid);
 			reqET.invokeListeners(d);
@@ -56,10 +55,10 @@ public class Dwidgets {
 		}
 	}
 	
-	public void Request_Dwidget(String dwid, CustomEventListener listener){
+	public void requestDwidget(String dwid, CustomEventListener listener){
 		
-		if( have_dwid.containsKey(dwid) ){
-			listener.customEventOccurred(new CustomEvent(have_dwid.get(dwid)));
+		if( haveDwid.containsKey(dwid) ){
+			listener.customEventOccurred(new CustomEvent(haveDwid.get(dwid)));
 		} else {
 			CustomEventTool reqET;
 			if( !requestETs.containsKey(dwid) ){
@@ -71,15 +70,14 @@ public class Dwidgets {
 		}
 	}
 	
-	public Dwidget Get_Dwided_Dwidget(String dwid){
-//		Lib.Alert("dwids: "+have_dwid);
-		return this.have_dwid.get(dwid);
+	public Dwidget getDwidedDwidget(String dwid){
+		return this.haveDwid.get(dwid);
 	}
 
 	@Override
 	public String toString() {
-		return "Dwidgets [on_auth_reinit=" + on_auth_reinit + ", have_dwid="
-				+ have_dwid.keySet() + "]";
+		return "Dwidgets [on_auth_reinit=" + onAuthReinit + ", have_dwid="
+				+ haveDwid.keySet() + "]";
 	}
 	
 }

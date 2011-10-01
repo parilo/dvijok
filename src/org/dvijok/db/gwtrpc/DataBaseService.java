@@ -16,8 +16,23 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.db.gwtrpc;
 
-public class DVDeserializeException extends Exception {
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import org.dvijok.db.DBObject;
+
+@RemoteServiceRelativePath("data")
+public interface DataBaseService extends RemoteService{
+
+	DBObject getSession();
+	DBObject auth(DBObject params);
+	DBObject sendKey(DBObject params);
+	DBObject logout(DBObject params);
+	DBObject getObject(DBObject params);
+	DBObject getObjects(DBObject params);
+	DBObject putObject(DBObject params);
+	DBObject delObject(DBObject params);
+	
 }

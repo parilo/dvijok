@@ -22,13 +22,13 @@ import java.util.Date;
 
 public class Config {
 
-	public String db_url;
-	public Date sess_exp_time;
+	public String dbUrl;
+	public Date sessExpTime;
 	
 	public Config(){
 
-		this.db_url = "http://127.0.0.1:8888/xmlrpcdb/xmlrpcdb.php";//for DataBaseXMLRPC
-		this.sess_exp_time = new Date(365*24*60*60*1000); //cookie exp time
+		this.dbUrl = "http://127.0.0.1:8888/xmlrpcdb/xmlrpcdb.php";//for DataBaseXMLRPC
+		this.sessExpTime = new Date(365*24*60*60*1000); //cookie exp time
 		
 	}
 	

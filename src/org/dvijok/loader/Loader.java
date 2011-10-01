@@ -21,44 +21,39 @@ package org.dvijok.loader;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.lib.Lib;
-import org.dvijok.widgets.Dwidget;
-import org.dvijok.widgets.Sub_Panel;
+import org.dvijok.widgets.SubPanel;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Loader {
 
-	private Dwidget_Factory factory;
+	private DwidgetFactory factory;
 	private HTMLPanel root;
 	
 	private boolean loading;
-	private boolean need_load;
+	private boolean needLoad;
 	
 	public Loader(){
 		
 		this.loading = false;
-		this.need_load = false;
+		this.needLoad = false;
 		this.root = null;
-		this.factory = new Dwidget_Factory();
+		this.factory = new DwidgetFactory();
 		
 	}
 	
-	public Dwidget_Factory Get_Dwidget_Factory(){
+	public DwidgetFactory getDwidgetFactory(){
 		return this.factory;
 	}
 	
-	private DBObject Get_Param(com.google.gwt.dom.client.Element pel){
+	private DBObject getParam(com.google.gwt.dom.client.Element pel){
 		com.google.gwt.dom.client.Element chel = pel.getNextSiblingElement();
 		if( chel != null ){
 			DBObject param = new DBObject();
 			while( chel != null ){
-//				Lib.Alert(chel.getNodeName()+" "+chel.getInnerText());
-				if( chel.getNodeName().equals("PARAM") ){ /*Lib.Alert("end el");*/ return param; }
+				if( chel.getNodeName().equals("PARAM") ){ return param; }
 				param.put(chel.getNodeName(), chel.getInnerHTML());
 				chel = chel.getNextSiblingElement();
 			}
@@ -67,32 +62,30 @@ public class Loader {
 		return null;
 	}
 	
-	public String Get_Attribute(Sub_Panel p, String name){
+	public String getAttribute(SubPanel p, String name){
 		return p.getElement().getAttribute(name);
 	}
 	
-	public ArrayList<DBObject> Get_Params(Sub_Panel p){
-		return this.Get_Params(p.getElement());
+	public ArrayList<DBObject> getParams(SubPanel p){
+		return this.getParams(p.getElement());
 	}
 	
-	public ArrayList<DBObject> Get_Params(Element el){
+	public ArrayList<DBObject> getParams(Element el){
 
 		com.google.gwt.dom.client.Element chel = el.getFirstChildElement();
 		if( chel != null ){
 			ArrayList<DBObject> params = new ArrayList<DBObject>();
 			while( chel != null ){
-//				Lib.Alert("loader: "+chel.getNodeName());
-				if( chel.getNodeName().equals("PARAM") ) params.add(this.Get_Param(chel));
+				if( chel.getNodeName().equals("PARAM") ) params.add(this.getParam(chel));
 				chel = chel.getNextSiblingElement();
 			}
-//			Lib.Alert("params: "+params);
 			return params;
 		}
 		
 		return null;
 	}
 	
-	private void Init_Root(){
+	private void initRoot(){
 		RootPanel p = RootPanel.get("dvijokroot");
 		String html = p.getElement().getInnerHTML();
 		p.clear();
@@ -101,12 +94,12 @@ public class Loader {
 		p.add(root);
 	}
 	
-	public void Load(){
-		this.Init_Root();
+	public void load(){
+		this.initRoot();
 		this.Load(this.root);
 	}
 	
-	public void Load_New(){
+	public void loadNew(){
 		this.Load(this.root);
 	}
 	
@@ -121,19 +114,18 @@ public class Loader {
 			if( (w = html.getElementById("dvijokw")) != null ){
 				w.setAttribute("id", "dvijokw_l");
 				String name = w.getAttribute("name");
-//				Lib.Alert("found: "+name);
-				html.add(this.factory.Get_Dwidget(name, new Sub_Panel(w)), "dvijokw_l");
+				html.add(this.factory.getDwidget(name, new SubPanel(w)), "dvijokw_l");
 				w.setAttribute("id", "dvijokw_");
 			}
 			
 			this.loading = false;
 
-			if( this.need_load == true ){
-				this.need_load = false;
-				this.Load_New();
+			if( this.needLoad == true ){
+				this.needLoad = false;
+				this.loadNew();
 			}
 			
-		} else this.need_load = true;
+		} else this.needLoad = true;
 		
 	}
 	

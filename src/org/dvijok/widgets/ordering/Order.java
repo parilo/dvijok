@@ -23,18 +23,16 @@ import java.util.List;
 
 import org.dvijok.controls.Table;
 import org.dvijok.db.DBObject;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Order extends Sub_Panels_Dwidget {
+public class Order extends SubPanelsDwidget {
 	
 	private Table objects;
 	private Image up;
@@ -52,7 +50,7 @@ public class Order extends Sub_Panels_Dwidget {
 	
 	public void addItem(Widget w, Object value){
 		w.addStyleName("dworderobj");
-		this.objects.Add_Cell(w);
+		this.objects.addCell(w);
 		this.vals.add(value);
 	}
 	
@@ -63,7 +61,7 @@ public class Order extends Sub_Panels_Dwidget {
 	public void removeItem(Object value){
 		int ind = this.vals.indexOf(value);
 		this.vals.remove(ind);
-		this.objects.Remove_Row(ind);
+		this.objects.removeRow(ind);
 		if( selind > ind ) selind--;
 		else if( selind == ind ) selind = -1;
 	}
@@ -80,7 +78,7 @@ public class Order extends Sub_Panels_Dwidget {
 	}
 	
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		vals = new ArrayList<Object>();
 		
 		this.objects = new Table();
@@ -138,7 +136,7 @@ public class Order extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("objects") ) {
 			return this.objects;
 		} else if( dwname.equals("up") ) {

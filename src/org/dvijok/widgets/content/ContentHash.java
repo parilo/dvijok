@@ -23,8 +23,8 @@ import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
 import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panel;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanel;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -33,74 +33,74 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Content_Hash extends Sub_Panels_Dwidget {
+public class ContentHash extends SubPanelsDwidget {
 
 	private SimplePanel content;
 	private HashMap<String,HTMLPanel> contents;
 	private HashMap<String,Boolean> loaded;
 	private String default_hash;
 	
-	public Content_Hash(Sub_Panel p){
+	public ContentHash(SubPanel p){
 		super("tmpl/widgets/content/content_hash/content_hash.html", p);
 		
 		History.addValueChangeHandler(new ValueChangeHandler<String>(){
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				String hash = event.getValue();
-				Load_Content(hash);
+				loadContent(hash);
 			}
 		});
 		
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		this.content = new SimplePanel();
 		this.contents = new HashMap<String,HTMLPanel>();
 		this.loaded = new HashMap<String,Boolean>();
 		this.default_hash = "";
 		
-		this.Init_Contents();
+		this.initContents();
 	}
 
 	@Override
-	protected void Create_GUI(){
-		super.Create_GUI();
-		this.Load_Content(History.getToken());
+	protected void createGUI(){
+		super.createGUI();
+		this.loadContent(History.getToken());
 	}
 	
-	private void Load_Content(String hash){
+	private void loadContent(String hash){
 		if( contents.containsKey(hash) ){
 			this.content.setWidget(contents.get(hash));
-			this.Load_Dwidgets(hash);
+			this.loadDwidgets(hash);
 		} else if( !this.default_hash.equals("") ){
 			this.content.setWidget(contents.get(this.default_hash));
-			this.Load_Dwidgets(this.default_hash);
+			this.loadDwidgets(this.default_hash);
 		} else {
 			this.content.clear();
 		}
 	}
 	
-	private void Load_Dwidgets(String hash){
+	private void loadDwidgets(String hash){
 		if(!this.loaded.get(hash)){
-			Resources.getInstance().loader.Load_New();
+			Resources.getInstance().loader.loadNew();
 			this.loaded.put(hash, true);
 		}
 	}
 	
-	private void Init_Contents(){
-		ArrayList<DBObject> ps = this.Get_Params();
+	private void initContents(){
+		ArrayList<DBObject> ps = this.getParams();
 		for(int i=0; i<ps.size(); i++){
 			DBObject p = ps.get(i);
-			String hash = p.Get_String("HASH");
-			this.contents.put(hash , new HTMLPanel(p.Get_String("VALUE")));
+			String hash = p.getString("HASH");
+			this.contents.put(hash , new HTMLPanel(p.getString("VALUE")));
 			this.loaded.put(hash, false);
 			if( p.containsKey("DEFAULT") ) this.default_hash = hash;
 		}
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

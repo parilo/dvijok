@@ -25,7 +25,7 @@ import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
-import org.dvijok.tmpl.Tmpls_DB;
+import org.dvijok.tmpl.TmplsDB;
 import org.dvijok.widgets.busy.Busy;
 
 import com.google.gwt.user.client.ui.RootPanel;
@@ -36,7 +36,7 @@ public class Resources {
 
 	private static Resources self = null;
 	
-	public Tmpls_DB tmpls;
+	public TmplsDB tmpls;
 	public Loader loader;
 	public Config conf;
 	public DataBase db;
@@ -76,11 +76,11 @@ public class Resources {
 		return self;
 	}
 	
-	public void Get_User_Info(){
-		this.Get_User_Info(null);
+	public void getUserInfo(){
+		this.getUserInfo(null);
 	}
 	
-	public void Get_User_Info(final DVRequestHandler<Integer> handler){
+	public void getUserInfo(final DVRequestHandler<Integer> handler){
 		DBObject reqp = new DBObject();
 		reqp.put("dbid", "userinfo");
 		
@@ -88,20 +88,20 @@ public class Resources {
 
 			@Override
 			public void success(DBObject result) {
-				Resources.getInstance().userInfo = result.Get_DB_Object("objects");
-				Resources.getInstance().idUserInfo = result.Get_String("id");
+				Resources.getInstance().userInfo = result.getDBObject("objects");
+				Resources.getInstance().idUserInfo = result.getString("id");
 				if( handler != null ) handler.success(0);
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.Alert("Resources: Get_User_Info: failed: "+result);
+				Lib.alert("Resources: Get_User_Info: failed: "+result);
 			}
 			
 		});
 	}
 	
-	public void Save_User_Info(){
+	public void saveUserInfo(){
 		DBObject reqp = new DBObject();
 		reqp.put("dbid", "userinfo");
 		reqp.put("id", Resources.getInstance().idUserInfo);
@@ -114,7 +114,7 @@ public class Resources {
 			
 			@Override
 			public void fail(DBObject result) {
-				Lib.Alert("Resources: Save_User_Info: failed: "+result);
+				Lib.alert("Resources: Save_User_Info: failed: "+result);
 			}
 			
 		});

@@ -18,9 +18,17 @@
 
 package org.dvijok.widgets;
 
-public interface Dwidget_Creator {
-	
-	public Dwidget Get_Dwidget(Sub_Panel p);
-	public boolean Need_Auth_Reinit();
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+
+public class SubPanel extends SimplePanel {
+
+	public SubPanel(com.google.gwt.dom.client.Element el){
+		super((com.google.gwt.user.client.Element)el);
+	}
+
+	public SubPanel(RootPanel rp){
+		super(rp.getElement());
+	}
 
 }

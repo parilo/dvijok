@@ -21,7 +21,6 @@ package org.dvijok.controls;
 import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.lib.Lib;
 
 import com.google.gwt.user.client.ui.ListBox;
 

@@ -20,10 +20,6 @@ package org.dvijok.db;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.dvijok.db.dvrpc.DVDeserializeException;
-import org.dvijok.lib.Lib;
 
 public class DBArray extends ArrayList<Serializable> implements Serializable {
 

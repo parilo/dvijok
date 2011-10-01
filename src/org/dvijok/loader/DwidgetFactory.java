@@ -22,19 +22,18 @@ import java.util.HashMap;
 
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
-import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Dwidget;
-import org.dvijok.widgets.Dwidget_Creator;
-import org.dvijok.widgets.Sub_Panel;
+import org.dvijok.widgets.DwidgetCreator;
+import org.dvijok.widgets.SubPanel;
 
-public class Dwidget_Factory {
+public class DwidgetFactory {
 
-	private HashMap<String,Dwidget_Creator> creators;
+	private HashMap<String,DwidgetCreator> creators;
 	private CustomEventTool dwidgetLoadET;
 	
-	public Dwidget_Factory(){
-		this.creators = new HashMap<String,Dwidget_Creator>();
+	public DwidgetFactory(){
+		this.creators = new HashMap<String,DwidgetCreator>();
 		dwidgetLoadET = new CustomEventTool();
 	}
 	
@@ -46,20 +45,20 @@ public class Dwidget_Factory {
 		dwidgetLoadET.removeCustomEventListener(listener);
 	}
 	
-	public void Register(String name, Dwidget_Creator dwc ){
+	public void register(String name, DwidgetCreator dwc ){
 		this.creators.put(name, dwc);
 	}
 	
-	public Dwidget Get_Dwidget(String name, Sub_Panel p){
+	public Dwidget getDwidget(String name, SubPanel p){
 		if( this.creators.containsKey(name) ){
-			Dwidget_Creator dc = this.creators.get(name);
-			Dwidget d = dc.Get_Dwidget(p);
+			DwidgetCreator dc = this.creators.get(name);
+			Dwidget d = dc.getDwidget(p);
 			
-			String dwid = d.Get_dwid();
+			String dwid = d.getDwid();
 			if( dwid != null )
-				if(!dwid.equals("")) Resources.getInstance().dwidgets.Add_Dwided_Dwidget(dwid, d);
+				if(!dwid.equals("")) Resources.getInstance().dwidgets.addDwidedDwidget(dwid, d);
 					
-			if( dc.Need_Auth_Reinit() ) Resources.getInstance().dwidgets.Add_On_Auth_Reload(d);
+			if( dc.needAuthReinit() ) Resources.getInstance().dwidgets.addOnAuthReload(d);
 			
 			dwidgetLoadET.invokeListeners(d);
 			

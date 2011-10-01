@@ -30,7 +30,7 @@ public class HttpFunctions {
 	    try {
 	      builder.sendRequest(null, rc);
 	    } catch (RequestException e) {
-	      Lib.Alert("Lib: Http_Client: Do_Get: exception: "+e.getMessage());
+	      Lib.alert("Lib: Http_Client: Do_Get: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
 	  }
@@ -41,7 +41,7 @@ public class HttpFunctions {
 	    try {
 	      builder.sendRequest(data, rc);
 	    } catch (RequestException e) {
-	      Lib.Alert("Lib: HttpClient: doPost: exception: "+e.getMessage());
+	      Lib.alert("Lib: HttpClient: doPost: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
 	  }

@@ -29,26 +29,26 @@ import org.dvijok.resources.Resources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class DataBase_GWTRPC implements DataBase {
+public class DataBaseGWTRPC implements DataBase {
 
 	private DBObject session;
 	
-	private static DataBase_ServiceAsync dataSvc = GWT.create(DataBase_Service.class);
+	private static DataBaseServiceAsync dataSvc = GWT.create(DataBaseService.class);
 	
-	public DataBase_GWTRPC(){
-		this.Restore_Session();
+	public DataBaseGWTRPC(){
+		this.restoreSession();
 	}
 
-	private void Make_Session(){
-		this.Make_Session(null);
+	private void makeSession(){
+		this.makeSession(null);
 	}
 	
-	private void Make_Session(final DVRequestHandler<Integer> handler){
+	private void makeSession(final DVRequestHandler<Integer> handler){
 		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: make session failed");
+				Lib.alert("DataBase_GWTRPC: make session failed");
 				if( handler != null ) handler.fail(0);
 			}
 
@@ -56,26 +56,26 @@ public class DataBase_GWTRPC implements DataBase {
 			public void onSuccess(DBObject result) {
 //				Lib.Alert("sid: "+result.Get_String("sid"));
 				session = result;
-				Store_Session();
+				storeSession();
 				if( handler != null ) handler.success(0);
 			}
 			
 		};
 		
-		dataSvc.Get_Session(cb);
+		dataSvc.getSession(cb);
 	}
 	
-	protected void Store_Session(){
-		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sess_exp_time.getTime());
-		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", session.Get_String("sid"), exp_time, Lib.getDomain(), "/", false);
+	protected void storeSession(){
+		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sessExpTime.getTime());
+		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", session.getString("sid"), exp_time, Lib.getDomain(), "/", false);
 	}
 	
-	protected void Restore_Session(){
+	protected void restoreSession(){
 		String sid = com.google.gwt.user.client.Cookies.getCookie("dvijok.session");
 		if( sid != null ){
 			session = new DBObject();
 			session.put("sid", sid);
-		} else Make_Session();
+		} else makeSession();
 	}
 	
 	@Override
@@ -89,16 +89,16 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: auth request failed");
+				Lib.alert("DataBase_GWTRPC: auth request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") ) handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DVRequestHandler<Integer>(){
+					makeSession(new DVRequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -107,7 +107,7 @@ public class DataBase_GWTRPC implements DataBase {
 
 						@Override
 						public void fail(Integer result) {
-							Lib.Alert("DataBase_GWTRPC: Get_CallBack: make session failed");
+							Lib.alert("DataBase_GWTRPC: Get_CallBack: make session failed");
 						}
 						
 					});
@@ -117,7 +117,7 @@ public class DataBase_GWTRPC implements DataBase {
 			
 		};
 		
-		dataSvc.Auth(allparams, cb);
+		dataSvc.auth(allparams, cb);
 	}
 
 	@Override
@@ -131,16 +131,16 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: authkey request failed");
+				Lib.alert("DataBase_GWTRPC: authkey request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DVRequestHandler<Integer>(){
+					makeSession(new DVRequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -149,7 +149,7 @@ public class DataBase_GWTRPC implements DataBase {
 
 						@Override
 						public void fail(Integer result) {
-							Lib.Alert("DataBase_GWTRPC: Get_CallBack: make session failed");
+							Lib.alert("DataBase_GWTRPC: Get_CallBack: make session failed");
 						}
 						
 					});
@@ -159,7 +159,7 @@ public class DataBase_GWTRPC implements DataBase {
 			
 		};
 		
-		dataSvc.Send_Key(allparams, cb);
+		dataSvc.sendKey(allparams, cb);
 	}
 
 	@Override
@@ -172,19 +172,19 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: Logout: logout request failed");
+				Lib.alert("DataBase_GWTRPC: Logout: logout request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") || res.equals("notsid") ) handler.success(result);
 				else handler.fail(result);
 			}
 			
 		};
 		
-		dataSvc.Logout(allparams, cb);
+		dataSvc.logout(allparams, cb);
 	}
 
 	@Override
@@ -197,16 +197,16 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: authkey request failed");
+				Lib.alert("DataBase_GWTRPC: authkey request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DVRequestHandler<Integer>(){
+					makeSession(new DVRequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -215,7 +215,7 @@ public class DataBase_GWTRPC implements DataBase {
 
 						@Override
 						public void fail(Integer result) {
-							Lib.Alert("DataBase_GWTRPC: Get_Object: make session failed");
+							Lib.alert("DataBase_GWTRPC: Get_Object: make session failed");
 						}
 						
 					});
@@ -225,7 +225,7 @@ public class DataBase_GWTRPC implements DataBase {
 			
 		};
 		
-		dataSvc.Get_Object(allparams, cb);
+		dataSvc.getObject(allparams, cb);
 	}
 
 	@Override
@@ -238,16 +238,16 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: authkey request failed");
+				Lib.alert("DataBase_GWTRPC: authkey request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DVRequestHandler<Integer>(){
+					makeSession(new DVRequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -256,7 +256,7 @@ public class DataBase_GWTRPC implements DataBase {
 
 						@Override
 						public void fail(Integer result) {
-							Lib.Alert("DataBase_GWTRPC: Put_Object: make session failed");
+							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
 						}
 						
 					});
@@ -266,7 +266,7 @@ public class DataBase_GWTRPC implements DataBase {
 			
 		};
 		
-		dataSvc.Get_Objects(allparams, cb);
+		dataSvc.getObjects(allparams, cb);
 	}
 
 	@Override
@@ -279,16 +279,16 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: authkey request failed");
+				Lib.alert("DataBase_GWTRPC: authkey request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DVRequestHandler<Integer>(){
+					makeSession(new DVRequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -297,7 +297,7 @@ public class DataBase_GWTRPC implements DataBase {
 
 						@Override
 						public void fail(Integer result) {
-							Lib.Alert("DataBase_GWTRPC: Put_Object: make session failed");
+							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
 						}
 						
 					});
@@ -307,7 +307,7 @@ public class DataBase_GWTRPC implements DataBase {
 			
 		};
 		
-		dataSvc.Put_Object(allparams, cb);
+		dataSvc.putObject(allparams, cb);
 	}
 
 	@Override
@@ -320,16 +320,16 @@ public class DataBase_GWTRPC implements DataBase {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Lib.Alert("DataBase_GWTRPC: authkey request failed");
+				Lib.alert("DataBase_GWTRPC: authkey request failed");
 			}
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.Get_String("result");
+				String res = result.getString("result");
 				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					Make_Session(new DVRequestHandler<Integer>(){
+					makeSession(new DVRequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -338,7 +338,7 @@ public class DataBase_GWTRPC implements DataBase {
 
 						@Override
 						public void fail(Integer result) {
-							Lib.Alert("DataBase_GWTRPC: Put_Object: make session failed");
+							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
 						}
 						
 					});
@@ -348,7 +348,7 @@ public class DataBase_GWTRPC implements DataBase {
 			
 		};
 		
-		dataSvc.Del_Object(allparams, cb);
+		dataSvc.delObject(allparams, cb);
 	}
 
 	@Override

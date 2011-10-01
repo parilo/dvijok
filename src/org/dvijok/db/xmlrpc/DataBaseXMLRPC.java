@@ -28,7 +28,6 @@ import com.fredhat.gwt.xmlrpc.client.XmlRpcRequest;
 
 import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DVRequestHandler;
-import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
 import com.google.gwt.user.client.Timer;
@@ -59,7 +58,7 @@ public class DataBaseXMLRPC {
 			@Override
 			public void success(DBObject dbo) {
 //				Lib.Alert("got: "+dbo);
-				session = dbo.Get_DB_Object("objects").Get_DB_Object("session");
+				session = dbo.getDBObject("objects").getDBObject("session");
 				Store_Session();
 				if( handler != null ) handler.success(0);
 			}
@@ -76,8 +75,8 @@ public class DataBaseXMLRPC {
 	}*/
 	
 	protected void Store_Session(){
-		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sess_exp_time.getTime());
-		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", session.Get_String("sid"), exp_time);
+		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sessExpTime.getTime());
+		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", session.getString("sid"), exp_time);
 	}
 	
 	protected void Restore_Session(){
@@ -86,11 +85,6 @@ public class DataBaseXMLRPC {
 			session = new DBObject();
 			session.put("sid", sid);
 		} else Make_Session();
-	}
-
-	private String Extract(Object o){
-		String s = (String)o;
-		return s.toUpperCase().equals("NULL")?"":s;
 	}
 	
 	private Serializable convert_type(Object o){
@@ -169,7 +163,7 @@ public class DataBaseXMLRPC {
 
 				@Override
 				public void success(DBObject result) {
-					if( result.Get_String("result").equals("notsid") ){
+					if( result.getString("result").equals("notsid") ){
 						Make_Session(new DVRequestHandler<Integer>(){
 
 							@Override
@@ -215,8 +209,8 @@ public class DataBaseXMLRPC {
 			@Override
 			public void success(DBObject result) {
 //				Lib.Alert(""+result);
-				String res = result.Get_String("result");
-				if( res.equals("success") ) handler.success(result.Get_DB_Object("objects"));
+				String res = result.getString("result");
+				if( res.equals("success") ) handler.success(result.getDBObject("objects"));
 				else handler.fail(new DBObject());
 			}
 

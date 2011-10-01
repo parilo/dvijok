@@ -21,14 +21,14 @@ package org.dvijok.widgets.editor;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EditorCKEditor extends Sub_Panels_Dwidget implements Editor {
+public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 
 	private SimplePanel ed;
 	private String edId;
@@ -55,7 +55,7 @@ public class EditorCKEditor extends Sub_Panels_Dwidget implements Editor {
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		edId = "ed" + Random.nextInt();
 		SimplePanel sp = new SimplePanel();
 		ed = new SimplePanel();
@@ -90,7 +90,7 @@ public class EditorCKEditor extends Sub_Panels_Dwidget implements Editor {
 	}-*/;	
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("editor") ){
 			return ed;
 		} else return null;

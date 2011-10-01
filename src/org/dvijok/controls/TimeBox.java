@@ -18,8 +18,6 @@
 
 package org.dvijok.controls;
 
-import org.dvijok.lib.Lib;
-
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -62,14 +60,14 @@ public class TimeBox extends TextBox {
 			case 5:
 				if( ch == '0' || ch == '1' || ch == '2' ){
 					this.time[0] = ch;
-					this.Refresh();
+					this.refresh();
 					this.setCursorPos(1);
 					this.setSelectionRange(1, 1);
 				}
 				break;
 			case 1:
 				if( setHour(ch) ){
-					this.Refresh();
+					this.refresh();
 					this.setCursorPos(3);
 					this.setSelectionRange(3, 1);
 				}
@@ -79,14 +77,14 @@ public class TimeBox extends TextBox {
 				int chval = Integer.parseInt(""+ch);
 				if( chval >= 0 && chval < 6 ){
 					this.time[2] = ch;
-					this.Refresh();
+					this.refresh();
 					this.setCursorPos(4);
 					this.setSelectionRange(4, 1);
 				}
 				break;
 			case 4:
 				if( setMinute(ch) ){
-					this.Refresh();
+					this.refresh();
 					this.setCursorPos(0);
 					this.setSelectionRange(0, 1);
 				}
@@ -113,7 +111,7 @@ public class TimeBox extends TextBox {
 		else return false;
 	}
 	
-	private void Refresh(){
+	private void refresh(){
 		this.setText(""+time[0]+time[1]+":"+time[2]+time[3]);
 	}
 

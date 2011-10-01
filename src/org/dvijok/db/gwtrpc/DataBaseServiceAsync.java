@@ -22,15 +22,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import org.dvijok.db.DBObject;
 
-public interface DataBase_ServiceAsync {
+public interface DataBaseServiceAsync {
 
-	void Get_Session(AsyncCallback<DBObject> callback);
-	void Auth(DBObject params, AsyncCallback<DBObject> callback);
-	void Send_Key(DBObject params, AsyncCallback<DBObject> callback);
-	void Logout(DBObject params, AsyncCallback<DBObject> callback);
-	void Get_Object(DBObject params, AsyncCallback<DBObject> callback);
-	void Get_Objects(DBObject params, AsyncCallback<DBObject> callback);
-	void Put_Object(DBObject params, AsyncCallback<DBObject> callback);
-	void Del_Object(DBObject params, AsyncCallback<DBObject> callback);
+	void getSession(AsyncCallback<DBObject> callback);
+	void auth(DBObject params, AsyncCallback<DBObject> callback);
+	void sendKey(DBObject params, AsyncCallback<DBObject> callback);
+	void logout(DBObject params, AsyncCallback<DBObject> callback);
+	void getObject(DBObject params, AsyncCallback<DBObject> callback);
+	void getObjects(DBObject params, AsyncCallback<DBObject> callback);
+	void putObject(DBObject params, AsyncCallback<DBObject> callback);
+	void delObject(DBObject params, AsyncCallback<DBObject> callback);
 	
 }

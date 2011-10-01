@@ -85,7 +85,7 @@ public class Table extends Composite {
 		this.table.removeCell(row, column);
 	}
 	
-	public void Remove_Row(int row){
+	public void removeRow(int row){
 		this.table.removeRow(row);
 		this.rownum--;
 	}
@@ -147,14 +147,14 @@ public class Table extends Composite {
 	}
 	
 	public void Add_Cell(String s){
-		this.Add_Cell(new Label(s));
+		this.addCell(new Label(s));
 	}
 	
 	public void Add_Cell(String s, int colspan, int rowspan){
 		this.Add_Cell(new Label(s), colspan, rowspan);
 	}
 	
-	public void Add_Cell(Widget w){
+	public void addCell(Widget w){
 		if( this.colnum > 0 ){
 			this.Row_Inc();
 			this.table.setWidget(this.rownum, this.rowi, w);

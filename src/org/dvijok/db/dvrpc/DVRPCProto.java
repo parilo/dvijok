@@ -23,7 +23,6 @@ import java.util.Iterator;
 
 import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
-import org.dvijok.lib.Lib;
 
 public class DVRPCProto {
 

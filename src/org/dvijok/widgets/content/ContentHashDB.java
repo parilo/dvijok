@@ -22,13 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.event.CustomEventListener;
-import org.dvijok.event.CustomEventTool;
 import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panel;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanel;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -37,53 +35,42 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Content_Hash_DB extends Sub_Panels_Dwidget {
+public class ContentHashDB extends SubPanelsDwidget {
 
 	private SimplePanel content;
 	private HashMap<String,HTMLPanel> contents;
 	private HashMap<String,Boolean> loaded;
-//	private CustomEventTool changeET;
 	
-	public Content_Hash_DB(Sub_Panel p){
+	public ContentHashDB(SubPanel p){
 		super("tmpl/widgets/content/content_hash/content_hash.html", p);
 		
 		History.addValueChangeHandler(new ValueChangeHandler<String>(){
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				String hash = event.getValue();
-//				changeET.invokeListeners(hash);
-				Load_Content(hash);
+				loadContent(hash);
 			}
 		});
 		
 	}
-	
-//	public void addPageHashChangeListener(CustomEventListener listener){
-//		changeET.addCustomEventListener(listener);
-//	}
-//	
-//	public void removePageHashChangeListener(CustomEventListener listener){
-//		changeET.removeCustomEventListener(listener);
-//	}
 
 	@Override
-	public void Reinit() {
+	public void reinit() {
 		this.contents.clear();
 		this.loaded.clear();
-		this.Init_Contents();
+		this.initContents();
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
-//		changeET = new CustomEventTool();
+	protected void beforeSubPanelsLoading() {
 		this.content = new SimplePanel();
 		this.contents = new HashMap<String,HTMLPanel>();
 		this.loaded = new HashMap<String,Boolean>();
 		
-		this.Init_Contents();
+		this.initContents();
 	}
 
-	private void Load_Content(String hash){
+	private void loadContent(String hash){
 		if( contents.containsKey(hash) ){
 			this.content.setWidget(contents.get(hash));
 			this.Load_Dwidgets(hash);
@@ -97,33 +84,33 @@ public class Content_Hash_DB extends Sub_Panels_Dwidget {
 	
 	private void Load_Dwidgets(String hash){
 		if(!this.loaded.get(hash)){
-			Resources.getInstance().loader.Load_New();
+			Resources.getInstance().loader.loadNew();
 			this.loaded.put(hash, true);
 		}
 	}
 	
-	private void Init_Contents(){
+	private void initContents(){
 		DBObject req = new DBObject();
-		req.put("dbid", this.Get_dbid());
+		req.put("dbid", this.getDbid());
 		Resources.getInstance().db.getObject(req, new DVRequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
-				Init_Contents(result.Get_DB_Object("objects"));
-				Load_Content(Lib.Get_Hash_Token());
+				initContents(result.getDBObject("objects"));
+				loadContent(Lib.getHashToken());
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.Alert("Content_Hash_DB: Init_Contents: fail: "+result);
+				Lib.alert("Content_Hash_DB: Init_Contents: fail: "+result);
 			}
 			
 		});
 	}
 	
-	private void Init_Contents(DBObject dbo){
+	private void initContents(DBObject dbo){
 		for(String hash : dbo.keySet()){
-			String cont = dbo.Get_String(hash);
+			String cont = dbo.getString(hash);
 			if( hash.equals("#def") ) hash = "def";
 			this.contents.put(hash , new HTMLPanel(cont));
 			this.loaded.put(hash, false);
@@ -131,7 +118,7 @@ public class Content_Hash_DB extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

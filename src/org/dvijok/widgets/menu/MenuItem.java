@@ -24,19 +24,19 @@ import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Menu_Item extends Sub_Panels_Dwidget {
+public class MenuItem extends SubPanelsDwidget {
 
 	private Label l;
 	private CustomEventTool actionET;
 	
-	public Menu_Item(){
+	public MenuItem(){
 		super("tmpl/widgets/menu/menu_item.html");
 	}
 	
@@ -49,27 +49,27 @@ public class Menu_Item extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		actionET = new CustomEventTool();
 		this.l = new Label();
 	}
 	
-	public void Set_Label(String label){
+	public void setLabel(String label){
 		this.l.setText(label);
 	}
 	
-	public void Set_Hash(final String hash){
+	public void setHash(final String hash){
 		this.l.addClickHandler(new ClickHandler(){
 			@Override
 			public void onClick(ClickEvent event) {
-				Lib.Change_Hash_Token(hash);
+				Lib.changeHashToken(hash);
 				actionET.invokeListeners(hash);
 			}
 		});
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(final String dwname, ArrayList<DBObject> params){
+	protected Widget genSubWidget(final String dwname, ArrayList<DBObject> params){
 		return this.l;
 	}
 	

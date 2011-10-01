@@ -23,24 +23,23 @@ import java.util.ArrayList;
 import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
-import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panel;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanel;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Logout_On_Hash extends Sub_Panels_Dwidget {
+public class LogoutOnHash extends SubPanelsDwidget {
 
-	public Logout_On_Hash(Sub_Panel p){
+	public LogoutOnHash(SubPanel p){
 		super("tmpl/widgets/auth/logoutonhash/logoutonhash.html", p);
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		History.addValueChangeHandler(new ValueChangeHandler<String>(){
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
@@ -54,12 +53,12 @@ public class Logout_On_Hash extends Sub_Panels_Dwidget {
 						@Override
 						public void success(DBObject result) {
 							//redirect
-							Lib.Redirect("about:blank");
+							Lib.redirect("about:blank");
 						}
 
 						@Override
 						public void fail(DBObject result) {
-							Lib.Alert("Logout_On_Hash: Before_Sub_Panels_Loading: logout failed: "+result);
+							Lib.alert("Logout_On_Hash: Before_Sub_Panels_Loading: logout failed: "+result);
 						}
 						
 					};
@@ -72,7 +71,7 @@ public class Logout_On_Hash extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		return null;
 	}
 	

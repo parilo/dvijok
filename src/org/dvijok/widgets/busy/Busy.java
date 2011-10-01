@@ -21,22 +21,22 @@ package org.dvijok.widgets.busy;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public class Busy extends Sub_Panels_Dwidget {
+public class Busy extends SubPanelsDwidget {
 
 	public Busy(){
 		super("tmpl/widgets/busy/busy.html");
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		return null;
 	}
 	

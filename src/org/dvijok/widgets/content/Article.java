@@ -21,30 +21,27 @@ package org.dvijok.widgets.content;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DVRequestHandler;
-import org.dvijok.lib.Lib;
-import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panel;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanel;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Article extends Sub_Panels_Dwidget {
+public class Article extends SubPanelsDwidget {
 
 	private HTML content;
 	
-	public Article(Sub_Panel p){
+	public Article(SubPanel p){
 		super("tmpl/widgets/content/article/article.html", p);
-		this.Init_Contents();
+		this.initContents();
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		this.content = new HTML();
 	}
 	
-	private void Init_Contents(){
+	private void initContents(){
 /*		Resources.getInstance().db.Get_DB_Object(this.Get_dbid(),new DV_Request_Handler<DB_Object>(){
 
 			@Override
@@ -61,7 +58,7 @@ public class Article extends Sub_Panels_Dwidget {
 	}
 	
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return this.content;
 		} else return null;

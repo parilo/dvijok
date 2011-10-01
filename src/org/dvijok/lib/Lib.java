@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Image;
 
 public class Lib {
 	
-	public static long Get_Long(String s){
+	public static long getLong(String s){
 		try{
 			return Long.parseLong(s);
 		} catch (NumberFormatException e){
@@ -33,7 +33,7 @@ public class Lib {
 		}
 	}
 
-	public static int Get_Int(String s){
+	public static int getInt(String s){
 		try{
 			return Integer.parseInt(s);
 		} catch (NumberFormatException e){
@@ -41,7 +41,7 @@ public class Lib {
 		}
 	}
 
-	public static double Get_Double(String s){
+	public static double getDouble(String s){
 		try{
 			return Double.parseDouble(s);
 		} catch (NumberFormatException e){
@@ -49,23 +49,23 @@ public class Lib {
 		}
 	}
 
-	public static void Set_Page_Title(String t){
+	public static void setPageTitle(String t){
 		com.google.gwt.user.client.Window.setTitle(t);
 	}
 	
-	public static void Change_Hash_Token(String token){
-		Change_Hash_Token(token, true);
+	public static void changeHashToken(String token){
+		changeHashToken(token, true);
 	}
 	
-	public static void Change_Hash_Token(String token, boolean issueEvent){
+	public static void changeHashToken(String token, boolean issueEvent){
 		History.newItem(token, issueEvent);
 	}
 	
-	public static String Get_Hash_Token(){
+	public static String getHashToken(){
 		return History.getToken();
 	}
 	
-	public static void Alert(String str){
+	public static void alert(String str){
 		com.google.gwt.user.client.Window.alert(str);
 	}
 	
@@ -73,7 +73,7 @@ public class Lib {
 		return Document.get().getDomain();
 	}
 	
-	public static void Redirect(String url){
+	public static void redirect(String url){
 		Window.open(url, "_self", ""); 
 	}
 	

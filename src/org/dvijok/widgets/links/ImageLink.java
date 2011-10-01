@@ -21,18 +21,14 @@ package org.dvijok.widgets.links;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.lib.Lib;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ImageLink extends Sub_Panels_Dwidget {
+public class ImageLink extends SubPanelsDwidget {
 
 	public Image im;
 	public Anchor link;
@@ -42,7 +38,7 @@ public class ImageLink extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		this.im = new Image();
 		this.im.addStyleName("pointer");
 		this.link = new Anchor("");
@@ -62,7 +58,7 @@ public class ImageLink extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("image") ){
 			return this.im;
 		} else if( dwname.equals("link") ){

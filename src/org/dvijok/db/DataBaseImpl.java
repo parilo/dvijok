@@ -51,12 +51,12 @@ public class DataBaseImpl implements DataBase {
 
 			@Override
 			public void success(DBObject result) {
-				Lib.Alert("DataBaseDVRPC success: "+result);
+				Lib.alert("DataBaseDVRPC success: "+result);
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.Alert("DataBaseDVRPC fail: "+result);
+				Lib.alert("DataBaseDVRPC fail: "+result);
 			}});
 	}
 
@@ -99,12 +99,12 @@ public class DataBaseImpl implements DataBase {
 
 			@Override
 			public void success(DBObject result) {
-				Lib.Alert("DataBaseDVRPC success: "+result);
+				Lib.alert("DataBaseDVRPC success: "+result);
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.Alert("DataBaseDVRPC fail: "+result);
+				Lib.alert("DataBaseDVRPC fail: "+result);
 			}});
 	}
 

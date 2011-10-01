@@ -26,7 +26,7 @@ import org.dvijok.db.DBObject;
 import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MoreVerticalPanel extends Sub_Panels_Dwidget {
+public class MoreVerticalPanel extends SubPanelsDwidget {
 
 	private VerticalPanel content;
 	private Button more;
@@ -71,13 +71,13 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 	
 			@Override
 			public void success(DBObject result) {
-				load(result.Get_DB_Object("objects"));
+				load(result.getDBObject("objects"));
 				Resources.getInstance().setBusy(false);
 			}
 	
 			@Override
 			public void fail(DBObject result) {
-				Lib.Alert("Messages: Load_Messages: failed: "+result);
+				Lib.alert("Messages: Load_Messages: failed: "+result);
 				Resources.getInstance().setBusy(false);
 			}
 			
@@ -91,15 +91,15 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 		long i=1;
 		while( objs.containsKey(Long.toString(i)) ){
 			String ii = Long.toString(i++);
-			DBObject obj = objs.Get_DB_Object(ii);
+			DBObject obj = objs.getDBObject(ii);
 			os.add(obj);
 		}
 		begi += os.size();
 		Collections.sort(os, new Comparator<DBObject>(){
 			@Override
 			public int compare(DBObject o1, DBObject o2) {
-				long id1 = o1.Get_Long("id");
-				long id2 = o2.Get_Long("id");
+				long id1 = o1.getLong("id");
+				long id2 = o2.getLong("id");
 				return id2>=id1?id2==id1?0:1:-1;
 			}});
 		
@@ -117,7 +117,7 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		content = new VerticalPanel();
 		content.addStyleName("dw-moreverticalpanel");
 		more = new Button("Показать еще");
@@ -130,7 +130,7 @@ public class MoreVerticalPanel extends Sub_Panels_Dwidget {
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
 			return content;
 		} else if( dwname.equals("more") ){

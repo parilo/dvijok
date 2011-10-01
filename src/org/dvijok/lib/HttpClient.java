@@ -36,7 +36,7 @@ public class HttpClient {
 	    try {
 	      builderGET.sendRequest(null, rc);
 	    } catch (RequestException e) {
-	      Lib.Alert("Lib: HttpClient: doGet: exception: "+e.getMessage());
+	      Lib.alert("Lib: HttpClient: doGet: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
 	  }
@@ -45,7 +45,7 @@ public class HttpClient {
 	    try {
 	      builderPOST.sendRequest(data, rc);
 	    } catch (RequestException e) {
-	      Lib.Alert("Lib: HttpClient: doPost: exception: "+e.getMessage());
+	      Lib.alert("Lib: HttpClient: doPost: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
 	  }

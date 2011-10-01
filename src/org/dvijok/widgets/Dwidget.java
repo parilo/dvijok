@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Dwidget extends Composite {
 	
-	private String tmpl_url;
+	private String tmplUrl;
 	private ArrayList<DBObject> params;
 	private HashMap<String, HTMLPanel> modes;
 	private String dbid;
@@ -41,103 +41,103 @@ public class Dwidget extends Composite {
 	private SimplePanel maincont;
 	private HTMLPanel main;
 	
-	private Sub_Panel panel;
+	private SubPanel panel;
 	
-	public Dwidget(String templ_url) {
+	public Dwidget(String templUrl) {
 		this.modes = new HashMap<String, HTMLPanel>();
-		this.Before_Tmpl_Init();
-		this.Init(templ_url);
+		this.beforeTmplInit();
+		this.init(templUrl);
 	}
 	
-	public Dwidget(String templ_url, Sub_Panel p) {
+	public Dwidget(String templUrl, SubPanel p) {
 		this.modes = new HashMap<String, HTMLPanel>();
 		this.panel = p;
-		this.Read_Params();
-		this.Read_dbid();
-		this.Read_dwid();
+		this.readParams();
+		this.readDbid();
+		this.readDwid();
 		this.panel.clear();
 		this.panel.getElement().setInnerHTML("");
-		this.Before_Tmpl_Init();
-		this.Init(templ_url);
+		this.beforeTmplInit();
+		this.init(templUrl);
 	}
 	
-	protected void Before_Tmpl_Init(){}
-	public void Reinit(){}
+	protected void beforeTmplInit(){}
+	public void reinit(){}
 	
-	private void Init(final String templ_url){
+	private void init(final String templUrl){
 		
 		this.maincont = new SimplePanel();
 		this.initWidget(this.maincont);
-		this.tmpl_url = templ_url;
-		this.Get_Tmpl();
+		this.tmplUrl = templUrl;
+		this.getTmpl();
 	}
 	
-	private void Get_Tmpl(){
+	private void getTmpl(){
 		
-		Resources.getInstance().tmpls.Get_Template(this.tmpl_url, new DVRequestHandler<String>(){
+		Resources.getInstance().tmpls.getTemplate(this.tmplUrl, new DVRequestHandler<String>(){
 			@Override
 			public void success(String result) {
-				tmpl_url = result;
-				Create_GUI();
+				tmplUrl = result;
+				createGUI();
 			}
 
 			@Override
 			public void fail(String message) {
-				Lib.Alert("cannot get template "+tmpl_url+" : "+message);
+				Lib.alert("cannot get template "+tmplUrl+" : "+message);
 			}
 		});
 		
 	}
 	
-	private void Read_Params(){
-		this.params = Resources.getInstance().loader.Get_Params(this.panel);
+	private void readParams(){
+		this.params = Resources.getInstance().loader.getParams(this.panel);
 	}
 	
-	public ArrayList<DBObject> Get_Params(){
+	public ArrayList<DBObject> getParams(){
 		return this.params;
 	}
 	
-	private void Read_dbid(){
-		this.dbid = Resources.getInstance().loader.Get_Attribute(this.panel, "dbid");
+	private void readDbid(){
+		this.dbid = Resources.getInstance().loader.getAttribute(this.panel, "dbid");
 	}
 	
-	private void Read_dwid(){
-		this.dwid = Resources.getInstance().loader.Get_Attribute(this.panel, "dwid");
+	private void readDwid(){
+		this.dwid = Resources.getInstance().loader.getAttribute(this.panel, "dwid");
 	}
 	
-	public String Get_dbid(){
+	public String getDbid(){
 		return this.dbid;
 	}
 	
-	public String Get_dwid(){
+	public String getDwid(){
 		return this.dwid;
 	}
 	
-	public HTMLPanel Get_HTMLPanel(){
+	public HTMLPanel getHTMLPanel(){
 		return this.main;
 	}
 	
-	protected void Create_GUI(){
-		this.Init_Tmpl();
-		this.Attach_Tmpl();
+	protected void createGUI(){
+		this.initTmpl();
+		this.attachTmpl();
 	}
 	
-	protected void Init_Tmpl(){
-		this.main = new HTMLPanel(tmpl_url);
-		this.modes.put(this.tmpl_url, this.main);
+	protected void initTmpl(){
+		this.main = new HTMLPanel(tmplUrl);
+		this.modes.put(this.tmplUrl, this.main);
 	}
 	
-	protected void Attach_Tmpl(){
+	protected void attachTmpl(){
 		this.maincont.setWidget(this.main);
-		Resources.getInstance().loader.Load_New();
+		Resources.getInstance().loader.loadNew();
 	}
 	
-	protected void Change_Tmpl(String url){
-		this.tmpl_url = url;
+	protected void changeTmpl(String url){
+		this.tmplUrl = url;
 		if( this.modes.containsKey(url) ){
 			this.main = this.modes.get(url);
 			this.maincont.setWidget(this.main);
-		} else this.Get_Tmpl();
+		} else this.getTmpl();
 	}
 
 }

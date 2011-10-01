@@ -25,22 +25,20 @@ import org.dvijok.interfaces.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
-import org.dvijok.widgets.Sub_Panel;
-import org.dvijok.widgets.Sub_Panels_Dwidget;
+import org.dvijok.widgets.SubPanel;
+import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Auth extends Sub_Panels_Dwidget {
+public class Auth extends SubPanelsDwidget {
 
 	private TextBox login;
 	private PasswordTextBox pass;
@@ -49,18 +47,18 @@ public class Auth extends Sub_Panels_Dwidget {
 	private Button sendauthkey;
 	private String authkeychal;
 	
-	public Auth(Sub_Panel p){
+	public Auth(SubPanel p){
 		super("tmpl/widgets/auth/auth/auth.html", p);
 	}
 
 	@Override
-	protected void Before_Sub_Panels_Loading() {
+	protected void beforeSubPanelsLoading() {
 		
 		KeyDownHandler loginkdh = new KeyDownHandler(){
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if( event.getNativeKeyCode() == KeyCodes.KEY_ENTER ){
-					Do_Login();
+					doLogin();
 				}
 			}
 		};
@@ -69,7 +67,7 @@ public class Auth extends Sub_Panels_Dwidget {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if( event.getNativeKeyCode() == KeyCodes.KEY_ENTER ){
-					Send_AuthKey();
+					sendAuthKey();
 				}
 			}
 		};
@@ -87,7 +85,7 @@ public class Auth extends Sub_Panels_Dwidget {
 		this.sendauthkey.addClickHandler(new ClickHandler(){
 			@Override
 			public void onClick(ClickEvent event) {
-				Send_AuthKey();
+				sendAuthKey();
 			}
 		});
 		this.sendauthkey.addKeyDownHandler(authkeykdh);
@@ -97,19 +95,19 @@ public class Auth extends Sub_Panels_Dwidget {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Do_Login();
+				doLogin();
 			}
 			
 		});
 		this.dologin.addKeyDownHandler(loginkdh);
 	}
 	
-	private void On_Auth_Success(){
-		Resources.getInstance().Get_User_Info(new DVRequestHandler<Integer>(){
+	private void onAuthSuccess(){
+		Resources.getInstance().getUserInfo(new DVRequestHandler<Integer>(){
 
 			@Override
 			public void success(Integer result) {
-				Resources.getInstance().dwidgets.Auth_Reload();
+				Resources.getInstance().dwidgets.authReload();
 			}
 
 			@Override
@@ -117,7 +115,7 @@ public class Auth extends Sub_Panels_Dwidget {
 		});
 	}
 	
-	private void Do_Login(){
+	private void doLogin(){
 		DBObject dbo = new DBObject();
 		dbo.put("login", login.getValue());
 		
@@ -125,12 +123,12 @@ public class Auth extends Sub_Panels_Dwidget {
 
 			@Override
 			public void success(DBObject result) {
-				On_Auth_Success();
+				onAuthSuccess();
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				On_Login_Failed(result, this);
+				onLoginFailed(result, this);
 			}
 			
 		};
@@ -138,7 +136,7 @@ public class Auth extends Sub_Panels_Dwidget {
 		Resources.getInstance().db.auth(dbo, loginrh);
 	}
 	
-	private void Send_AuthKey(){
+	private void sendAuthKey(){
 		
 		DBObject dbo = new DBObject();
 		dbo.put("login", login.getValue());
@@ -149,12 +147,12 @@ public class Auth extends Sub_Panels_Dwidget {
 
 			@Override
 			public void success(DBObject result) {
-				On_Auth_Success();
+				onAuthSuccess();
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				On_Login_Failed(result, this);
+				onLoginFailed(result, this);
 			}
 			
 		};
@@ -162,13 +160,13 @@ public class Auth extends Sub_Panels_Dwidget {
 		Resources.getInstance().db.sendKey(dbo, authkeyrh);
 	}
 	
-	private void On_Login_Failed(DBObject result, DVRequestHandler<DBObject> loginrh){
+	private void onLoginFailed(DBObject result, DVRequestHandler<DBObject> loginrh){
 
-		String res = result.Get_String("result");
+		String res = result.getString("result");
 		
 		if( res.equals("challange") ){
 
-			String resp = md5.md5(result.Get_DB_Object("objects").Get_String("chal")+pass.getValue());
+			String resp = md5.md5(result.getDBObject("objects").getString("chal")+pass.getValue());
 			
 			DBObject dbo = new DBObject();
 			dbo.put("login", login.getValue());
@@ -177,30 +175,30 @@ public class Auth extends Sub_Panels_Dwidget {
 			Resources.getInstance().db.auth( dbo, loginrh );
 			
 		} else if( res.equals("authkey") ){
-			this.authkeychal = result.Get_DB_Object("objects").Get_String("chal");
-			Change_Tmpl("tmpl/widgets/auth/auth/authkeymode.html");
+			this.authkeychal = result.getDBObject("objects").getString("chal");
+			changeTmpl("tmpl/widgets/auth/auth/authkeymode.html");
 		} else {
-			Change_Tmpl("tmpl/widgets/auth/auth/auth.html");
-			Lib.Alert("Неверный логин или пароль");
+			changeTmpl("tmpl/widgets/auth/auth/auth.html");
+			Lib.alert("Неверный логин или пароль");
 			pass.setFocus(true);
 		}
 		
 	}
 
 	@Override
-	protected Widget Gen_Sub_Widget(String dwname, ArrayList<DBObject> params) {
+	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("login") ) return this.login;
 		else if( dwname.equals("pass") ) return this.pass;
 		else if( dwname.equals("dologin") ){
 			if( params != null ){
-				this.dologin.setText(params.get(0).Get_String("LABEL"));
+				this.dologin.setText(params.get(0).getString("LABEL"));
 			}
 			return this.dologin;
 		}
 		else if( dwname.equals("authkey") ) return this.authkey;
 		else if( dwname.equals("sendauthkey") ){
 			if( params != null ){
-				this.sendauthkey.setText(params.get(0).Get_String("LABEL"));
+				this.sendauthkey.setText(params.get(0).getString("LABEL"));
 			}
 			return this.sendauthkey;
 		}
