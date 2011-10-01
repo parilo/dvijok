@@ -29,7 +29,7 @@ class DVService {
 		$func = $obj['func'];
 		
 		if( $func == 'initSession' ){
-			return $this->initSession();
+			return $this->initSession($obj);
 		} else if( $func == "listenForEvent" ){
 			return $this->listenForEvent();
 		} else if( $func == "testIPC" ){
@@ -56,13 +56,10 @@ class DVService {
 		return $ret;
 	}
 	
-	private function initSession(){
+	private function initSession($obj){
 		
-		$ret['ccc'] = "444444444";
-		$ret['ddddddd'] = "8888888888";
-		$a['eeee'] = "123123123"; 
-		$a['fffff'] = "4321";
-		$ret['obj'] = $a;
+		$ret['result'] = "success";
+		$ret['obj'] = $obj;
 		return $ret; 
 	}
 	

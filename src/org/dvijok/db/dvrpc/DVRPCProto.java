@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
+import org.dvijok.lib.Lib;
 
 public class DVRPCProto {
 
@@ -48,7 +49,12 @@ public class DVRPCProto {
 	}
 	
 	private String extract(int len){
-		String ret = data.substring(i, i+len);
+		String ret;
+		try{
+			ret = data.substring(i, i+len);
+		} catch ( StringIndexOutOfBoundsException e ){
+			return null;
+		}
 		i += len;
 		return ret;
 	}
@@ -65,7 +71,7 @@ public class DVRPCProto {
 		return extract(3);
 	}
 	
-	private String dbaGetVal(){
+	private String dboGetVal(){
 		return dboGetIdent();	
 	}
 	
@@ -78,7 +84,7 @@ public class DVRPCProto {
 		while(
 			(ident = dboGetIdent()) != null &&
 			(type = dboGetType()) != null &&
-			(val = dbaGetVal()) != null
+			(val = dboGetVal()) != null
 		){
 			if( type.equals("STR") ){
 				ret.put(ident, val);
@@ -120,15 +126,52 @@ public class DVRPCProto {
 		return ret;
 	}
 	
-	public DBArray dbaDecode(String data){
+	public DBArray dbaDecode(String indata){
 		DBArray arr = new DBArray();
-		setData(data);
-		arr.add("need to parse :) ");
+		setData(indata);
+		String type;
+		String val;
+		while(
+			(type = dboGetType()) != null &&
+			(val = dboGetVal()) != null
+		){
+			if( type.equals("STR") ){
+				arr.add(val);
+			} else if( type.equals("DBO") ){
+				String currData = data;
+				int currI = i;
+				arr.add(dboDecode(val));
+				data = currData;
+				i = currI;
+			} else if( type.equals("DBA") ){
+				String currData = data;
+				int currI = i;
+				arr.add(dbaDecode(val));
+				data = currData;
+				i = currI;
+			}
+		}
+		
 		return arr;
 	}
 	
 	public String dbaCode(DBArray arr){
-		return "need to code array :)";
+		String ret = "";
+		Iterator<Serializable> i = arr.iterator();
+		while( i.hasNext() ){
+			Serializable s = i.next();
+			if( s instanceof String ){
+				String str = (String)s;
+				ret += "STR"+str.length()+","+str;
+			} else if( s instanceof DBObject ){
+				String dbos = dboCode((DBObject)s);
+				ret += "DBO"+dbos.length()+","+dbos;
+			} else if( s instanceof DBArray ){
+				String dbas = dbaCode((DBArray)s);
+				ret += "DBA"+dbas.length()+","+dbas;
+			}
+		}
+		return ret;
 	}
 	
 	public String code(Serializable obj){

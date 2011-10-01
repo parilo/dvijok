@@ -45,6 +45,7 @@ class DVRPCProto {
 	
 	private function extract($len){
 		$ret = substr($this->req, $this->i, $len);
+		if( $ret === false ) return false;
 		$this->i += $len;
 		return $ret;
 	}
@@ -74,19 +75,15 @@ class DVRPCProto {
 			if( $type == "STR" ){
 				$ret[$ident] = $val;
 			} else if( $type == "DBO" ){
-// 				$proto = new DVRPCProto();
 				$currI = $this->i;
 				$currReq = $this->req;
-// 				$this->setData($val);
-				$ret[$ident] = $proto->hashMapDecode($val);
+				$ret[$ident] = $this->hashMapDecode($val);
 				$this->i = $currI;
 				$this->req = $currReq;
 			} else if( $type == "DBA" ){
-// 				$proto = new DVRPCProto();
 				$currI = $this->i;
 				$currReq = $this->req;
-// 				$this->setData($val);
-				$ret[$ident] = $proto->arrayDecode($val);
+				$ret[$ident] = $this->arrayDecode($val);
 				$this->i = $currI;
 				$this->req = $currReq;
 			}
@@ -100,7 +97,7 @@ class DVRPCProto {
 		foreach( $hashMap as $key => $val ){
 			if( is_string($val) ){
 				$ret .= strlen($key).",".$key."STR".strlen($val).",".$val;
-			} else if( is_array($val) && array_key_exists('_isarr',$hashMap) ){
+			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
 				$str = $this->arrayCode($val);
 				$ret .= strlen($key).",".$key."DBA".strlen($str).",".$str;
 			} else if( is_array($val) ){
@@ -111,12 +108,48 @@ class DVRPCProto {
 		return $ret;
 	}
 	
-	public function arrayDecode($val){
-		$arr['array'] = 'need to parse :) ';
+	public function arrayDecode($data){
+		$this->setData($data);
+		$ret = array();
+		while(
+			($type = $this->hashMapGetType()) !== false &&
+			($val = $this->hashMapGetVal()) !== false
+		){
+			if( $type == "STR" ){
+				$ret[] = $val;
+			} else if( $type == "DBO" ){
+				$currI = $this->i;
+				$currReq = $this->req;
+				$ret[] = $this->hashMapDecode($val);
+				$this->i = $currI;
+				$this->req = $currReq;
+			} else if( $type == "DBA" ){
+				$currI = $this->i;
+				$currReq = $this->req;
+				$ret[] = $this->arrayDecode($val);
+				$this->i = $currI;
+				$this->req = $currReq;
+			}
+		}
+		
+		$ret['_isarr'] = '_isarr';
+		return $ret;
 	}
 	
 	public function arrayCode($array){
-		return "need to code array :)";
+		$ret = "";
+		foreach( $array as $val ){
+			if( is_string($val) && $val != "_isarr" ){
+				$ret .= "STR".strlen($val).",".$val;
+			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
+				$str = $this->arrayCode($val);
+				$ret .= "DBA".strlen($str).",".$str;
+			} else if( is_array($val) ){
+				$str = $this->hashMapCode($val);
+				$ret .= "DBO".strlen($str).",".$str;
+			}
+		}
+		return $ret;
 	}
 }
 

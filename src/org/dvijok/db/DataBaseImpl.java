@@ -33,9 +33,14 @@ public class DataBaseImpl implements DataBase {
 		dbodbo.put("aaa", "111");
 		dbodbo.put("bbb", "222");
 		
+		DBArray dbodba = new DBArray();
+		dbodba.add("bbb");
+		dbodba.add(dbodbo);
+		
 		DBObject dbo = new DBObject();
 		dbo.put("func", "initSession");
 		dbo.put("dbo", dbodbo);
+		dbo.put("dba", dbodba);
 		initSession(dbo, null);
 		
 //		listenForEvents(null, null);

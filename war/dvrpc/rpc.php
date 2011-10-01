@@ -144,7 +144,7 @@ $dvrpc->registerService($dvservice);
 $dvrpc->callService($requestData);
 
 //system( "echo '$request_xml' > /home/www/saas/lastreq-".date("H-i-s-u")."-".md5($request_xml).".xml" );
-// system( "echo '$requestData' > /home/anton/devel/workspace/dvijok/war/dvrpc/lastreq.txt" );
+system( "echo '$requestData' > /home/anton/devel/workspace/dvijok/war/dvrpc/lastreq.txt" );
 
 /*$headers = apache_request_headers();
 

@@ -39,7 +39,7 @@ public class DBRequestDVRPC implements DBRequest {
 	}
 	
 	public void request(DBObject data, final DVRequestHandler<DBObject> handler){
-		
+
 		httpClient.doPost( proto.code(data), new RequestCallback(){
 
 			@Override
