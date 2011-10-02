@@ -19,13 +19,15 @@
 
 require_once "dvipcresponses.php";
 require_once "lib.php";
+require_once 'config.php';
 
 class DVIPCFiles extends DVIPCResponses {
 
 	private $dir;
 	
 	function __construct(){
-		$this->dir = '/home/anton/devel/workspace/dvijok/war/dvrpc/ipcfiles/';
+		global $config;
+		$this->dir = $config['ipcfilesdir'];
 	}
 	
 	private function readFromFile($filename){

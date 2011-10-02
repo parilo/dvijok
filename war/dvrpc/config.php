@@ -33,7 +33,10 @@ $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
 #$config['CAPTCHA_URL'] = 'http://dvijok/xmlrpcdb/captcha.php';
 #$config['CAPTCHA_SOUND_URL'] = 'http://dvijok/xmlrpcdb/captchasound.php';
 
-$config['shmemkey'] = 100;
+#$config['shmemkey'] = 100;
+
+$config['ipcfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/ipcfiles/';
+$config['dbfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/dbfiles/';
 
 date_default_timezone_set('Asia/Omsk');
 
