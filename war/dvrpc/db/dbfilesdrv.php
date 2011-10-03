@@ -24,7 +24,7 @@ class DataBaseFilesDriver implements DataBaseDriver {
 
 	private $dir;
 	private $lastidfile;
-	private $tagsfile;
+	private $tagsfile;//hashmap tag => id1. id2. id3
 	
 	public function __construct(){
 		global $config;
@@ -54,31 +54,54 @@ class DataBaseFilesDriver implements DataBaseDriver {
 		return unserialize(file_get_contents($this->tagsfile));
 	}
 	
-	private function addTags($tags, $id){
-		print "dvfilesdrv.php: addTags: need to add only not present tags and remove that was removed\n";
+	private function updateTags($tags, $id){
+		//hashmap: tag => id1, id2, id3
 		$alltags = $this->getTags();
-		foreach( $tags as $tag ){
+		
+		//tags of object with id == $id
+		//contents: array of tags
+		$objtagsfile = $this->dir.'/'."$id.tags";
+		if( file_exists($objtagsfile) ){
+
+			$oldtags = unserialize(file_get_contents($objtagsfile));
+			$toremove = array_diff($oldtags, $tags);
+			$toadd = array_diff($tags, $oldtags);
+			foreach( $toremove as $tag ){
+// 				$ids = $alltags[$tag];
+				unset($alltags[$tag][array_search($id, $alltags[$tag])]);
+				if( count($alltags[$tag]) < 1 ) unset($alltags[$tag]);
+			}
+			
+		} else {
+			$toadd = $tags;
+		}
+		
+		foreach( $toadd as $tag ){
 			$alltags[$tag][] = $id;
 		}
+		
+		if( count($tags) > 0 ) file_put_contents($objtagsfile, serialize($tags));
+		else unlink($objtagsfile);
 		file_put_contents($this->tagsfile, serialize($alltags));
+		
 	}
 	
-	private function removeTags($id){
-		$alltags = $this->getTags();
-		foreach( $alltags as $tag ){
-			unset($tag[array_search($id, $tag)]);
-		}
-		file_put_contents($this->tagsfile, serialize($alltags));
-	}
+// 	private function removeTags($id){
+// 		$alltags = $this->getTags();
+// 		foreach( $alltags as $tag ){
+// 			unset($tag[array_search($id, $tag)]);
+// 		}
+// 		file_put_contents($this->tagsfile, serialize($alltags));
+// 	}
 	
 	//$tags - array
 	public function store($id, $obj, $tags){
-		$this->addTags($tags, $id);
+		$this->updateTags($tags, $id);
 		file_put_contents($this->dir.'/'.$id, serialize($obj));
 	}
 	
 	public function deleteById($id){
-		$this->removeTags($id);
+		$this->updateTags(array(), $id);
 		unlink($this->dir.'/'.$id);
 	}
 	

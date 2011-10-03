@@ -31,6 +31,11 @@ class DataBaseTest {
 		$usergids[] = 'group3';
 		$user['gids'] = $usergids;
 		
+		$user2['uid'] = 'test2';
+		$usergids2[] = 'test2';
+		$usergids2[] = 'group2';
+		$user2['gids'] = $usergids2;
+		
 		$rights['uid'] = 'test';
 		$rights['gid'] = 'test';
 		$rights['ur'] = '1';
@@ -43,7 +48,29 @@ class DataBaseTest {
 		$dbo1['field1'] = 'val1';
 		$dbo1['field2'] = 'val2';
 		
-		$db->putObject($dbo1, '', $user, $rights);
+		$dbo2['field1'] = 'aaa1';
+		$dbo2['field2'] = 'aaa2';
+				
+		$id1 = $db->putObject($dbo1, 'aaa bbb ccc', $user, $rights);
+		$id2 = $db->putObject($dbo2, 'bbb ccc', $user, $rights);
+		$id3 = $db->putObject($dbo2, 'bbb ccc', $user, $rights);
+		
+  		$db->delObject($id3);
+
+  		$id3 = $db->putObject($dbo2, 'ccc', $user, $rights);
+  		
+  		print 'by id: ->'.serialize($db->getObjectById($id2, $user))."<-\n";
+  		print 'by id: ->'.serialize($db->getObjectById($id2, $user2))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectByTags('ccc', $user))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectByTags('bbb', $user))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectByTags('aaa', $user))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectByTags('bbb ccc', $user))."<-\n";
+  		
+  		  		
+  		$db->delObject($id1);
+  		$db->delObject($id2);
+  		$db->delObject($id3);
+  		
 	}
 }
 

@@ -53,7 +53,7 @@ class DataBase {
 	}
 
 	public function getObjectByTags ($tags, $user) {
-		return $this->drv->getObjectsByTags($tags, $user, 1, 0);
+		return $this->getObjectsByTags($tags, $user, 1, 0);
 	}
 	
 	//$tags: string, ' ' - separator
@@ -110,7 +110,7 @@ class DataBase {
 	}
 
 	public function delObject ($id) {
-		$drv->deleteById($id);
+		$this->drv->deleteById($id);
 	}
 }
 
