@@ -18,10 +18,17 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 require_once "dvipcfiles.php";
+require_once "lib.php";
+require_once "db/db.php";
 
 class DVService {
+	
+	private $db;
+	private $root;
 
 	public function __construct(){
+		$this->db = new DataBase();
+		$this->root['']
 	}
 	
 	public function call($obj){
@@ -56,7 +63,13 @@ class DVService {
 		return $ret;
 	}
 	
+	private function removeOutdatedSessions(){}
+	
 	private function initSession($obj){
+		
+		$sid = randHash();
+		$sess['sid'] = $sid;
+		$sess['']
 		
 		$ret['result'] = "success";
 		$ret['obj'] = $obj;
@@ -67,17 +80,13 @@ class DVService {
 	
 // 	public abstract [result, challange] login (String sid);
 	
-// 	public [result] authResponse (String sid, String response) {
-	
-// 	}
+// 	public [result] authResponse (String sid, String response) 
 	
 // 	public abstract [result, challange] sendKey (String sid);
 	
-// 	public [result] sendKeyResponse (String sid, String response) {
-	
-// 	}
-	
 // 	public abstract [result] logout (String sid);
+
+//	public [result] usermod();
 	
 // 	public abstract [result, DBObject] getObject (String sid, String[] tags);
 	

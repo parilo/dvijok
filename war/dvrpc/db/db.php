@@ -37,9 +37,23 @@ require_once 'dbfilesdrv.php';
 class DataBase {
 
 	private $drv;
+	private $defuser;
+	private $defrights;
 	
 	public function __construct(){
 		$this->drv = new DataBaseFilesDriver();
+		
+		$this->defuser['uid'] = 'root';
+		$this->defuser['gids'][] = 'root';
+		
+		$this->defrights['uid'] = 'root';
+		$this->defrights['gid'] = 'root';
+		$this->defrights['ur'] = '1';
+		$this->defrights['uw'] = '1';
+		$this->defrights['gr'] = '0';
+		$this->defrights['gw'] = '0';
+		$this->defrights['or'] = '0';
+		$this->defrights['ow'] = '0';
 	}
 	
 	public function getObjectById ($id, $user) {
@@ -75,7 +89,11 @@ class DataBase {
 
 	/** returns id of added object
 	$tags: string, ' ' - separator */
-	public function putObject ($dbo, $tags, $user, $rights){
+	public function putObject ($dbo, $tags, $user = null, $rights = null){
+		
+		if( $rights == null ) $rights = $this->defrights;
+		if( $user == null ) $user = $this->defuser;
+		a
 		
 		if( isset($dbo['id']) ){
 			
