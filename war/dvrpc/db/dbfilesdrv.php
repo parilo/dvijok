@@ -113,14 +113,18 @@ class DataBaseFilesDriver implements DataBaseDriver {
 	}
 	
 	// $tags: array
-	public function readByTags($tags, $count, $offset){
+	public function readByTags($tags, $count = 0, $offset = 0){
 		$alltags = $this->getTags();
 		$ids = $alltags[array_shift($tags)];
+// 		print "tags: ".serialize($tags)."\n";
+// 		print "ids: ".serialize($ids)."\n";
 		foreach($tags as $tag){
 			$ids = array_intersect($ids, $alltags[$tag]);
 		}
-		if( count($ids) > $offset ) return array();
-		$ids = array_splice ( $ids , $offset , $count );
+		if( $offset > count($ids) ) return array();
+		
+		if( $count != 0 || $offset != 0 ) $ids = array_splice ( $ids , $offset , $count );
+		
 		$ret = array();
 		foreach( $ids as $id ){
 			$ret[] = $this->readById($id);

@@ -65,7 +65,30 @@ class DataBaseTest {
   		print 'by tags: ->'.serialize($db->getObjectByTags('bbb', $user))."<-\n";
   		print 'by tags: ->'.serialize($db->getObjectByTags('aaa', $user))."<-\n";
   		print 'by tags: ->'.serialize($db->getObjectByTags('bbb ccc', $user))."<-\n";
+
+  		print "\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('bbb', $user))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('aaa', $user))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('bbb ccc', $user))."<-\n";
   		
+  		print "\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user, 1))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user, 2))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user, 1, 1))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user, 1, 10))."<-\n";
+  		
+  		print "\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user2))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('bbb', $user2))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('aaa', $user2))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('bbb ccc', $user2))."<-\n";
+  		  		
+  		print "\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user2, 1))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user2, 2))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user2, 1, 1))."<-\n";
+  		print 'by tags: ->'.serialize($db->getObjectsByTags('ccc', $user2, 1, 10))."<-\n";
   		  		
   		$db->delObject($id1);
   		$db->delObject($id2);

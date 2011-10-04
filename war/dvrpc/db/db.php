@@ -57,8 +57,9 @@ class DataBase {
 	}
 	
 	//$tags: string, ' ' - separator
-	public function getObjectsByTags ($tags, $user, $count, $offset) {
-		$objs = $this->drv->readByTags(split(' ',$tags), $count, $offset);
+	public function getObjectsByTags ($tags, $user, $count = 0, $offset = 0) {
+		$objs = $this->drv->readByTags(explode(' ',$tags), $count, $offset);
+// 		print "objs: ".serialize($objs)."\n";
 		$ret = array();
 		$uid = $user['uid'];
 		$gids = $user['gids'];
@@ -98,7 +99,7 @@ class DataBase {
 				
 		} else {
 
-			$tagsarr = split(' ',$tags);
+			$tagsarr = explode(' ',$tags);
 			$id = $this->drv->getNewId();
 			$obj['id'] = $id;
 			$obj['dbo'] = $dbo;
