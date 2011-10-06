@@ -94,6 +94,13 @@ class DataBaseFilesDriver implements DataBaseDriver {
 // 		file_put_contents($this->tagsfile, serialize($alltags));
 // 	}
 	
+	/**
+	 * write object to database without tags
+	 */
+	public function write($id, $obj){
+		file_put_contents($this->dir.'/'.$id, serialize($obj));
+	}
+	
 	//$tags - array
 	public function store($id, $obj, $tags){
 		$this->updateTags($tags, $id);

@@ -57,13 +57,15 @@ class DataBase {
 	}
 	
 	public function getObjectById ($id, $user) {
-		$obj = $this->drv->readById($id);
-		$rights = $obj['rights'];
-		
-		if( $rights['uid'] == $user['uid'] ) return $obj['dbo'];
-		else if( ($rights['gr'] == '1') && in_array($rights['gid'], $user['gids']) ) return $obj['dbo'];
-		else if( $rights['or'] == '1' ) return $obj['dbo'];
-		else return false;
+		if( is_numeric($id) ){
+			$obj = $this->drv->readById($id);
+			$rights = $obj['rights'];
+			
+			if( $rights['uid'] == $user['uid'] ) return $obj['dbo'];
+			else if( ($rights['gr'] == '1') && in_array($rights['gid'], $user['gids']) ) return $obj['dbo'];
+			else if( $rights['or'] == '1' ) return $obj['dbo'];
+			else return false;
+		} else return false; 
 	}
 
 	public function getObjectByTags ($tags, $user) {
@@ -130,6 +132,17 @@ class DataBase {
 
 	public function delObject ($id) {
 		$this->drv->deleteById($id);
+	}
+	
+	/** 
+	$tags: string, ' ' - separator */
+	public function putTags($tags, $tagsrights) {
+		$tagsarr = explode(' ',$tags);
+		$tr = $this->db->readById('tagsrights');
+		foreach($tagsarr as $tag){
+			$tr[$tag] = $tagsrights; 
+		}
+		$this->db->write($tr);
 	}
 }
 
