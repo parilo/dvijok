@@ -18,7 +18,6 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 require_once 'dbdrv.php';
-require_once '../config.php';
 
 class DataBaseFilesDriver implements DataBaseDriver {
 
@@ -26,9 +25,8 @@ class DataBaseFilesDriver implements DataBaseDriver {
 	private $lastidfile;
 	private $tagsfile;//hashmap tag => id1. id2. id3
 	
-	public function __construct(){
-		global $config;
-		$this->dir = $config['dbfilesdir'];
+	public function __construct($dir){
+		$this->dir = $dir;
 		$this->lastidfile = $this->dir.'/lastid';
 		$this->tagsfile = $this->dir.'/tags';
 		

@@ -17,26 +17,48 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+require_once 'config.php';
 require_once "dvipcfiles.php";
 require_once "lib.php";
 require_once "db/db.php";
+require_once "db/dbinit.php";
 
 class DVService {
 	
 	private $db;
 	private $root;
+	private $expTimeAnon;
+	private $root;
 
 	public function __construct(){
-		$this->db = new DataBase();
-		$this->root['']
+		$this->initDB();
+		
+		$this->root['uid'] = 'root';
+		$this->root['gids'][] = 'root';
 	}
 	
-	public function call($obj){
+	private function initExpTime(){
+		global $config;
+		$this->expTimeAnon = $config['SESSION_EXPIRATION_TIME_ANON'];
+	}
+	
+	private function initDB(){
+		global $config;
+		$this->db = new DataBase($config['dbfilesdir']);
+		if( !$this->db->isInitialized() ){
+			$dbinit = new DataBaseInit();
+			$dbinit->init($this->db);
+		}
+	}
+	
+	public function call($obj, $ip){
 		
 		$func = $obj['func'];
 		
 		if( $func == 'initSession' ){
-			return $this->initSession($obj);
+			return $this->initSession($obj, $ip);
+		} else if( $func == "login" ){
+			return $this->login($obj);
 		} else if( $func == "listenForEvent" ){
 			return $this->listenForEvent();
 		} else if( $func == "testIPC" ){
@@ -65,18 +87,31 @@ class DVService {
 	
 	private function removeOutdatedSessions(){}
 	
-	private function initSession($obj){
+	private function initSession($obj, $ip){
 		
 		$sid = randHash();
 		$sess['sid'] = $sid;
-		$sess['']
-		
+ 		$sess['uid'] = 'guest';
+ 		$sess['exp'] = floor(time()/60) + $this->expTimeAnon;
+ 		$sess['ip'] = $ip;
+ 		
+ 		$this->db->putObject($sess, 'sess unauth');
+ 		$retobj['sid'] = $sid;
+ 		
 		$ret['result'] = "success";
-		$ret['obj'] = $obj;
-		return $ret; 
+		$ret['objs'] = $retobj;
+		return $ret;
 	}
 	
-// 	public abstract [result, sid] initSession ();
+	private function login($obj){
+		if( isset($obj['sid']) ){
+			$sid = $obj['sid'];
+			$sess = $this->db->getObjectByVal('sid', $sid, 'sess unauth', $this->root);
+			a
+		} else {
+			$retobj['result'] = 'sid is required';
+		}
+	}
 	
 // 	public abstract [result, challange] login (String sid);
 	

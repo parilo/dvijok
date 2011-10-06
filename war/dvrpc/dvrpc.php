@@ -32,17 +32,17 @@ class DVRPC {
 		$this->dvservice = $dvservice;
 	}
 	
-	private function requestParse($request){
+	private function requestParse($request, $ip){
 		$req = $this->proto->hashMapDecode($request);
 		
-		$retobj = $this->dvservice->call($req);
+		$retobj = $this->dvservice->call($req, $ip);
 		
 		$ret = $this->proto->hashMapCode($retobj);
 		print "$ret\n";
 	}
 	
-	public function callService($request){
-		$this->requestParse($request);
+	public function callService($request, $ip){
+		$this->requestParse($request, $ip);
 	}
 	
 }

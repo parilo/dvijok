@@ -1,14 +1,13 @@
-- db initializer
-	- root and guest users
-	- tags for comments
-- fix db::putObject
++ db initializer
+	+ root and guest users
+	+ tags for comments
+- service
+- deny to put objects without tags from service
 - tags api
 	- creating tag (storing rights on tag)
 	- set rights on tag
 	- remove tag
-	- deny to put objects without tags from service
 - users and groups api( groups and users stores as ordinary db objects with rights)
-- service
 
 [- comments dwidget]
 [- radiodebri]

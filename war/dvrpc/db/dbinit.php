@@ -19,10 +19,12 @@
 
 require_once 'db.php';
 
-class DataBaseTest {
+class DataBaseInit {
 
 	public function __construct(){
-		$db = new DataBase();
+	}
+
+	public function init($db){
 		
 		$root['uid'] = 'root';
 		$rootgids[] = 'root';
@@ -48,12 +50,14 @@ class DataBaseTest {
 		$tr['gw'] = '1';
 		$tr['ow'] = '1';
 		
-		$id1 = $db->putObject($root, 'user admin', $root, $rights);
-		$id1 = $db->putObject($guest, 'user guest', $guest, $rights);
+		$db->putObject($root, 'user admin', $root, $rights);
+		$db->putObject($guest, 'user guest', $guest, $rights);
+		
+		$db->putTags('comment maincomments', $tr);
+		
+		$db->setInitialized();
 		
 	}
 }
-
-new DataBaseTest();
 
 ?>

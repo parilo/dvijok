@@ -141,7 +141,7 @@ $requestData = $HTTP_RAW_POST_DATA;
 $dvservice = new DVService();
 $dvrpc = new DVRPC();
 $dvrpc->registerService($dvservice);
-$dvrpc->callService($requestData);
+$dvrpc->callService($requestData, get_client_ip_address());
 
 //system( "echo '$request_xml' > /home/www/saas/lastreq-".date("H-i-s-u")."-".md5($request_xml).".xml" );
 system( "echo '$requestData' > /home/anton/devel/workspace/dvijok/war/dvrpc/lastreq.txt" );

@@ -40,8 +40,8 @@ class DataBase {
 	private $defuser;
 	private $defrights;
 	
-	public function __construct(){
-		$this->drv = new DataBaseFilesDriver();
+	public function __construct($dir){
+		$this->drv = new DataBaseFilesDriver($dir);
 		
 		$this->defuser['uid'] = 'root';
 		$this->defuser['gids'][] = 'root';
@@ -54,6 +54,16 @@ class DataBase {
 		$this->defrights['gw'] = '0';
 		$this->defrights['or'] = '0';
 		$this->defrights['ow'] = '0';
+	}
+	
+	public function isInitialized() {
+		$ret = $this->drv->readById('isinit');
+		if( $ret === false ) return false;
+		else return true;
+	}
+	
+	public function setInitialized() {
+		$this->drv->write('isinit', 1);
 	}
 	
 	public function getObjectById ($id, $user) {
@@ -95,7 +105,6 @@ class DataBase {
 		
 		if( $rights == null ) $rights = $this->defrights;
 		if( $user == null ) $user = $this->defuser;
-		a
 		
 		if( isset($dbo['id']) ){
 			
@@ -138,11 +147,19 @@ class DataBase {
 	$tags: string, ' ' - separator */
 	public function putTags($tags, $tagsrights) {
 		$tagsarr = explode(' ',$tags);
-		$tr = $this->db->readById('tagsrights');
+		$tr = $this->drv->readById('tagsrights');
 		foreach($tagsarr as $tag){
 			$tr[$tag] = $tagsrights; 
 		}
-		$this->db->write($tr);
+		$this->drv->write('tagsrights', $tr);
+	}
+	
+	public function getObjectByVal($key, $val, $tags, $user){
+		$objs = $this->getObjectByTags($tags, $user);
+		foreach( $objs as $obj ){
+			if( isset($obj[$key]) ) if( $obj[$key] == $val ) return $obj;
+		}
+		return false;
 	}
 }
 

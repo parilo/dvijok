@@ -28,35 +28,28 @@ public class DataBaseImpl implements DataBase {
 	
 	public DataBaseImpl(){
 		dbRequest = new DBRequestDVRPC("http://127.0.0.1:8888/dvrpc/rpc.php");
-		
-		DBObject dbodbo = new DBObject();
-		dbodbo.put("aaa", "111");
-		dbodbo.put("bbb", "222");
-		
-		DBArray dbodba = new DBArray();
-		dbodba.add("bbb");
-		dbodba.add(dbodbo);
+		initSession();
+	}
+	
+	private void initSession() {
 		
 		DBObject dbo = new DBObject();
 		dbo.put("func", "initSession");
-		dbo.put("dbo", dbodbo);
-		dbo.put("dba", dbodba);
-		initSession(dbo, null);
 		
-//		listenForEvents(null, null);
-	}
-	
-	private void initSession(DBObject params, DVRequestHandler<DBObject> handler) {
-		dbRequest.request(params, new DVRequestHandler<DBObject>(){
+		dbRequest.request(dbo, new DVRequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
-				Lib.alert("DataBaseDVRPC success: "+result);
+				if( result.getString("result").equals("success") ){
+					Lib.alert("DataBaseDVRPC success: "+result);
+				} else {
+					Lib.alert("DataBaseDVRPC: A: init session failed: "+result.getString("result"));
+				}
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.alert("DataBaseDVRPC fail: "+result);
+				Lib.alert("DataBaseDVRPC: B: init session failed: "+result);
 			}});
 	}
 

@@ -24,7 +24,8 @@ interface DataBaseDriver {
 	public function deleteById($id);
 	public function readById($id);
 	public function readByTags($tags, $count, $offset);
-		
+	public function write($id, $obj);
+	
 }
 
 ?>
