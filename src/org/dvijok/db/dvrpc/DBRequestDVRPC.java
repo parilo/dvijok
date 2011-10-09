@@ -20,7 +20,7 @@ package org.dvijok.db.dvrpc;
 
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DBRequest;
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.HttpClient;
 import org.dvijok.lib.Lib;
 

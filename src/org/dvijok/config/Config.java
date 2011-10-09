@@ -27,7 +27,7 @@ public class Config {
 	
 	public Config(){
 
-		this.dbUrl = "http://127.0.0.1:8888/xmlrpcdb/xmlrpcdb.php";//for DataBaseXMLRPC
+		this.dbUrl = "http://127.0.0.1:8888/dvrpc/rpc.php";
 		this.sessExpTime = new Date(365*24*60*60*1000); //cookie exp time
 		
 	}

@@ -21,7 +21,7 @@
   <source path='client'/>
   <source path='loader'/>
   <source path='tmpl'/>
-  <source path='interfaces'/>
+  <source path='handlers'/>
   <source path='resources'/>
   <source path='widgets'/>
   <source path='db'/>

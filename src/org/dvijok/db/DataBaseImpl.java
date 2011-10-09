@@ -18,20 +18,49 @@
 
 package org.dvijok.db;
 
+import java.util.Date;
+
 import org.dvijok.db.dvrpc.DBRequestDVRPC;
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.Handler;
 import org.dvijok.lib.Lib;
+import org.dvijok.resources.Resources;
 
 public class DataBaseImpl implements DataBase {
 
 	private DBRequest dbRequest;
+	private String sid;
 	
 	public DataBaseImpl(){
-		dbRequest = new DBRequestDVRPC("http://127.0.0.1:8888/dvrpc/rpc.php");
-		initSession();
+		dbRequest = new DBRequestDVRPC(Resources.getInstance().conf.dbUrl);
+		restoreSession();
+		
+		DBObject dbo = new DBObject();
+		dbo.put("dddd", "4444");
+		dbo.put("ffff", "5555");
+		
+		DBObject mdbo = new DBObject();
+		mdbo.put("tags", "tag1 tag2");
+		mdbo.put("dbo", dbo);
+		
+		putObject(mdbo, null);
 	}
 	
-	private void initSession() {
+	protected void storeSession(){
+		Date expTime = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sessExpTime.getTime());
+		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", sid, expTime, Lib.getDomain(), "/", false);
+	}
+	
+	private void restoreSession(){
+		sid = com.google.gwt.user.client.Cookies.getCookie("dvijok.session");
+		if( sid == null ) initSession();
+	}
+	
+	private void initSession(){
+		initSession(null);
+	}
+	
+	private void initSession(final Handler<Boolean> handler) {
 		
 		DBObject dbo = new DBObject();
 		dbo.put("func", "initSession");
@@ -41,7 +70,10 @@ public class DataBaseImpl implements DataBase {
 			@Override
 			public void success(DBObject result) {
 				if( result.getString("result").equals("success") ){
-					Lib.alert("DataBaseDVRPC success: "+result);
+//					Lib.alert("DataBaseDVRPC success: "+result);
+					sid = result.getDBObject("objs").getString("sid");
+					storeSession();
+					if( handler != null ) handler.onHandle(true);
 				} else {
 					Lib.alert("DataBaseDVRPC: A: init session failed: "+result.getString("result"));
 				}
@@ -73,8 +105,46 @@ public class DataBaseImpl implements DataBase {
 	public void getObjects(DBObject params, DVRequestHandler<DBObject> handler) {
 	}
 
+	/**
+	 * Checks if result is 'notsid' and if so, init new Session and invoke handler after it
+	 * @param result
+	 * @param handler
+	 * @return true if result is not 'notsid'
+	 */
+	private boolean checkNotSid(String result, Handler<Boolean> handler){
+		if( result.equals("notsid") ){
+			initSession(handler);
+			return false;
+		} else return true;
+	}
+
 	@Override
-	public void putObject(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void putObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
+		DBObject req = new DBObject();
+		req.put("sid", sid);
+		req.put("func", "putObject");
+		req.put("obj", params);
+		
+		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				String res = result.getString("result");
+				if( res.equals("success") ){
+					Lib.alert("DataBase: putObject: success: "+result);
+				} else {
+					if( checkNotSid(res, new Handler<Boolean>(){
+						@Override
+						public void onHandle(Boolean param) {
+							putObject(params, handler);
+						}}) ) Lib.alert("DataBase: putObject A: fail: "+result);
+				}
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.alert("DataBase: putObject B: fail: "+result);
+			}});
 	}
 
 	@Override

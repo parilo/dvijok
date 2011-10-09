@@ -20,7 +20,7 @@ package org.dvijok.tmpl;
 
 import java.util.HashMap;
 
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.HttpFunctions;
 
 import com.google.gwt.http.client.Request;

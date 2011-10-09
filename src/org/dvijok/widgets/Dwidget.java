@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 

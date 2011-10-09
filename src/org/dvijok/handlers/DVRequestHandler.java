@@ -16,10 +16,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.interfaces;
+package org.dvijok.handlers;
 
-public interface Handler<T> {
+public interface DVRequestHandler<T> {
 
-	public void onHandle(T param);
+	public void success(T result);
+	public void fail(T result);
 	
 }

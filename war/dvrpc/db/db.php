@@ -108,7 +108,8 @@ class DataBase {
 		
 		if( isset($dbo['id']) ){
 			
-			$obj = readById($id);
+			$id = $dbo['id'];
+			$obj = $this->drv->readById($id);
 			$uid = $user['uid'];
 			$gids = $user['gids'];
 			$rights = $obj['rights'];
@@ -118,7 +119,6 @@ class DataBase {
 				( $rights['ow'] == '1' )
 			){
 				$tagsarr = split(' ',$tags);
-				$id = $dbo['id'];
 				$obj['id'] = $id;
 				$obj['dbo'] = $dbo;
 				$obj['rights'] = $rights;

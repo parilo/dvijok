@@ -120,21 +120,30 @@ class DataBaseFilesDriver implements DataBaseDriver {
 	// $tags: array
 	public function readByTags($tags, $count = 0, $offset = 0){
 		$alltags = $this->getTags();
-		$ids = $alltags[array_shift($tags)];
-// 		print "tags: ".serialize($tags)."\n";
-// 		print "ids: ".serialize($ids)."\n";
-		foreach($tags as $tag){
-			$ids = array_intersect($ids, $alltags[$tag]);
-		}
-		if( $offset > count($ids) ) return array();
+		$tags = array_intersect($tags, array_keys($alltags));
+		if( count($tags) > 0 ){
+			
+			$ids = $alltags[array_shift($tags)];
 		
-		if( $count != 0 || $offset != 0 ) $ids = array_splice ( $ids , $offset , $count );
+	// 		print "tags: ".serialize($tags)."\n";
+	// 		print "ids: ".serialize($ids)."\n";
+
+			foreach($tags as $tag){
+				$ids = array_intersect($ids, $alltags[$tag]);
+			}
+			if( $offset > count($ids) ) return array();
+			
+			if( $count != 0 || $offset != 0 ) $ids = array_splice ( $ids , $offset , $count );
+			
+			$ret = array();
+			foreach( $ids as $id ){
+				$obj = $this->readById($id);
+				$obj['dbo']['id'] = $id;
+				$ret[] = $obj;
+			}
+			return $ret;
 		
-		$ret = array();
-		foreach( $ids as $id ){
-			$ret[] = $this->readById($id);
-		}
-		return $ret;
+		} else return array();
 	}
 	
 }

@@ -21,7 +21,7 @@ package org.dvijok.resources;
 import org.dvijok.config.Config;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;

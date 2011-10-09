@@ -21,4 +21,12 @@ function randHash(){
 	return md5(time()+mt_rand(0,10000));
 }
 
+/**
+*
+* returns current minuts since the Unix Epoch (January 1 1970 00:00:00 GMT)
+*/
+function nowMinuts(){
+	return floor(time()/60);
+}
+
 ?>

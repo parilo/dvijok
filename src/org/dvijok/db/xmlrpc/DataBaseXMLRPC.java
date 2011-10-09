@@ -27,7 +27,7 @@ import com.fredhat.gwt.xmlrpc.client.XmlRpcClient;
 import com.fredhat.gwt.xmlrpc.client.XmlRpcRequest;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.resources.Resources;
 
 import com.google.gwt.user.client.Timer;

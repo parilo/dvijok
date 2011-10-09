@@ -28,9 +28,9 @@ class DVService {
 	private $db;
 	private $root;
 	private $expTimeAnon;
-	private $root;
 
 	public function __construct(){
+		$this->initExpTime();
 		$this->initDB();
 		
 		$this->root['uid'] = 'root';
@@ -57,8 +57,8 @@ class DVService {
 		
 		if( $func == 'initSession' ){
 			return $this->initSession($obj, $ip);
-		} else if( $func == "login" ){
-			return $this->login($obj);
+		} else if( $func == "putObject" ){
+			return $this->checkSession($obj, $ip, 'putObject');
 		} else if( $func == "listenForEvent" ){
 			return $this->listenForEvent();
 		} else if( $func == "testIPC" ){
@@ -68,6 +68,40 @@ class DVService {
 		$ret['result'] = 'function not found';
 		return $ret;
 		
+	}
+	
+	/**
+	 * 
+	 * Checks user session
+	 * @param DBObject $obj
+	 * @param String $ip
+	 * @param Method $method - this method will be invoked as method($obj) if session is valid 
+	 */
+	private function checkSession($obj, $ip, $method){
+		//TODO remove expired sessions
+		
+		if( isset($obj['sid']) ){
+			$sid = strtolower($obj['sid']);
+			$sess = $this->db->getObjectByVal('sid', $sid, 'sess unauth', $this->root);
+			if( $sess === false ) $ifsess = false;
+			else {
+				//TODO pick correct expiration time for guest and authorized users
+				$expTime = $this->expTimeAnon;
+				$now = nowMinuts();
+				if( ($sess['time'] + $expTime) < $now ) $ifsess = false;
+				else {
+					$sess['time'] = $now;
+					$this->db->putObject($sess, 'sess unauth', $this->root);
+					$ifsess = true;
+				}
+				
+			}
+		} else $ifsess = false;
+		
+		if( $ifsess === false  ){
+			$ret['result'] = 'notsid';
+			return $ret;
+		} else return $this->$method($obj, $sess['uid']);
 	}
 	
 	private function testIPC(){
@@ -92,26 +126,40 @@ class DVService {
 		$sid = randHash();
 		$sess['sid'] = $sid;
  		$sess['uid'] = 'guest';
- 		$sess['exp'] = floor(time()/60) + $this->expTimeAnon;
+ 		$sess['time'] = nowMinuts();
  		$sess['ip'] = $ip;
  		
- 		$this->db->putObject($sess, 'sess unauth');
+ 		$this->db->putObject($sess, 'sess unauth', $this->root);
  		$retobj['sid'] = $sid;
  		
 		$ret['result'] = "success";
 		$ret['objs'] = $retobj;
 		return $ret;
 	}
-	
-	private function login($obj){
-		if( isset($obj['sid']) ){
-			$sid = $obj['sid'];
-			$sess = $this->db->getObjectByVal('sid', $sid, 'sess unauth', $this->root);
-			a
-		} else {
-			$retobj['result'] = 'sid is required';
-		}
+
+	private function putObject($inp, $uid){
+		
+		$obj = $inp['dbo'];
+		$tags = $inp['tags'];
+		
+// 		$id = $this->db->putObject($obj, $tags, );
+		a
+		
+		$ret['inp'] = $inp;
+		$ret['uid'] = $uid;
+		return $ret;
 	}
+	
+	
+// 	private function login($obj){
+// 		if( isset($obj['sid']) ){
+// 			$sid = $obj['sid'];
+// 			$sess = $this->db->getObjectByVal('sid', $sid, 'sess unauth', $this->root);
+// 			a
+// 		} else {
+// 			$retobj['result'] = 'sid is required';
+// 		}
+// 	}
 	
 // 	public abstract [result, challange] login (String sid);
 	

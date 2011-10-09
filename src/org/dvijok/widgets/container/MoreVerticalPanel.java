@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.SubPanelsDwidget;

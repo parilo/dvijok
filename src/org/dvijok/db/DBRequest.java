@@ -18,7 +18,7 @@
 
 package org.dvijok.db;
 
-import org.dvijok.interfaces.DVRequestHandler;
+import org.dvijok.handlers.DVRequestHandler;
 
 public interface DBRequest {
 	
