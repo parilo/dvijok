@@ -101,7 +101,7 @@ class DVService {
 		if( $ifsess === false  ){
 			$ret['result'] = 'notsid';
 			return $ret;
-		} else return $this->$method($obj, $sess['uid']);
+		} else return $this->$method($obj['obj'], $sess['uid']);
 	}
 	
 	private function testIPC(){
@@ -139,14 +139,27 @@ class DVService {
 
 	private function putObject($inp, $uid){
 		
+		$user = $this->db->getObjectByVal('uid', $uid, 'user', $this->root);
+		if( $user === false ) return retarr('notuser');
+		
 		$obj = $inp['dbo'];
 		$tags = $inp['tags'];
+		if( isset($inp['rights']) ) $rights = $inp['rights'];
+		else {
+			$rights['uid'] = $uid;
+			$rights['gid'] = $uid;
+			$rights['ur'] = '1';
+			$rights['uw'] = '1';
+			$rights['gr'] = '0';
+			$rights['gw'] = '0';
+			$rights['or'] = '0';
+			$rights['ow'] = '0';
+		}
 		
-// 		$id = $this->db->putObject($obj, $tags, );
-		a
+		$id = $this->db->putObject($obj, $tags, $user, $rights);
 		
-		$ret['inp'] = $inp;
-		$ret['uid'] = $uid;
+		$ret['result'] = 'success';
+		$ret['objs']['id'] = "$id";
 		return $ret;
 	}
 	

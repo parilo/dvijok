@@ -29,4 +29,8 @@ function nowMinuts(){
 	return floor(time()/60);
 }
 
+function retarr($str){
+	return array( 'result' => $str );
+}
+
 ?>

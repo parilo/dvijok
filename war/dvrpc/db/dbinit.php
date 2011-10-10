@@ -51,7 +51,7 @@ class DataBaseInit {
 		$tr['ow'] = '1';
 		
 		$db->putObject($root, 'user admin', $root, $rights);
-		$db->putObject($guest, 'user guest', $guest, $rights);
+		$db->putObject($guest, 'user guest', $root, $rights);
 		
 		$db->putTags('comment maincomments', $tr);
 		

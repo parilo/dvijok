@@ -43,7 +43,18 @@ public class DataBaseImpl implements DataBase {
 		mdbo.put("tags", "tag1 tag2");
 		mdbo.put("dbo", dbo);
 		
-		putObject(mdbo, null);
+		putObject(mdbo, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				Lib.alert("ret: "+result);
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				// TODO Auto-generated method stub
+				
+			}});
 	}
 	
 	protected void storeSession(){
@@ -99,6 +110,31 @@ public class DataBaseImpl implements DataBase {
 
 	@Override
 	public void getObject(DBObject params, DVRequestHandler<DBObject> handler) {
+//		DBObject req = new DBObject();
+//		req.put("sid", sid);
+//		req.put("func", "getObjects");
+//		req.put("obj", params);
+//		
+//		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				String res = result.getString("result");
+//				if( res.equals("success") ){
+//					Lib.alert("DataBase: getObject: success: "+result);
+//				} else {
+//					if( checkNotSid(res, new Handler<Boolean>(){
+//						@Override
+//						public void onHandle(Boolean param) {
+//							putObject(params, handler);
+//						}}) ) Lib.alert("DataBase: putObject A: fail: "+result);
+//				}
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				Lib.alert("DataBase: putObject B: fail: "+result);
+//			}});
 	}
 
 	@Override
@@ -131,7 +167,7 @@ public class DataBaseImpl implements DataBase {
 			public void success(DBObject result) {
 				String res = result.getString("result");
 				if( res.equals("success") ){
-					Lib.alert("DataBase: putObject: success: "+result);
+					handler.success(result.getDBObject("objs"));
 				} else {
 					if( checkNotSid(res, new Handler<Boolean>(){
 						@Override

@@ -115,7 +115,7 @@ class DataBase {
 			$rights = $obj['rights'];
 			if(
 				( $rights['uid'] == $user['uid'] ) ||
-				( ($rights['gw'] == '1') && in_array($rights['gid'], $user['gids']) ) ||
+				( ($rights['gw'] == '1') && in_array($rights['gid'], $gids) ) ||
 				( $rights['ow'] == '1' )
 			){
 				$tagsarr = split(' ',$tags);
@@ -128,6 +128,8 @@ class DataBase {
 				
 		} else {
 
+			//TODO check if user can write to specified tags
+			
 			$tagsarr = explode(' ',$tags);
 			$id = $this->drv->getNewId();
 			$obj['id'] = $id;
@@ -155,7 +157,8 @@ class DataBase {
 	}
 	
 	public function getObjectByVal($key, $val, $tags, $user){
-		$objs = $this->getObjectByTags($tags, $user);
+		$objs = $this->getObjectsByTags($tags, $user);
+// 		print serialize($objs)."\n";
 		foreach( $objs as $obj ){
 			if( isset($obj[$key]) ) if( $obj[$key] == $val ) return $obj;
 		}

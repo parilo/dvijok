@@ -40,10 +40,6 @@ function get_client_ip_address(){
 	}
 }
 
-function retarr($str){
-	return array( 'result' => $str );
-}
-
 /*
  * sessionInit - Session initialization
  * returns:
