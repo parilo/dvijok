@@ -26,7 +26,7 @@ public interface DataBase {
 	public void sendKey(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void logout(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void getObject(DBObject params, final DVRequestHandler<DBObject> handler);
-	public void getObjects(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void getObjects(DBObject params, final DVRequestHandler<DBArray> handler);
 	public void putObject(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void delObject(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void listenForEvents(DBObject params, final DVRequestHandler<DBObject> handler);

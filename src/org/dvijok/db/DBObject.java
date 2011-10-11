@@ -42,6 +42,14 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 		}
 	}
 	
+	public DBArray getDBArray(String s){
+		try{
+			return this.containsKey(s)?(DBArray)this.get(s):null;
+		} catch( java.lang.ClassCastException e ){
+			return null;
+		}
+	}
+	
 	public double getDouble(String s){
 		try{
 			return Double.parseDouble(this.getString(s));

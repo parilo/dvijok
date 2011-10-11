@@ -43,8 +43,6 @@ public class Resources {
 	public Dwidgets dwidgets;
 	public DBObject userInfo = null;
 	private String idUserInfo;
-	public String adminUrl = "http://javadimon.homelinux.net:8081/granatw/";		
-	public String cabUrl = "http://javadimon.homelinux.net:8081/granatcab/";		
 	
 	private Busy busy;
 	private int busycount;

@@ -57,10 +57,16 @@ class DVService {
 		
 		if( $func == 'initSession' ){
 			return $this->initSession($obj, $ip);
+			
 		} else if( $func == "putObject" ){
 			return $this->checkSession($obj, $ip, 'putObject');
+			
+		} else if( $func == "getObjects" ){
+			return $this->checkSession($obj, $ip, 'getObjects');
+			
 		} else if( $func == "listenForEvent" ){
 			return $this->listenForEvent();
+			
 		} else if( $func == "testIPC" ){
 			return $this->testIPC();
 		}
@@ -101,7 +107,12 @@ class DVService {
 		if( $ifsess === false  ){
 			$ret['result'] = 'notsid';
 			return $ret;
-		} else return $this->$method($obj['obj'], $sess['uid']);
+		} else {
+			
+			$user = $this->getUser($sess['uid']);
+			if( $user === false ) return retarr('notuser');
+			else return $this->$method($obj['obj'], $user);
+		}
 	}
 	
 	private function testIPC(){
@@ -136,14 +147,20 @@ class DVService {
 		$ret['objs'] = $retobj;
 		return $ret;
 	}
+	
+	private function getUser($uid){
+		return $this->db->getObjectByVal('uid', $uid, 'user', $this->root);
+	}
 
-	private function putObject($inp, $uid){
+	private function putObject($inp, $user){
 		
-		$user = $this->db->getObjectByVal('uid', $uid, 'user', $this->root);
-		if( $user === false ) return retarr('notuser');
+		$uid = $user['uid'];
+		if( isset($inp['dbo']) ) $obj = $inp['dbo'];
+		else return retarr('specify DBObject');
 		
-		$obj = $inp['dbo'];
-		$tags = $inp['tags'];
+		if( isset($inp['tags']) ) $tags = $inp['tags'];
+		else return retarr('specify tags');
+		
 		if( isset($inp['rights']) ) $rights = $inp['rights'];
 		else {
 			$rights['uid'] = $uid;
@@ -163,6 +180,25 @@ class DVService {
 		return $ret;
 	}
 	
+	private function getObjects($inp, $user){
+		
+		if( !isset($inp['tags']) ) return retarr('specify tags');
+		$tags = $inp['tags'];
+		if( $tags == "" ) return retarr('specify tags');
+		
+		if( isset($inp['count']) ) $count = $inp['count'];
+		else $count = 0;
+		
+		if( isset($inp['offset']) ) $offset = $inp['offset'];
+		else $offset = 0;
+		
+		$objs = $this->db->getObjectsByTags($tags, $user, $count, $offset);
+		$objs['_isarr'] = '1';
+		$ret['result'] = 'success';
+		$ret['objs'] = $objs;
+		
+		return $ret;
+	}
 	
 // 	private function login($obj){
 // 		if( isset($obj['sid']) ){
@@ -188,7 +224,6 @@ class DVService {
 	
 // 	public abstract [result, DBObject] getObjectById (String sid, String id);
 	
-// 	public abstract [result, DBObject[]] getObjects (String sid, String[] tags, long count, long offset);
 	
 // 	public abstract [result] putObject (String sid, String[] tags, unix rights rights);
 	

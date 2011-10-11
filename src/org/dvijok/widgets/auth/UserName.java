@@ -71,11 +71,11 @@ public class UserName extends SubPanelsDwidget {
 		String name = Resources.getInstance().userInfo.getString("fullname");
 		username = new Label(name.equals("guest")?"":name);
 		backtoadm = new Anchor();
-		backtoadmClick = new ClickHandler(){
-			@Override
-			public void onClick(ClickEvent event) {
-				Lib.redirect(Resources.getInstance().adminUrl);
-			}};
+//		backtoadmClick = new ClickHandler(){
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				Lib.redirect(Resources.getInstance().adminUrl);
+//			}};
 	}
 
 	@Override

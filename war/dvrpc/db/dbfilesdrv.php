@@ -133,8 +133,10 @@ class DataBaseFilesDriver implements DataBaseDriver {
 			}
 			if( $offset > count($ids) ) return array();
 			
-			if( $count != 0 || $offset != 0 ) $ids = array_splice ( $ids , $offset , $count );
-			
+			if( $count != 0 && $offset != 0 ) $ids = array_splice ( $ids , $offset , $count );
+			else if( $count != 0 ) $ids = array_splice ( $ids , 0 , $count );
+			else if( $offset != 0 ) $ids = array_splice ( $ids , $offset );
+				
 			$ret = array();
 			foreach( $ids as $id ){
 				$obj = $this->readById($id);

@@ -138,8 +138,8 @@ class DVRPCProto {
 	
 	public function arrayCode($array){
 		$ret = "";
-		foreach( $array as $val ){
-			if( is_string($val) && $val != "_isarr" ){
+		foreach( $array as $key => $val ){
+			if( is_string($val) && $key != "_isarr" ){
 				$ret .= "STR".strlen($val).",".$val;
 			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
 				$str = $this->arrayCode($val);

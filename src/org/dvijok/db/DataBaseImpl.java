@@ -35,26 +35,62 @@ public class DataBaseImpl implements DataBase {
 		dbRequest = new DBRequestDVRPC(Resources.getInstance().conf.dbUrl);
 		restoreSession();
 		
-		DBObject dbo = new DBObject();
-		dbo.put("dddd", "4444");
-		dbo.put("ffff", "5555");
-		
-		DBObject mdbo = new DBObject();
-		mdbo.put("tags", "tag1 tag2");
-		mdbo.put("dbo", dbo);
-		
-		putObject(mdbo, new DVRequestHandler<DBObject>(){
+//putObject test
+//		
+//		DBObject dbo = new DBObject();
+//		dbo.put("dddd", "4444");
+//		dbo.put("ffff", "5555");
+//		
+//		DBObject mdbo = new DBObject();
+//		mdbo.put("tags", "tag1 tag2");
+//		mdbo.put("dbo", dbo);
+//		
+//		putObject(mdbo, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				Lib.alert("ret: "+result);
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				// TODO Auto-generated method stub
+//				
+//			}});
 
-			@Override
-			public void success(DBObject result) {
-				Lib.alert("ret: "+result);
-			}
+//getObject test
+//
+//		DBObject dbo = new DBObject();
+//		dbo.put("tags", "tag1");
+//		dbo.put("offset", "1");
+//		
+//		getObject(dbo, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				Lib.alert("ret: "+result);
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {}});
 
-			@Override
-			public void fail(DBObject result) {
-				// TODO Auto-generated method stub
-				
-			}});
+//getObjects test
+//		
+//		DBObject dbo = new DBObject();
+//		dbo.put("tags", "tag1");
+//		dbo.put("offset", "4");
+//		dbo.put("count", "2");
+//		
+//		getObjects(dbo, new DVRequestHandler<DBArray>(){
+//
+//			@Override
+//			public void success(DBArray result) {
+//				Lib.alert("ret: "+result);
+//			}
+//
+//			@Override
+//			public void fail(DBArray result) {}});
+	
 	}
 	
 	protected void storeSession(){
@@ -109,36 +145,51 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void getObject(DBObject params, DVRequestHandler<DBObject> handler) {
-//		DBObject req = new DBObject();
-//		req.put("sid", sid);
-//		req.put("func", "getObjects");
-//		req.put("obj", params);
-//		
-//		dbRequest.request(req, new DVRequestHandler<DBObject>(){
-//
-//			@Override
-//			public void success(DBObject result) {
-//				String res = result.getString("result");
-//				if( res.equals("success") ){
-//					Lib.alert("DataBase: getObject: success: "+result);
-//				} else {
-//					if( checkNotSid(res, new Handler<Boolean>(){
-//						@Override
-//						public void onHandle(Boolean param) {
-//							putObject(params, handler);
-//						}}) ) Lib.alert("DataBase: putObject A: fail: "+result);
-//				}
-//			}
-//
-//			@Override
-//			public void fail(DBObject result) {
-//				Lib.alert("DataBase: putObject B: fail: "+result);
-//			}});
+	public void getObject(DBObject params, final DVRequestHandler<DBObject> handler) {
+		params.put("count", "1");
+		getObjects(params, new DVRequestHandler<DBArray>(){
+
+			@Override
+			public void success(DBArray retobjs) {
+				if( retobjs.size() > 0 ) handler.success(retobjs.getDBObject(0));
+				else handler.success(null);
+			}
+
+			@Override
+			public void fail(DBArray result) {
+			}
+			
+		});
 	}
 
 	@Override
-	public void getObjects(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void getObjects(final DBObject params, final DVRequestHandler<DBArray> handler) {
+
+		DBObject req = new DBObject();
+		req.put("sid", sid);
+		req.put("func", "getObjects");
+		req.put("obj", params);
+		
+		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				String res = result.getString("result");
+				if( res.equals("success") ){
+					handler.success(result.getDBArray("objs"));
+				} else {
+					if( checkNotSid(res, new Handler<Boolean>(){
+						@Override
+						public void onHandle(Boolean param) {
+							getObjects(params, handler);
+						}}) ) Lib.alert("DataBase: getObjects A: fail: "+result);
+				}
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.alert("DataBase: getObjects B: fail: "+result);
+			}});
 	}
 
 	/**
