@@ -20,6 +20,7 @@ package org.dvijok.db.gwtrpc;
 
 import java.util.Date;
 
+import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
 import org.dvijok.handlers.DVRequestHandler;
@@ -229,7 +230,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 
 	@Override
-	public void getObjects(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void getObjects(final DBObject params, final DVRequestHandler<DBArray> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -243,25 +244,25 @@ public class DataBaseGWTRPC implements DataBase {
 
 			@Override
 			public void onSuccess(DBObject result) {
-				String res = result.getString("result");
-				if( res.equals("success") )	handler.success(result);
-				else if( res.equals("notsid") ){
-					
-					makeSession(new DVRequestHandler<Integer>(){
-
-						@Override
-						public void success(Integer result) {
-							getObjects(params, handler);
-						}
-
-						@Override
-						public void fail(Integer result) {
-							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
-						}
-						
-					});
-					
-				} else handler.fail(result);
+//				String res = result.getString("result");
+//				if( res.equals("success") )	handler.success(result);
+//				else if( res.equals("notsid") ){
+//					
+//					makeSession(new DVRequestHandler<Integer>(){
+//
+//						@Override
+//						public void success(Integer result) {
+//							getObjects(params, handler);
+//						}
+//
+//						@Override
+//						public void fail(Integer result) {
+//							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
+//						}
+//						
+//					});
+//					
+//				} else handler.fail(result);
 			}
 			
 		};

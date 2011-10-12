@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.Lib;
@@ -67,16 +68,16 @@ public class MoreVerticalPanel extends SubPanelsDwidget {
 		reqp.put("beg", Integer.toString(begi));
 		reqp.put("count", Integer.toString(count));
 		
-		Resources.getInstance().db.getObjects(reqp, new DVRequestHandler<DBObject>(){
+		Resources.getInstance().db.getObjects(reqp, new DVRequestHandler<DBArray>(){
 	
 			@Override
-			public void success(DBObject result) {
-				load(result.getDBObject("objects"));
-				Resources.getInstance().setBusy(false);
+			public void success(DBArray result) {
+//				load(result.getDBObject("objects"));
+//				Resources.getInstance().setBusy(false);
 			}
 	
 			@Override
-			public void fail(DBObject result) {
+			public void fail(DBArray result) {
 				Lib.alert("Messages: Load_Messages: failed: "+result);
 				Resources.getInstance().setBusy(false);
 			}

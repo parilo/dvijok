@@ -31,7 +31,7 @@ class DataBaseFilesDriver implements DataBaseDriver {
 		$this->tagsfile = $this->dir.'/tags';
 		
 		if( file_exists($this->lastidfile) === false ){
-			file_put_contents($this->lastidfile, serialize(1));
+			file_put_contents($this->lastidfile, serialize(0));
 		}
 		
 		if( file_exists($this->tagsfile) === false ){
@@ -140,7 +140,7 @@ class DataBaseFilesDriver implements DataBaseDriver {
 			$ret = array();
 			foreach( $ids as $id ){
 				$obj = $this->readById($id);
-				$obj['dbo']['id'] = $id;
+				$obj['dbo']['id'] = "$id";
 				$ret[] = $obj;
 			}
 			return $ret;

@@ -141,8 +141,25 @@ class DataBase {
 		}
 	}
 
-	public function delObject ($id) {
-		$this->drv->deleteById($id);
+	public function delObject ($id, $user) {
+		if( is_numeric($id) ){
+			
+			$obj = $this->drv->readById($id);
+			if( $obj === false ) return true;
+			 
+			$uid = $user['uid'];
+			$gids = $user['gids'];
+			$rights = $obj['rights'];
+			if(
+				( $rights['uid'] == $user['uid'] ) ||
+				( ($rights['gw'] == '1') && in_array($rights['gid'], $gids) ) ||
+				( $rights['ow'] == '1' )
+			){
+				$this->drv->deleteById($id);
+				return true;
+			} else return "deletion failed";
+			
+		} else return "id must be numeric";
 	}
 	
 	/** 

@@ -64,6 +64,9 @@ class DVService {
 		} else if( $func == "getObjects" ){
 			return $this->checkSession($obj, $ip, 'getObjects');
 			
+		} else if( $func == "delObject" ){
+			return $this->checkSession($obj, $ip, 'delObject');
+			
 		} else if( $func == "listenForEvent" ){
 			return $this->listenForEvent();
 			
@@ -200,6 +203,21 @@ class DVService {
 		return $ret;
 	}
 	
+	private function delObject($inp, $user){
+		
+		if( isset($inp['id']) ) $id = $inp['id'];
+		else return retarr('specify id');
+		
+		$res = $this->db->delObject($id, $user);
+		if( $res === true ){
+			$ret['return'] = 'success';
+			$ret['id'] = $id;
+			return $ret;
+		}
+		else return retarr($res);
+		
+	}
+	
 // 	private function login($obj){
 // 		if( isset($obj['sid']) ){
 // 			$sid = $obj['sid'];
@@ -219,15 +237,6 @@ class DVService {
 // 	public abstract [result] logout (String sid);
 
 //	public [result] usermod();
-	
-// 	public abstract [result, DBObject] getObject (String sid, String[] tags);
-	
-// 	public abstract [result, DBObject] getObjectById (String sid, String id);
-	
-	
-// 	public abstract [result] putObject (String sid, String[] tags, unix rights rights);
-	
-// 	public abstract [result] delObject (String sid, String id);
 	
 	
 }

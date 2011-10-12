@@ -18,7 +18,9 @@
 
 package org.dvijok.db;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.dvijok.db.dvrpc.DBRequestDVRPC;
 import org.dvijok.handlers.DVRequestHandler;
@@ -30,6 +32,7 @@ public class DataBaseImpl implements DataBase {
 
 	private DBRequest dbRequest;
 	private String sid;
+	private DBObject eventsreq
 	
 	public DataBaseImpl(){
 		dbRequest = new DBRequestDVRPC(Resources.getInstance().conf.dbUrl);
@@ -90,7 +93,59 @@ public class DataBaseImpl implements DataBase {
 //
 //			@Override
 //			public void fail(DBArray result) {}});
-	
+
+//getObjects test
+//		
+//		DBObject dbo = new DBObject();
+//		dbo.put("tags", "tag1");
+//		dbo.put("count", "2");
+//		
+//		getObjects(dbo, new DVRequestHandler<DBArray>(){
+//
+//			@Override
+//			public void success(DBArray result) {
+//				Lib.alert("ret: "+result);
+//				Iterator<Serializable> i = result.iterator();
+//				while( i.hasNext() ){
+//					DBObject dbo = (DBObject) i.next();
+//					
+//					DBObject todel = new DBObject();
+//					todel.put("id", dbo.getString("id"));
+//					delObject(todel, new DVRequestHandler<DBObject>(){
+//
+//						@Override
+//						public void success(DBObject result) {
+//							Lib.alert("del: "+result);
+//						}
+//
+//						@Override
+//						public void fail(DBObject result) {
+//							// TODO Auto-generated method stub
+//							
+//						}});
+//					
+//				}
+//			}
+//
+//			@Override
+//			public void fail(DBArray result) {}});
+
+//		DBObject todel = new DBObject();
+//		todel.put("id", "2");
+//		delObject(todel, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				Lib.alert("del: "+result);
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				// TODO Auto-generated method stub
+//				
+//			}});
+		
+		
 	}
 	
 	protected void storeSession(){
@@ -235,26 +290,61 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void delObject(DBObject params, DVRequestHandler<DBObject> handler) {
-	}
+	public void delObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
 
-	@Override
-	public void listenForEvents(DBObject params, DVRequestHandler<DBObject> handler) {
-		DBObject dbo = new DBObject();
-		dbo.put("func", "listenForEvent");
-		dbo.put("aaa", "1234");
-		dbo.put("bbbbb", "123");
+		DBObject req = new DBObject();
+		req.put("sid", sid);
+		req.put("func", "delObject");
+		req.put("obj", params);
 		
-		dbRequest.request(dbo, new DVRequestHandler<DBObject>(){
+		dbRequest.request(req, new DVRequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
-				Lib.alert("DataBaseDVRPC success: "+result);
+				String res = result.getString("result");
+				if( res.equals("success") ){
+					handler.success(result.getDBObject("objs"));
+				} else {
+					if( checkNotSid(res, new Handler<Boolean>(){
+						@Override
+						public void onHandle(Boolean param) {
+							delObject(params, handler);
+						}}) ) Lib.alert("DataBase: delObject A: fail: "+result);
+				}
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.alert("DataBaseDVRPC fail: "+result);
+				Lib.alert("DataBase: delObject B: fail: "+result);
+			}});
+	}
+
+	@Override
+	public void listenForEvents(DBObject params, DVRequestHandler<DBObject> handler) {
+		DBObject req = new DBObject();
+		req.put("sid", sid);
+		req.put("func", "listenForEvent");
+		req.put("obj", params);
+		
+		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				String res = result.getString("result");
+				if( res.equals("success") ){
+					handler.success(result.getDBObject("objs"));
+				} else {
+					if( checkNotSid(res, new Handler<Boolean>(){
+						@Override
+						public void onHandle(Boolean param) {
+							delObject(params, handler);
+						}}) ) Lib.alert("DataBase: delObject A: fail: "+result);
+				}
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.alert("DataBase: delObject B: fail: "+result);
 			}});
 	}
 
