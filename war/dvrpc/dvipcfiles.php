@@ -32,11 +32,7 @@ class DVIPCFiles extends DVIPCResponses {
 	
 	private function readFromFile($filename){
 		if( file_exists($filename) ){
-// 			$file = fopen($filename, 'r');
-// 			$content = fread($file, filesize($filename));
 			$content = file_get_contents($filename);
-// 			print "cont: ->$content<-\n";
-// 			fclose($file);
 			return unserialize($content);
 		} else return false;			
 	}
@@ -44,10 +40,6 @@ class DVIPCFiles extends DVIPCResponses {
 	private function writeToFile($filename, $val){
 		$file = fopen($filename, 'w');
 		$serval = serialize($val);
-// 		print "write: ->$serval<-\n";
-// 		fwrite($file, $serval);
-// 		fflush($file);
-// 		fclose($file);
 		file_put_contents($filename, $serval);
 	}
 	

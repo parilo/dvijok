@@ -23,6 +23,7 @@ import java.util.Date;
 import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
+import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
@@ -355,6 +356,25 @@ public class DataBaseGWTRPC implements DataBase {
 	@Override
 	public void listenForEvents(DBObject params,
 			DVRequestHandler<DBObject> handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addEventListener(DBObject params, DataBaseEventListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeEventListener(DBObject params,
+			DataBaseEventListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stopListenForEvents() {
 		// TODO Auto-generated method stub
 		
 	}

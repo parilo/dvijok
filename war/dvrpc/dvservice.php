@@ -67,9 +67,9 @@ class DVService {
 		} else if( $func == "delObject" ){
 			return $this->checkSession($obj, $ip, 'delObject');
 			
-		} else if( $func == "listenForEvent" ){
-			return $this->listenForEvent();
-			
+		} else if( $func == "listenForEvents" ){
+			return $this->checkSession($obj, $ip, 'listenForEvents');
+				
 		} else if( $func == "testIPC" ){
 			return $this->testIPC();
 		}
@@ -118,17 +118,12 @@ class DVService {
 		}
 	}
 	
-	private function testIPC(){
-		$ipc = new DVIPCFiles();
-		$event = $ipc->invokeEvent("testIPC event :)");
-	}
+	private function listenForEvents($inp, $user){
 	
-	private function listenForEvent(){
-		
 		$ipc = new DVIPCFiles();
 		$event = $ipc->listenForEvent();
 	
-		$ret['event'] = $event;
+		$ret['objs']['event'] = $event;
 		$ret['result'] = 'success';
 		return $ret;
 	}
@@ -176,7 +171,17 @@ class DVService {
 			$rights['ow'] = '0';
 		}
 		
+		if( isset($obj['id'])) $ismod = true;
+		else $ismod = false;
+		
 		$id = $this->db->putObject($obj, $tags, $user, $rights);
+		$obj['id'] = "$id";
+		
+		$ipc = new DVIPCFiles();
+		if( $ismod ) $event['type'] = 'mod';
+		else $event['type'] = 'add';
+		$event['obj'] = $obj;
+		$ipc->invokeEvent($event);
 		
 		$ret['result'] = 'success';
 		$ret['objs']['id'] = "$id";

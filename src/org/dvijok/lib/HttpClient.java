@@ -18,6 +18,7 @@
 
 package org.dvijok.lib;
 
+import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
@@ -32,22 +33,24 @@ public class HttpClient {
 		builderPOST = new RequestBuilder(RequestBuilder.POST, url);
 	}
 	
-	  public void doGet(RequestCallback rc) {
+	  public Request doGet(RequestCallback rc) {
 	    try {
-	      builderGET.sendRequest(null, rc);
+	      return builderGET.sendRequest(null, rc);
 	    } catch (RequestException e) {
 	      Lib.alert("Lib: HttpClient: doGet: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
+		return null;
 	  }
 
-	  public void doPost(String data, RequestCallback rc) {
+	  public Request doPost(String data, RequestCallback rc) {
 	    try {
-	      builderPOST.sendRequest(data, rc);
+	      return builderPOST.sendRequest(data, rc);
 	    } catch (RequestException e) {
 	      Lib.alert("Lib: HttpClient: doPost: exception: "+e.getMessage());
 	      e.printStackTrace();
 	    }
+		return null;
 	  }
-	
+	  
 }

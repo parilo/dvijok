@@ -18,6 +18,7 @@
 
 package org.dvijok.db;
 
+import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.handlers.DVRequestHandler;
 
 public interface DataBase {
@@ -29,6 +30,10 @@ public interface DataBase {
 	public void getObjects(DBObject params, final DVRequestHandler<DBArray> handler);
 	public void putObject(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void delObject(DBObject params, final DVRequestHandler<DBObject> handler);
+	
+	public void addEventListener(DBObject params, DataBaseEventListener listener);
+	public void removeEventListener(DBObject params, DataBaseEventListener listener);
 	public void listenForEvents(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void stopListenForEvents();
 	
 }

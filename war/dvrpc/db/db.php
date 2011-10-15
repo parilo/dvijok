@@ -124,7 +124,7 @@ class DataBase {
 				$obj['rights'] = $rights;
 				$this->drv->store($id, $obj, $tagsarr);
 				return $id;
-			}
+			} else return false;
 				
 		} else {
 

@@ -18,134 +18,72 @@
 
 package org.dvijok.db;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Iterator;
 
-import org.dvijok.db.dvrpc.DBRequestDVRPC;
+import org.dvijok.db.dvrpc.DBRequestMakerDVRPC;
+import org.dvijok.db.event.DataBaseEventListener;
+import org.dvijok.db.event.DataBaseEventsDB;
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.handlers.Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
+import com.google.gwt.user.client.Window.ScrollEvent;
+import com.google.gwt.user.client.Window.ScrollHandler;
+import com.sun.java.swing.plaf.windows.WindowsBorders;
+
 public class DataBaseImpl implements DataBase {
 
-	private DBRequest dbRequest;
+	private DBRequestMaker dbRequest;
 	private String sid;
-	private DBObject eventsreq
+	private DataBaseEventsDB dbe;
+	private DBRequest dbEventsRequest;
 	
 	public DataBaseImpl(){
-		dbRequest = new DBRequestDVRPC(Resources.getInstance().conf.dbUrl);
+		dbRequest = new DBRequestMakerDVRPC(Resources.getInstance().conf.dbUrl);
+		dbe = new DataBaseEventsDB(this);
 		restoreSession();
 		
-//putObject test
-//		
-//		DBObject dbo = new DBObject();
-//		dbo.put("dddd", "4444");
-//		dbo.put("ffff", "5555");
-//		
-//		DBObject mdbo = new DBObject();
-//		mdbo.put("tags", "tag1 tag2");
-//		mdbo.put("dbo", dbo);
-//		
-//		putObject(mdbo, new DVRequestHandler<DBObject>(){
-//
-//			@Override
-//			public void success(DBObject result) {
-//				Lib.alert("ret: "+result);
-//			}
-//
-//			@Override
-//			public void fail(DBObject result) {
-//				// TODO Auto-generated method stub
-//				
-//			}});
+		Window.addResizeHandler(new ResizeHandler(){
 
-//getObject test
-//
-//		DBObject dbo = new DBObject();
-//		dbo.put("tags", "tag1");
-//		dbo.put("offset", "1");
-//		
-//		getObject(dbo, new DVRequestHandler<DBObject>(){
-//
-//			@Override
-//			public void success(DBObject result) {
-//				Lib.alert("ret: "+result);
-//			}
-//
-//			@Override
-//			public void fail(DBObject result) {}});
-
-//getObjects test
-//		
-//		DBObject dbo = new DBObject();
-//		dbo.put("tags", "tag1");
-//		dbo.put("offset", "4");
-//		dbo.put("count", "2");
-//		
-//		getObjects(dbo, new DVRequestHandler<DBArray>(){
-//
-//			@Override
-//			public void success(DBArray result) {
-//				Lib.alert("ret: "+result);
-//			}
-//
-//			@Override
-//			public void fail(DBArray result) {}});
-
-//getObjects test
-//		
-//		DBObject dbo = new DBObject();
-//		dbo.put("tags", "tag1");
-//		dbo.put("count", "2");
-//		
-//		getObjects(dbo, new DVRequestHandler<DBArray>(){
-//
-//			@Override
-//			public void success(DBArray result) {
-//				Lib.alert("ret: "+result);
-//				Iterator<Serializable> i = result.iterator();
-//				while( i.hasNext() ){
-//					DBObject dbo = (DBObject) i.next();
-//					
-//					DBObject todel = new DBObject();
-//					todel.put("id", dbo.getString("id"));
-//					delObject(todel, new DVRequestHandler<DBObject>(){
-//
-//						@Override
-//						public void success(DBObject result) {
-//							Lib.alert("del: "+result);
-//						}
-//
-//						@Override
-//						public void fail(DBObject result) {
-//							// TODO Auto-generated method stub
-//							
-//						}});
-//					
-//				}
-//			}
-//
-//			@Override
-//			public void fail(DBArray result) {}});
-
-//		DBObject todel = new DBObject();
-//		todel.put("id", "2");
-//		delObject(todel, new DVRequestHandler<DBObject>(){
-//
-//			@Override
-//			public void success(DBObject result) {
-//				Lib.alert("del: "+result);
-//			}
-//
-//			@Override
-//			public void fail(DBObject result) {
-//				// TODO Auto-generated method stub
-//				
-//			}});
+			@Override
+			public void onResize(ResizeEvent event) {
+				Lib.alert("resize 1");
+			}});
 		
+		com.google.gwt.user.client.Window.addWindowScrollHandler(new ScrollHandler(){
+
+			@Override
+			public void onWindowScroll(ScrollEvent event) {
+				Lib.alert("scroll");
+				
+			}
+			
+		});
 		
+		com.google.gwt.user.client.Window.addCloseHandler(new CloseHandler<Window>(){
+
+			@Override
+			public void onClose(CloseEvent<Window> event) {
+				Lib.alert("close 1");
+			}});
+		
+		com.google.gwt.user.client.Window.addWindowClosingHandler(new ClosingHandler(){
+
+			@Override
+			public void onWindowClosing(ClosingEvent event) {
+				event.setMessage("aaaaa");
+				Lib.alert("close 2");
+			}});
+		
+		new DataBaseTest(this);
 	}
 	
 	protected void storeSession(){
@@ -320,13 +258,13 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void listenForEvents(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void listenForEvents(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		DBObject req = new DBObject();
 		req.put("sid", sid);
-		req.put("func", "listenForEvent");
+		req.put("func", "listenForEvents");
 		req.put("obj", params);
 		
-		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbEventsRequest = dbRequest.request(req, new DVRequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -337,15 +275,29 @@ public class DataBaseImpl implements DataBase {
 					if( checkNotSid(res, new Handler<Boolean>(){
 						@Override
 						public void onHandle(Boolean param) {
-							delObject(params, handler);
-						}}) ) Lib.alert("DataBase: delObject A: fail: "+result);
+							listenForEvents(params, handler);
+						}}) ) Lib.alert("DataBase: listenForEvents A: fail: ->"+result+"<-");
 				}
 			}
 
 			@Override
 			public void fail(DBObject result) {
-				Lib.alert("DataBase: delObject B: fail: "+result);
+				Lib.alert("DataBase: listenForEvents B: fail: "+result);
 			}});
 	}
 
+	public void stopListenForEvents(){
+		dbEventsRequest.cancel();
+	}
+
+	@Override
+	public void addEventListener(DBObject params, DataBaseEventListener listener) {
+		dbe.addEventListener(params, listener);
+	}
+
+	@Override
+	public void removeEventListener(DBObject params, DataBaseEventListener listener) {
+		dbe.removeEventListener(params, listener);
+	}
+	
 }

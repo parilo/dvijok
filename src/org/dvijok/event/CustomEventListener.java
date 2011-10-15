@@ -1,20 +1,13 @@
-package org.dvijok.event;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-import java.util.EventListener;
-
 /**
  *
- * @author developer
+ * @author Dmitry Zubanov, 2011
  */
-// Declare the listener class. It must extend EventListener.
-// A class must implement this interface to get MyEvents.
-public interface CustomEventListener extends EventListener {
+
+package org.dvijok.event;
+
+public interface CustomEventListener {
 
     public void customEventOccurred(CustomEvent evt);
+    
 }
 

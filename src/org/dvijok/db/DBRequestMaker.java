@@ -1,5 +1,5 @@
 //    dvijok - cms written in gwt
-//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
+//    Copyright (C) 2010-2011  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -16,23 +16,12 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.db;
 
-import org.dvijok.db.DBRequest;
+import org.dvijok.handlers.DVRequestHandler;
 
-import com.google.gwt.http.client.Request;
-
-public class DBRequestDVRPC implements DBRequest {
-
-	private Request request;
+public interface DBRequestMaker {
 	
-	public DBRequestDVRPC(Request request){
-		this.request = request;
-	}
-	
-	@Override
-	public void cancel() {
-		request.cancel();
-	}
+	public DBRequest request(DBObject data, DVRequestHandler<DBObject> handler);
 
 }

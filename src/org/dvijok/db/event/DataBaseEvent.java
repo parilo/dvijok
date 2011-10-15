@@ -16,23 +16,24 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.db.event;
 
-import org.dvijok.db.DBRequest;
+import org.dvijok.db.DBObject;
 
-import com.google.gwt.http.client.Request;
+public class DataBaseEvent {
 
-public class DBRequestDVRPC implements DBRequest {
-
-	private Request request;
+	private DBObject params;
 	
-	public DBRequestDVRPC(Request request){
-		this.request = request;
-	}
-	
-	@Override
-	public void cancel() {
-		request.cancel();
+	public DataBaseEvent(DBObject params){
+		this.params = params;
 	}
 
+	public DBObject getParams() {
+		return params;
+	}
+
+	public void setParams(DBObject params) {
+		this.params = params;
+	}
+	
 }

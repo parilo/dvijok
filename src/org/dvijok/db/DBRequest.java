@@ -1,5 +1,5 @@
 //    dvijok - cms written in gwt
-//    Copyright (C) 2010-2011  Pechenko Anton Vladimirovich aka Parilo
+//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -18,10 +18,8 @@
 
 package org.dvijok.db;
 
-import org.dvijok.handlers.DVRequestHandler;
-
 public interface DBRequest {
-	
-	public void request(DBObject data, DVRequestHandler<DBObject> handler);
 
+	public void cancel();
+	
 }
