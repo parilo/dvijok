@@ -30,10 +30,22 @@ class DVRPCProto {
 		$this->i = 0;
 	}
 	
+	private function strpos($haystack, $needle, $offset = 0){
+		return mb_strpos($haystack, $needle, $offset, mb_detect_encoding($haystack));
+	}
+	
+	private function substr($str, $start ,$length){
+		return mb_substr($str, $start ,$length, mb_detect_encoding($str));
+	}
+	
+	private function strlen($str){
+		return mb_strlen($str, mb_detect_encoding($str));
+	}
+	
 	private function extractLen(){
-		$pos = strpos($this->req, ",", $this->i);
+		$pos = $this->strpos($this->req, ",", $this->i);
 		if( $pos === false ) return false;
-		$len = substr($this->req, $this->i, $pos - $this->i );
+		$len = $this->substr($this->req, $this->i, $pos - $this->i );
 		if( is_numeric($len) ){
 			
 			$this->i = $pos+1;
@@ -44,7 +56,7 @@ class DVRPCProto {
 	}
 	
 	private function extract($len){
-		$ret = substr($this->req, $this->i, $len);
+		$ret = $this->substr($this->req, $this->i, $len);
 		if( $ret === false ) return false;
 		$this->i += $len;
 		return $ret;
@@ -95,14 +107,17 @@ class DVRPCProto {
 	public function hashMapCode($hashMap){
 		$ret = "";
 		foreach( $hashMap as $key => $val ){
-			if( is_string($val) ){
-				$ret .= strlen($key).",".$key."STR".strlen($val).",".$val;
-			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
+// 			if( is_string($val) ){
+// 				$ret .= mb_strlen($key).",".$key."STR".mb_strlen($val).",".$val;
+// 			} else
+			if( is_array($val) && array_key_exists('_isarr',$val) ){
 				$str = $this->arrayCode($val);
-				$ret .= strlen($key).",".$key."DBA".strlen($str).",".$str;
+				$ret .= $this->strlen($key).",".$key."DBA".$this->strlen($str).",".$str;
 			} else if( is_array($val) ){
 				$str = $this->hashMapCode($val);
-				$ret .= strlen($key).",".$key."DBO".strlen($str).",".$str;
+				$ret .= $this->strlen($key).",".$key."DBO".$this->strlen($str).",".$str;
+			} else {
+				$ret .= $this->strlen($key).",".$key."STR".$this->strlen($val).",$val";
 			}
 		}
 		return $ret;
@@ -139,16 +154,20 @@ class DVRPCProto {
 	public function arrayCode($array){
 		$ret = "";
 		foreach( $array as $key => $val ){
-			if( is_string($val) && $key != "_isarr" ){
-				$ret .= "STR".strlen($val).",".$val;
-			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
+// 			if( is_string($val) && $key != "_isarr" ){
+// 				$ret .= "STR".mb_strlen($val).",".$val;
+// 			} else
+			if( is_array($val) && array_key_exists('_isarr',$val) ){
 				$str = $this->arrayCode($val);
-				$ret .= "DBA".strlen($str).",".$str;
+				$ret .= "DBA".$this->strlen($str).",".$str;
 			} else if( is_array($val) ){
 				$str = $this->hashMapCode($val);
-				$ret .= "DBO".strlen($str).",".$str;
+				$ret .= "DBO".$this->strlen($str).",".$str;
+			} else if( "$key" != "_isarr" ) {
+				$ret .= "STR".$this->strlen($val).",$val";
 			}
 		}
+		
 		return $ret;
 	}
 }

@@ -118,7 +118,7 @@ class DataBase {
 				( ($rights['gw'] == '1') && in_array($rights['gid'], $gids) ) ||
 				( $rights['ow'] == '1' )
 			){
-				$tagsarr = split(' ',$tags);
+				$tagsarr = explode(' ',$tags);
 				$obj['id'] = $id;
 				$obj['dbo'] = $dbo;
 				$obj['rights'] = $rights;
