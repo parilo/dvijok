@@ -79,7 +79,9 @@ class DataBase {
 	}
 
 	public function getObjectByTags ($tags, $user) {
-		return $this->getObjectsByTags($tags, $user, 1, 0);
+		$objs = $this->getObjectsByTags($tags, $user, 1, 0);
+		if( count($objs) > 0 ) return $objs[0];
+		else return false; 
 	}
 	
 	//$tags: string, ' ' - separator
