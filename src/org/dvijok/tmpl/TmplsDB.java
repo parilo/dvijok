@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.HttpFunctions;
+import org.dvijok.resources.Resources;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
@@ -41,6 +42,7 @@ public class TmplsDB {
 			req.success(this.tmpls.get(url));
 		} else {
 			
+//			Resources.getInstance().db.pauseListenForEvents();
 			HttpFunctions.doGet(url, new RequestCallback(){
 	
 				@Override
@@ -56,6 +58,7 @@ public class TmplsDB {
 				}
 				
 			});
+//			Resources.getInstance().db.resumeListenForEvents();
 
 		}
 	}

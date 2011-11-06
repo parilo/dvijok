@@ -41,7 +41,7 @@ public class DBRequestMakerDVRPC implements DBRequestMaker {
 	
 	public DBRequest request(DBObject data, final DVRequestHandler<DBObject> handler){
 
-		return new DBRequestDVRPC( httpClient.doPost( proto.code(data), new RequestCallback(){
+		RequestCallback rcb = new RequestCallback(){
 
 			@Override
 			public void onResponseReceived(Request request, Response response) {
@@ -54,7 +54,11 @@ public class DBRequestMakerDVRPC implements DBRequestMaker {
 				Lib.alert("DBRequestDVRPC: onError: "+exception.getMessage());
 				obj.put("result", "DBRequestDVRPC: onError: "+exception.getMessage());
 				handler.fail(obj);
-			}}));
+			}};
+		
+		String datastr = proto.code(data);
+			
+		return new DBRequestDVRPC( httpClient.doPost( datastr, rcb), datastr, rcb, httpClient);
 		
 	}
 

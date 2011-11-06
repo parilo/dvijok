@@ -44,6 +44,7 @@ class DVRPCProto {
 	}
 	
 	private function extractLen(){
+		if( $this->i >= strlen($this->req) ) return false;
 		$pos = $this->strpos($this->req, ",", $this->i);
 		if( $pos === false ) return false;
 		$len = $this->substr($this->req, $this->i, $pos - $this->i );

@@ -119,10 +119,24 @@ class DVService {
 	}
 	
 	private function listenForEvents($inp, $user){
-	
+		
+		need queue of events in DVIPCFiles:
+		all events must be stored with its timestamps in this queue
+		and removed if timestamp is greater some value (maybe 1 min)
+
+		print_r($inp);
+		
+		//check for enqueued events
+		
 		$ipc = new DVIPCFiles();
 		$event = $ipc->listenForEvent();
 	
+		print_r($event);
+		
+		//make atomic events
+		//enqueue second and all after events for this session
+		//return first event
+		
 		$ret['objs']['event'] = $event;
 		$ret['result'] = 'success';
 		return $ret;
@@ -181,6 +195,7 @@ class DVService {
 		if( $ismod ) $event['type'] = 'mod';
 		else $event['type'] = 'add';
 		$event['obj'] = $obj;
+		$event['tags'] = $tags;
 		$ipc->invokeEvent($event);
 		
 		$ret['result'] = 'success';

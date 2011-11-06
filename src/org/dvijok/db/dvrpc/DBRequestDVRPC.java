@@ -19,15 +19,23 @@
 package org.dvijok.db.dvrpc;
 
 import org.dvijok.db.DBRequest;
+import org.dvijok.lib.HttpClient;
 
 import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
 
 public class DBRequestDVRPC implements DBRequest {
 
 	private Request request;
+	private RequestCallback callback;
+	private HttpClient httpClient;
+	private String data;
 	
-	public DBRequestDVRPC(Request request){
+	public DBRequestDVRPC(Request request, String data, RequestCallback callback, HttpClient httpClient){
 		this.request = request;
+		this.callback = callback;
+		this.httpClient = httpClient;
+		this.data = data;
 	}
 	
 	@Override
@@ -35,4 +43,19 @@ public class DBRequestDVRPC implements DBRequest {
 		request.cancel();
 	}
 
+	@Override
+	public void pause(){
+		request.cancel();
+	}
+	
+	@Override
+	public void resume(){
+		request = httpClient.doPost( data, callback);
+	}
+
+	@Override
+	public boolean isPending() {
+		return request.isPending();
+	}
+	
 }

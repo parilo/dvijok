@@ -51,37 +51,37 @@ public class DataBaseImpl implements DataBase {
 		dbe = new DataBaseEventsDB(this);
 		restoreSession();
 		
-		Window.addResizeHandler(new ResizeHandler(){
-
-			@Override
-			public void onResize(ResizeEvent event) {
-				Lib.alert("resize 1");
-			}});
-		
-		com.google.gwt.user.client.Window.addWindowScrollHandler(new ScrollHandler(){
-
-			@Override
-			public void onWindowScroll(ScrollEvent event) {
-				Lib.alert("scroll");
-				
-			}
-			
-		});
-		
-		com.google.gwt.user.client.Window.addCloseHandler(new CloseHandler<Window>(){
-
-			@Override
-			public void onClose(CloseEvent<Window> event) {
-				Lib.alert("close 1");
-			}});
-		
-		com.google.gwt.user.client.Window.addWindowClosingHandler(new ClosingHandler(){
-
-			@Override
-			public void onWindowClosing(ClosingEvent event) {
-				event.setMessage("aaaaa");
-				Lib.alert("close 2");
-			}});
+//		Window.addResizeHandler(new ResizeHandler(){
+//
+//			@Override
+//			public void onResize(ResizeEvent event) {
+//				Lib.alert("resize 1");
+//			}});
+//		
+//		com.google.gwt.user.client.Window.addWindowScrollHandler(new ScrollHandler(){
+//
+//			@Override
+//			public void onWindowScroll(ScrollEvent event) {
+//				Lib.alert("scroll");
+//				
+//			}
+//			
+//		});
+//		
+//		com.google.gwt.user.client.Window.addCloseHandler(new CloseHandler<Window>(){
+//
+//			@Override
+//			public void onClose(CloseEvent<Window> event) {
+//				Lib.alert("close 1");
+//			}});
+//		
+//		com.google.gwt.user.client.Window.addWindowClosingHandler(new ClosingHandler(){
+//
+//			@Override
+//			public void onWindowClosing(ClosingEvent event) {
+//				event.setMessage("aaaaa");
+//				Lib.alert("close 2");
+//			}});
 		
 		new DataBaseTest(this);
 	}
@@ -276,7 +276,7 @@ public class DataBaseImpl implements DataBase {
 						@Override
 						public void onHandle(Boolean param) {
 							listenForEvents(params, handler);
-						}}) ) Lib.alert("DataBase: listenForEvents A: fail: ->"+result+"<-");
+						}}) ) /*Lib.alert("DataBase: listenForEvents A: fail: ->"+result+"<-")*/;
 				}
 			}
 
@@ -287,7 +287,15 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	public void stopListenForEvents(){
-		dbEventsRequest.cancel();
+		if( dbEventsRequest != null ) if( dbEventsRequest.isPending() ) dbEventsRequest.cancel();
+	}
+	
+	public void pauseListenForEvents(){
+		dbEventsRequest.pause();
+	}
+	
+	public void resumeListenForEvents(){
+		dbEventsRequest.resume();
 	}
 
 	@Override

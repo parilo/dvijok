@@ -21,5 +21,8 @@ package org.dvijok.db;
 public interface DBRequest {
 
 	public void cancel();
+	public void pause();
+	public void resume();
+	public boolean isPending();
 	
 }

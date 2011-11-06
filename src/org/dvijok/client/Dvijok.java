@@ -53,7 +53,7 @@ public void onModuleLoad() {
 	Loader l = new Loader();
 
 	Resources.getInstance().loader = l;
-	Resources.getInstance().tmpls = new TmplsDB();
+	Resources.getInstance().tmpls = new TmplsDB();//this must be init after DataBaseImpl
 	
 	this.registerDwidgets();
 	

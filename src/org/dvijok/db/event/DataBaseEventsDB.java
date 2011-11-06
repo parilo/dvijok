@@ -46,6 +46,7 @@ public class DataBaseEventsDB implements DataBaseEventsInterface {
 		if( !allParams.contains(params) ){
 			allParams.add(params);
 			evTool.addDataBaseListener(listener);
+			db.stopListenForEvents();
 			listenForEvents();
 		}
 	}
