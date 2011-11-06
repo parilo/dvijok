@@ -18,6 +18,7 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 require_once 'dbdrv.php';
+require_once 'dbexception.php';
 
 class DataBaseFilesDriver implements DataBaseDriver {
 
@@ -31,25 +32,28 @@ class DataBaseFilesDriver implements DataBaseDriver {
 		$this->tagsfile = $this->dir.'/tags';
 		
 		if( file_exists($this->lastidfile) === false ){
-			file_put_contents($this->lastidfile, serialize(0));
+			if( @file_put_contents($this->lastidfile, serialize(0)) === false ) throw new DBException();
 		}
 		
 		if( file_exists($this->tagsfile) === false ){
-			file_put_contents($this->tagsfile, serialize(array()));
+			if( @file_put_contents($this->tagsfile, serialize(array())) === false ) throw new DBException();
 		}
 		
 	}
 	
 	public function getNewId(){
-		$content = file_get_contents($this->lastidfile);
+		$content = @file_get_contents($this->lastidfile);
+		if( $content === false ) throw new DBException();
 		$id = unserialize($content);
 		$id++;
-		file_put_contents($this->lastidfile, serialize($id));
+		if( @file_put_contents($this->lastidfile, serialize($id)) === false ) throw new DBException();
 		return $id;
 	}
 	
 	private function getTags(){
-		return unserialize(file_get_contents($this->tagsfile));
+		$res = @file_get_contents($this->tagsfile);
+		if( $res === false ) throw new DBException();
+		return unserialize($res);
 	}
 	
 	private function updateTags($tags, $id){
@@ -61,7 +65,9 @@ class DataBaseFilesDriver implements DataBaseDriver {
 		$objtagsfile = $this->dir.'/'."$id.tags";
 		if( file_exists($objtagsfile) ){
 
-			$oldtags = unserialize(file_get_contents($objtagsfile));
+			$cont = @file_get_contents($objtagsfile);
+			if( $cont === false ) throw new DBException();
+			$oldtags = unserialize($cont);
 			$toremove = array_diff($oldtags, $tags);
 			$toadd = array_diff($tags, $oldtags);
 			foreach( $toremove as $tag ){
@@ -78,9 +84,12 @@ class DataBaseFilesDriver implements DataBaseDriver {
 			$alltags[$tag][] = $id;
 		}
 		
-		if( count($tags) > 0 ) file_put_contents($objtagsfile, serialize($tags));
-		else unlink($objtagsfile);
-		file_put_contents($this->tagsfile, serialize($alltags));
+		if( count($tags) > 0 ){
+			if( @file_put_contents($objtagsfile, serialize($tags)) === false ) throw new DBException();
+		} else {
+			if( unlink($objtagsfile) === false ) throw new DBException();
+		}
+		if( @file_put_contents($this->tagsfile, serialize($alltags)) === false ) throw new DBException();
 		
 	}
 	
@@ -96,24 +105,26 @@ class DataBaseFilesDriver implements DataBaseDriver {
 	 * write object to database without tags
 	 */
 	public function write($id, $obj){
-		file_put_contents($this->dir.'/'.$id, serialize($obj));
+		if( @file_put_contents($this->dir.'/'.$id, serialize($obj)) === false ) throw new DBException();
 	}
 	
 	//$tags - array
 	public function store($id, $obj, $tags){
 		$this->updateTags($tags, $id);
-		file_put_contents($this->dir.'/'.$id, serialize($obj));
+		if( @file_put_contents($this->dir.'/'.$id, serialize($obj)) === false ) throw new DBException();
 	}
 	
 	public function deleteById($id){
 		$this->updateTags(array(), $id);
-		unlink($this->dir.'/'.$id);
+		if( unlink($this->dir.'/'.$id) === false ) throw new DBException();
 	}
 	
 	public function readById($id){
 		$f = $this->dir.'/'.$id;
 		if( file_exists($f) ){
-			return unserialize(file_get_contents($f));
+			$cont = @file_get_contents($f);
+			if( $cont === false ) throw new DBException();
+			return unserialize($cont);
 		} else return false;
 	}
 	

@@ -17,7 +17,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once 'config.php';
+require_once 'config.def.php';
 require_once "dvipcfiles.php";
 require_once "lib.php";
 require_once "db/db.php";

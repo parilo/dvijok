@@ -35,9 +35,11 @@ $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
 
 #$config['shmemkey'] = 100;
 
-$config['ipcfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/ipcfiles/';
-$config['dbfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/dbfiles/';
+$config['ipcfilesdir'] = '/home/anton/devel/workspace/estate/war/dvrpc/ipcfiles/';
+$config['dbfilesdir'] = '/home/anton/devel/workspace/estate/war/dvrpc/dbfiles/';
 
 date_default_timezone_set('Asia/Omsk');
+
+if( file_exists('config.php') ) require_once 'config.php';
 
 ?>

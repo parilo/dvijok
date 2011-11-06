@@ -19,7 +19,7 @@
 
 require_once "dvipcresponses.php";
 require_once "lib.php";
-require_once 'config.php';
+require_once 'config.def.php';
 
 class DVIPCFiles extends DVIPCResponses {
 

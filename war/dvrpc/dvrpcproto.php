@@ -31,6 +31,7 @@ class DVRPCProto {
 	}
 	
 	private function strpos($haystack, $needle, $offset = 0){
+		//echo "hs: $haystack, n: $needle, o: $offset\n";
 		return mb_strpos($haystack, $needle, $offset, mb_detect_encoding($haystack));
 	}
 	

@@ -17,36 +17,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once "dvrpcproto.php";
-
-class DVRPC {
-
-	private $proto; 
-	private $dvservice;
-	
-	public function __construct(){}
-	
-	public function setProto($proto){
-		$this->proto = $proto;
-	}
-	
-	public function registerService($dvservice){
-		$this->dvservice = $dvservice;
-	}
-	
-	private function requestParse($request, $ip){
-		$req = $this->proto->hashMapDecode($request);
-		
-		$retobj = $this->dvservice->call($req, $ip);
-		
-		$ret = $this->proto->hashMapCode($retobj);
-		echo "$ret\n";
-	}
-	
-	public function callService($request, $ip){
-		$this->requestParse($request, $ip);
-	}
-	
-}
+class DBException extends Exception {}
 
 ?>
