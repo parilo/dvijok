@@ -17,42 +17,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once "dvipc.php";
-require_once "config.php";
+interface DVIPC {
 
-//not used now
-class DVIPCShm implements DVIPC {
-
-	private $key;
+	public function listenForEvent();
+	public function invokeEvent($event);
 	
-	public function __construct(){
-		$tmp = tempnam('/tmp', 'PHP');
-		$this->key = ftok($tmp, 'a');
-	}
-	
-	public function listenForEvent(){
-// 		$shmres = shm_attach($this->key);
-// 		while( shm_has_var($shmres, 1) === false ){
-// 			print "a: ".shm_has_var($shmres, 1)."\n";
-// 			usleep(100000);
-// 		}
-// 		print "event\n";
-
-		for(;;){
-			$shmres = shm_attach($this->key);
-			if( shm_has_var($shmres, 1) ) break;
-			shm_detach($shmres);
-			print "a";
-			usleep(100000);
-		}
-		shm_detach($shmres);
-		print "event\n";
-		
-// 		do{
-// 			$var = shm_get_var($shmres, 1);
-// 		} while( $var != "aaaeventvar" );
-		return "event";
-	}
 }
 
 ?>

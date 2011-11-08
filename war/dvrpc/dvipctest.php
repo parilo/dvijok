@@ -1,14 +1,14 @@
 <?php
 
-require_once "dvipcfiles.php";
+require_once 'dvipc.php';
 
-class DVIPCFilesTest extends DVIPCFiles {
-	
-	public function __construct(){
-		parent::__construct();
-//  		$this->putEnvToBus("aaaa", "aaaaval");
-// 		print "env: ".$this->getEnvFromBus("aaaa")."\n";
-//  		$this->removeEnvFromBus("aaaa");
+$ipcsys = new DVIPCSys();
+
+$ipcsys->invokeEvent('aaa');
+
+//$this->putEnvToBus("aaaa", "aaaaval");
+//print "env: ".$this->getEnvFromBus("aaaa")."\n";
+//$this->removeEnvFromBus("aaaa");
 
 //  		$this->putToQueue("aa", "aaa1");
 //  		$this->putToQueue("aa", "aaa2");
@@ -23,13 +23,5 @@ class DVIPCFilesTest extends DVIPCFiles {
 //  		print "queue: ".$this->getFromQueue("aa")."\n";
 //  		print "queue: ".$this->getFromQueue("aa")."\n";
 //  		print "queue: ".$this->getFromQueue("aa")."\n";
-
-		$this->invokeEvent("123event123");
-		
-	}
-	
-}
-
-new DVIPCFilesTest();
 
 ?>

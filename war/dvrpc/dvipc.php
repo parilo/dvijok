@@ -17,11 +17,25 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-interface DVIPC {
+require_once 'dvipc/dvipcfiles.php';
+require_once 'config.def.php';
 
-	public function listenForEvent();
-	public function invokeEvent($event);
+class DVIPCSys extends DVIPCFiles {
 	
+	public function __construct(){
+		global $config;
+		parent::__construct($config['ipcfilesdir'], $config['ipcsystimeout']);
+	}
+	
+}
+
+class DVIPCUser extends DVIPCFiles {
+
+	public function __construct(){
+		global $config;
+		parent::__construct($config['ipcfilesdir'], $config['ipcusertimeout']);
+	}
+
 }
 
 ?>

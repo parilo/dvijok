@@ -17,8 +17,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once "dvipc.php";
-require_once "lib.php";
+require_once 'dvipc/dvipc.php';
+require_once 'lib.php';
 
 abstract class DVIPCResponses implements DVIPC {
 
@@ -29,6 +29,11 @@ abstract class DVIPCResponses implements DVIPC {
 	abstract protected function putToQueue($name, $val);
 	
 	private $sess;
+	private $timeout;
+	
+	public function __construct($timeout){
+		$this->timeout = $timeout;
+	}
 	
 	private function getSession(){
 		return randHash();
@@ -53,6 +58,7 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	private function getEventFromBus($sess){
+		//remove old by timestamp $event['ts'];
 		return $this->getFromQueue($sess);
 	}
 	
@@ -70,10 +76,8 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	public function invokeEvent($event){
-		$reg = $this->getEnvFromBus('registered');
-		foreach( $reg as $sess ){
-			$this->putToQueue($sess, $event);
-		}
+		$event['ts'] = date_timestamp_get(date_create());
+		$this->putToQueue('main', $event);
 	}
 	
 }

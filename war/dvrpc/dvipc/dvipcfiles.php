@@ -17,17 +17,17 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once "dvipcresponses.php";
+require_once "history/dvipcresponses.php";
 require_once "lib.php";
-require_once 'config.def.php';
 
 class DVIPCFiles extends DVIPCResponses {
 
 	private $dir;
 	
-	function __construct(){
+	public function __construct($filesdir, $timeout){
+		parent::__construct($timeout);
 		global $config;
-		$this->dir = $config['ipcfilesdir'];
+		$this->dir = $filesdir;
 	}
 	
 	private function readFromFile($filename){
@@ -38,7 +38,6 @@ class DVIPCFiles extends DVIPCResponses {
 	}
 	
 	private function writeToFile($filename, $val){
-		$file = fopen($filename, 'w');
 		$serval = serialize($val);
 		file_put_contents($filename, $serval);
 	}

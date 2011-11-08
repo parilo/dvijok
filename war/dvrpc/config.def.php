@@ -36,6 +36,9 @@ $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
 #$config['shmemkey'] = 100;
 
 $config['ipcfilesdir'] = '/home/anton/devel/workspace/estate/war/dvrpc/ipcfiles/';
+$config['ipcsystimeout'] = 300;//in seconds
+$config['ipcusertimeout'] = 300;//in seconds
+
 $config['dbfilesdir'] = '/home/anton/devel/workspace/estate/war/dvrpc/dbfiles/';
 
 date_default_timezone_set('Asia/Omsk');
