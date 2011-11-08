@@ -17,11 +17,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once 'config.def.php';
-require_once "dvipcfiles.php";
+require_once "dvipc.php";
 require_once "lib.php";
 require_once "db/db.php";
 require_once "db/dbinit.php";
+require_once 'config.def.php';
 
 class DVService {
 	
@@ -120,22 +120,27 @@ class DVService {
 	
 	private function listenForEvents($inp, $user){
 		
-		need queue of events in DVIPCFiles:
-		all events must be stored with its timestamps in this queue
-		and removed if timestamp is greater some value (maybe 1 min)
-
+		//remove timeout sessions and their event queues
+		
+		//1 at loading resetEvents
+		//2 listen for events
+		//3 storing events in queues
+		//4 if client dont ask for event in 1 min - unregister from event queue
+		//5 pick up event from client event queue and send it if present otherwise pass to next steps
+		//6 pick up event from sys queue and understand if this event is needed by client
+		//  if needed store all client events generated from this system event
+		//  in client event queue, first client event return to client
+		//7 if client event queue and sys event queue is empty - wait for event 
+		
 		print_r($inp);
 		
 		//check for enqueued events
 		
 		$ipc = new DVIPCFiles();
 		$event = $ipc->listenForEvent();
+		unset($event['ts']);
 	
 		print_r($event);
-		
-		//make atomic events
-		//enqueue second and all after events for this session
-		//return first event
 		
 		$ret['objs']['event'] = $event;
 		$ret['result'] = 'success';

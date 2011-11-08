@@ -39,13 +39,18 @@ abstract class DVIPCResponses implements DVIPC {
 		return randHash();
 	}
 	
-	private function registerOnBus(){
+	public function register($id){
 		$reg = $this->getEnvFromBus('registered'); // this env must be array
-		$sess = $this->getSession();
+		$sess = $id;
 		if( $reg === false ) $reg = array();
-		array_push($reg, $sess);
+		if( !in_array($sess, $reg) ) array_push($reg, $sess);
 		$this->putEnvToBus('registered', $reg);
 		$this->sess = $sess;
+	}
+	
+	private function registerOnBus(){
+		$sess = $this->getSession();
+		$this->register($sess);
 		return $sess;
 	}
 	
@@ -63,21 +68,22 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	public function listenForEvent(){
-		$sess = $this->registerOnBus();
 		for(;;){
-			$event = $this->getEventFromBus($sess);
+			$event = $this->getEventFromBus($this->sess);
 			if( !($event === false) ){
 				break;
 			}
 			usleep(100000);
 		}
-		$this->unregisterOnBus();
 		return $event;
 	}
 	
 	public function invokeEvent($event){
 		$event['ts'] = date_timestamp_get(date_create());
-		$this->putToQueue('main', $event);
+		$reg = $this->getEnvFromBus('registered');
+		foreach( $reg as $sess ){
+			$this->putToQueue($sess, $event);
+		}
 	}
 	
 }

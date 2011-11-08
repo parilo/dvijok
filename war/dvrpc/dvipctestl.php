@@ -4,7 +4,10 @@ require_once 'dvipc.php';
 
 $ipcsys = new DVIPCSys();
 
-$ipcsys->invokeEvent('aaa');
+$event['obj'] = 'aaa';
+
+$ipcsys->register('asdf');
+print_r($ipcsys->listenForEvent());
 
 //$this->putEnvToBus("aaaa", "aaaaval");
 //print "env: ".$this->getEnvFromBus("aaaa")."\n";

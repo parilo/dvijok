@@ -58,7 +58,6 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	private function getEventFromBus($sess){
-		//remove old by timestamp $event['ts'];
 		return $this->getFromQueue($sess);
 	}
 	
