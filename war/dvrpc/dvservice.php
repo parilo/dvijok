@@ -114,35 +114,59 @@ class DVService {
 			
 			$user = $this->getUser($sess['uid']);
 			if( $user === false ) return retarr('notuser');
-			else return $this->$method($obj['obj'], $user);
+			else return $this->$method($obj, $user);
 		}
 	}
 	
 	private function listenForEvents($inp, $user){
 		
+		print_r($inp);
+		$need = $inp['obj']['need'];
+		$sid = $inp['sid'];
+		
 		//remove timeout sessions and their event queues
 		
 		//1 at loading resetEvents
-		//2 listen for events
 		//3 storing events in queues
 		//4 if client dont ask for event in 1 min - unregister from event queue
 		//5 pick up event from client event queue and send it if present otherwise pass to next steps
-		//6 pick up event from sys queue and understand if this event is needed by client
-		//  if needed store all client events generated from this system event
-		//  in client event queue, first client event return to client
-		//7 if client event queue and sys event queue is empty - wait for event 
 		
-		print_r($inp);
+		$clipc = new DVIPCSys(); //client ipc
+		$clipc->register($sid);
+		
+		$clevent = $clipc->getEvent();
+		if( $clevent === false ){
+
+			//6 pick up event from sys queue and understand if this event is needed by client
+			//  if needed store all client events generated from this system event
+			//  in client event queue, first client event return to client
+			
+			$sysipc = new DVIPCSys();
+			$sysipc->register($sid);
+			$sysevent = $sysipc->listenForEvent();
+			
+			echo "---sysevent-------------------\n";
+			print_r($sysevent);
+			echo "------------------------------\n";
+				
+			//7 if client event queue and sys event queue is empty - wait for event
+					
+		} else {
+			echo "---clevent--------------------\n";
+			print_r($clevent);
+			echo "------------------------------\n";
+		}
+		
 		
 		//check for enqueued events
 		
-		$ipc = new DVIPCFiles();
-		$event = $ipc->listenForEvent();
-		unset($event['ts']);
+		//$ipc = new DVIPCSys();
+		//$event = $ipc->listenForEvent();
+		//unset($event['ts']);
 	
-		print_r($event);
+		//print_r($event);
 		
-		$ret['objs']['event'] = $event;
+ 		//$ret['objs']['event'] = $event;
 		$ret['result'] = 'success';
 		return $ret;
 	}
@@ -170,6 +194,8 @@ class DVService {
 	}
 
 	private function putObject($inp, $user){
+		
+		$inp = $inp['obj'];
 		
 		$uid = $user['uid'];
 		if( isset($inp['dbo']) ) $obj = $inp['dbo'];
@@ -210,6 +236,8 @@ class DVService {
 	
 	private function getObjects($inp, $user){
 		
+		$inp = $inp['obj'];
+		
 		if( !isset($inp['tags']) ) return retarr('specify tags');
 		$tags = $inp['tags'];
 		if( $tags == "" ) return retarr('specify tags');
@@ -229,6 +257,8 @@ class DVService {
 	}
 	
 	private function delObject($inp, $user){
+		
+		$inp = $inp['obj'];
 		
 		if( isset($inp['id']) ) $id = $inp['id'];
 		else return retarr('specify id');

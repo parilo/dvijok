@@ -20,6 +20,7 @@
 interface DVIPC {
 
 	public function register($id);
+	public function getEvent();
 	public function listenForEvent();
 	public function invokeEvent($event);
 	

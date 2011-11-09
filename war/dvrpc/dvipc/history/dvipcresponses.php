@@ -67,6 +67,10 @@ abstract class DVIPCResponses implements DVIPC {
 		return $this->getFromQueue($sess);
 	}
 	
+	public function getEvent(){
+		return $this->getEventFromBus($this->sess);
+	}
+	
 	public function listenForEvent(){
 		for(;;){
 			$event = $this->getEventFromBus($this->sess);
