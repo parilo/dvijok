@@ -24,9 +24,8 @@ class DVIPCFiles extends DVIPCResponses {
 
 	private $dir;
 	
-	public function __construct($filesdir, $timeout){
-		parent::__construct($timeout);
-		global $config;
+	public function __construct($ipcid, $filesdir, $timeout){
+		parent::__construct($ipcid, $timeout);
 		$this->dir = $filesdir;
 	}
 	
@@ -73,6 +72,13 @@ class DVIPCFiles extends DVIPCResponses {
 		if( $queue === false ) $queue = array();
 		array_push($queue, $val);
 		$this->writeToFile($fname, $queue);
+	}
+	
+	protected function removeQueue($name){
+		$filename = $this->dir.'/'.$name.'_queue';
+		if( file_exists($filename) ){
+			unlink($filename);
+		}
 	}
 	
 }

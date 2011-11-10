@@ -34,6 +34,7 @@ public interface DataBase {
 	public void addEventListener(DBObject params, DataBaseEventListener listener);
 	public void removeEventListener(DBObject params, DataBaseEventListener listener);
 	public void listenForEvents(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void resetEvents(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void stopListenForEvents();
 	public void pauseListenForEvents();
 	public void resumeListenForEvents();

@@ -69,7 +69,10 @@ class DVService {
 			
 		} else if( $func == "listenForEvents" ){
 			return $this->checkSession($obj, $ip, 'listenForEvents');
-				
+			
+		} else if( $func == "resetEvents" ){
+			return $this->checkSession($obj, $ip, 'resetEvents');
+						
 		} else if( $func == "testIPC" ){
 			return $this->testIPC();
 		}
@@ -118,53 +121,74 @@ class DVService {
 		}
 	}
 	
+	private function resetEvents($inp, $user){
+		$sid = $inp['sid'];
+		$clipc = new DVIPCUser($sid); //client ipc
+		$clipc->clear();
+		$sysipc = new DVIPCSys();
+		$sysipc->unregister($sid);
+		$ret['result'] = "success";
+		return $ret;
+	}
+	
 	private function listenForEvents($inp, $user){
 		
-		print_r($inp);
+		//print_r($inp);
 		$need = $inp['obj']['need'];
 		$sid = $inp['sid'];
 		
 		//remove timeout sessions and their event queues
+		//return idle event on timeout instead of wainting forever - to prevent forever threads
 		
-		//1 at loading resetEvents
-		//3 storing events in queues
+		//v1 at loading resetEvents
+		//v3 storing events in queues
 		//4 if client dont ask for event in 1 min - unregister from event queue
-		//5 pick up event from client event queue and send it if present otherwise pass to next steps
+		//v5 pick up event from client event queue and send it if present otherwise pass to next steps
 		
-		$clipc = new DVIPCSys(); //client ipc
+		$clipc = new DVIPCUser($sid); //client ipc
 		$clipc->register($sid);
 		
 		$clevent = $clipc->getEvent();
 		if( $clevent === false ){
 
-			//6 pick up event from sys queue and understand if this event is needed by client
+			//v6 pick up event from sys queue and understand if this event is needed by client
 			//  if needed store all client events generated from this system event
 			//  in client event queue, first client event return to client
+			//v7 if client event queue and sys event queue is empty - wait for event
 			
 			$sysipc = new DVIPCSys();
 			$sysipc->register($sid);
 			$sysevent = $sysipc->listenForEvent();
 			
-			echo "---sysevent-------------------\n";
-			print_r($sysevent);
-			echo "------------------------------\n";
+			//echo "---sysevent-------------------\n";
+			//print_r($sysevent);
+			//echo "------------------------------\n";
+			
+			$systagsarr = explode(' ',$sysevent['tags']);
+			
+			unset($need['_isarr']);
+			foreach( $need as $ind => $tags ){
+				$needtags = $tags['tags'];
+				$needtagsarr = explode(' ', $needtags);
 				
-			//7 if client event queue and sys event queue is empty - wait for event
+				//print_r(array_intersect($systagsarr, $needtagsarr));
+				//print_r($needtagsarr);
+				
+				if( count($needtagsarr) > 0 ) if( $needtagsarr == array_values(array_intersect($systagsarr, $needtagsarr)) ){
+					$clevent = $sysevent;
+					$clevent['tags'] = $needtags;
+					$clipc->invokeEvent($clevent);
+				}
+			}
+			
+			return $this->listenForEvents($inp, $user);
 					
 		} else {
-			echo "---clevent--------------------\n";
-			print_r($clevent);
-			echo "------------------------------\n";
+			//echo "---clevent--------------------\n";
+			//print_r($clevent);
+			//echo "------------------------------\n";
+			$ret['objs']['event'] = $clevent;
 		}
-		
-		
-		//check for enqueued events
-		
-		//$ipc = new DVIPCSys();
-		//$event = $ipc->listenForEvent();
-		//unset($event['ts']);
-	
-		//print_r($event);
 		
  		//$ret['objs']['event'] = $event;
 		$ret['result'] = 'success';
@@ -222,7 +246,7 @@ class DVService {
 		$id = $this->db->putObject($obj, $tags, $user, $rights);
 		$obj['id'] = "$id";
 		
-		$ipc = new DVIPCFiles();
+		$ipc = new DVIPCSys();
 		if( $ismod ) $event['type'] = 'mod';
 		else $event['type'] = 'add';
 		$event['obj'] = $obj;

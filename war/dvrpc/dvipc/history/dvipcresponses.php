@@ -27,12 +27,18 @@ abstract class DVIPCResponses implements DVIPC {
 	abstract protected function removeEnvFromBus($name);
 	abstract protected function getFromQueue($name);
 	abstract protected function putToQueue($name, $val);
+	abstract protected function removeQueue($name);
 	
+	private $ipcid;
 	private $sess;
 	private $timeout;
+	private $registeredstr;
 	
-	public function __construct($timeout){
+	public function __construct($ipcid, $timeout){
+		$this->ipcid = $ipcid;
 		$this->timeout = $timeout;
+		
+		$this->registeredstr = $this->ipcid.'_registered';
 	}
 	
 	private function getSession(){
@@ -40,12 +46,31 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	public function register($id){
-		$reg = $this->getEnvFromBus('registered'); // this env must be array
+		$reg = $this->getEnvFromBus($this->registeredstr); // this env must be array
 		$sess = $id;
 		if( $reg === false ) $reg = array();
 		if( !in_array($sess, $reg) ) array_push($reg, $sess);
-		$this->putEnvToBus('registered', $reg);
+		$this->putEnvToBus($this->registeredstr, $reg);
 		$this->sess = $sess;
+	}
+	
+	public function unregister($id){
+		$this->removeQueue($this->ipcid.'_'.$id);
+		$reg = $this->getEnvFromBus($this->registeredstr); // this env must be array
+		if( is_array($reg) ){
+			unset($reg[array_search($id, $reg)]);
+			$this->putEnvToBus($this->registeredstr, $reg);
+		}
+	}
+	
+	public function clear(){
+		$reg = $this->getEnvFromBus($this->registeredstr);
+		if( $reg !== false ){
+			foreach( $reg as $sess ){
+				$this->removeQueue($this->ipcid.'_'.$sess);
+			}
+			$this->removeEnvFromBus($this->registeredstr);
+		}
 	}
 	
 	private function registerOnBus(){
@@ -55,16 +80,12 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	private function unregisterOnBus(){
-		$reg = $this->getEnvFromBus('registered'); // this env must be array
-		if( is_array($reg) ){
-			unset($reg[array_search($this->sess, $reg)]);
-			$this->putEnvToBus('registered', $reg);
-		}
+		$this->unregister($this->sess);
 	}
 	
 	private function getEventFromBus($sess){
 		//remove old by timestamp $event['ts'];
-		return $this->getFromQueue($sess);
+		return $this->getFromQueue($this->ipcid.'_'.$sess);
 	}
 	
 	public function getEvent(){
@@ -84,9 +105,9 @@ abstract class DVIPCResponses implements DVIPC {
 	
 	public function invokeEvent($event){
 		$event['ts'] = date_timestamp_get(date_create());
-		$reg = $this->getEnvFromBus('registered');
+		$reg = $this->getEnvFromBus($this->registeredstr);
 		foreach( $reg as $sess ){
-			$this->putToQueue($sess, $event);
+			$this->putToQueue($this->ipcid.'_'.$sess, $event);
 		}
 	}
 	

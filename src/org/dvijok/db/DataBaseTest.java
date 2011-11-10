@@ -161,29 +161,29 @@ public class DataBaseTest {
 			}});
 
 		
-		dbo = new DBObject();
-		dbo.put("tags", "tag2");
-		db.addEventListener(dbo, new DataBaseEventListener(){
-
-			@Override
-			public void objectAdded(DataBaseEvent evt) {
-				Lib.alert("t2 add: "+evt.getParams());
-			}
-
-			@Override
-			public void objectModifyed(DataBaseEvent evt) {
-				Lib.alert("t2 mod: "+evt.getParams());
-			}
-
-			@Override
-			public void objectDeleted(DataBaseEvent evt) {
-				Lib.alert("t2 del: "+evt.getParams());
-			}
-
-			@Override
-			public void allEvent(DataBaseEvent evt) {
-				Lib.alert("t2 all-------: "+evt.getParams());
-			}});
+//		dbo = new DBObject();
+//		dbo.put("tags", "tag2");
+//		db.addEventListener(dbo, new DataBaseEventListener(){
+//
+//			@Override
+//			public void objectAdded(DataBaseEvent evt) {
+//				Lib.alert("t2 add: "+evt.getParams());
+//			}
+//
+//			@Override
+//			public void objectModifyed(DataBaseEvent evt) {
+//				Lib.alert("t2 mod: "+evt.getParams());
+//			}
+//
+//			@Override
+//			public void objectDeleted(DataBaseEvent evt) {
+//				Lib.alert("t2 del: "+evt.getParams());
+//			}
+//
+//			@Override
+//			public void allEvent(DataBaseEvent evt) {
+//				Lib.alert("t2 all-------: "+evt.getParams());
+//			}});
 		
 //		dbo = new DBObject();
 //		dbo.put("dddd", "4444");

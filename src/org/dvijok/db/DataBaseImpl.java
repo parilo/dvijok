@@ -49,7 +49,17 @@ public class DataBaseImpl implements DataBase {
 	public DataBaseImpl(){
 		dbRequest = new DBRequestMakerDVRPC(Resources.getInstance().conf.dbUrl);
 		dbe = new DataBaseEventsDB(this);
-		restoreSession();
+		if( restoreSession() ){
+			resetEvents(new DBObject(),  new DVRequestHandler<DBObject>(){
+
+				@Override
+				public void success(DBObject result) {
+					Lib.alert("reset events sucess");
+				}
+
+				@Override
+				public void fail(DBObject result) {}});
+		}
 		
 //		Window.addResizeHandler(new ResizeHandler(){
 //
@@ -83,6 +93,8 @@ public class DataBaseImpl implements DataBase {
 //				Lib.alert("close 2");
 //			}});
 		
+		
+		
 		new DataBaseTest(this);
 	}
 	
@@ -91,9 +103,13 @@ public class DataBaseImpl implements DataBase {
 		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", sid, expTime, Lib.getDomain(), "/", false);
 	}
 	
-	private void restoreSession(){
+	//true if session is restored
+	private boolean restoreSession(){
 		sid = com.google.gwt.user.client.Cookies.getCookie("dvijok.session");
-		if( sid == null ) initSession();
+		if( sid == null ){
+			initSession();
+			return false;
+		} else return true;
 	}
 	
 	private void initSession(){
@@ -306,6 +322,35 @@ public class DataBaseImpl implements DataBase {
 	@Override
 	public void removeEventListener(DBObject params, DataBaseEventListener listener) {
 		dbe.removeEventListener(params, listener);
+	}
+
+	@Override
+	public void resetEvents(final DBObject params, final DVRequestHandler<DBObject> handler) {
+		DBObject req = new DBObject();
+		req.put("sid", sid);
+		req.put("func", "resetEvents");
+		req.put("obj", params);
+		
+		dbEventsRequest = dbRequest.request(req, new DVRequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				String res = result.getString("result");
+				if( res.equals("success") ){
+					handler.success(null);
+				} else {
+					if( checkNotSid(res, new Handler<Boolean>(){
+						@Override
+						public void onHandle(Boolean param) {
+							resetEvents(params, handler);
+						}}) ) Lib.alert("DataBase: resetEvents A: fail: ->"+result+"<-");
+				}
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.alert("DataBase: resetEvents B: fail: "+result);
+			}});
 	}
 	
 }

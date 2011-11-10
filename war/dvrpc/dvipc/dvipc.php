@@ -20,9 +20,11 @@
 interface DVIPC {
 
 	public function register($id);
+	public function unregister($id);//removes $id's queue
 	public function getEvent();
 	public function listenForEvent();
 	public function invokeEvent($event);
+	public function clear();//removes all ipc meta(files, etc.)
 	
 }
 

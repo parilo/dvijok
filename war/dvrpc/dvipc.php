@@ -24,16 +24,16 @@ class DVIPCSys extends DVIPCFiles {
 	
 	public function __construct(){
 		global $config;
-		parent::__construct($config['ipcfilesdir'], $config['ipcsystimeout']);
+		parent::__construct('sys', $config['ipcfilesdir'], $config['ipcsystimeout']);
 	}
 	
 }
 
 class DVIPCUser extends DVIPCFiles {
 
-	public function __construct(){
+	public function __construct($ipcid){
 		global $config;
-		parent::__construct($config['ipcfilesdir'], $config['ipcusertimeout']);
+		parent::__construct($ipcid, $config['ipcfilesdir'], $config['ipcusertimeout']);
 	}
 
 }

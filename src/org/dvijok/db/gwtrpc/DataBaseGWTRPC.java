@@ -391,6 +391,12 @@ public class DataBaseGWTRPC implements DataBase {
 		
 	}
 
+	@Override
+	public void resetEvents(DBObject params, DVRequestHandler<DBObject> handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
 /*	@Override
 	public void Send_Request(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
 		final DB_Object allparams = new DB_Object();
