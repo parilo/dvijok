@@ -38,7 +38,7 @@ $requestData = $HTTP_RAW_POST_DATA;
 global $config;
 if( isset($config['lastreq']) ){
 	$lastreq = $config['lastreq'];
-	//system( "echo '$requestData' > $lastreq" );
+	system( "echo '$requestData' > $lastreq" );
 }
 
 try {
