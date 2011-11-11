@@ -109,6 +109,7 @@ abstract class DVIPCResponses implements DVIPC {
 	public function invokeEvent($event){
 		$event['ts'] = date_timestamp_get(date_create());
 		$reg = $this->getEnvFromBus($this->registeredstr);
+		if( is_array($reg) )
 		foreach( $reg as $sess ){
 			$this->putToQueue($this->ipcid.'_'.$sess, $event);
 		}
