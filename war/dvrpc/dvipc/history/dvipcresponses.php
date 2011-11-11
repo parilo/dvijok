@@ -93,13 +93,16 @@ abstract class DVIPCResponses implements DVIPC {
 	}
 	
 	public function listenForEvent(){
-		for(;;){
+		// 1 min
+		for($i=0; $i<600; $i++){
 			$event = $this->getEventFromBus($this->sess);
 			if( !($event === false) ){
-				break;
+				return $event;
 			}
 			usleep(100000);
 		}
+		
+		$event['type'] = 'idle';
 		return $event;
 	}
 	

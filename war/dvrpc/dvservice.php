@@ -138,11 +138,11 @@ class DVService {
 		$sid = $inp['sid'];
 		
 		//remove timeout sessions and their event queues
-		//return idle event on timeout instead of wainting forever - to prevent forever threads
+		//if client dont ask for event in 1 min - unregister from event queue
+		//v return idle event on timeout instead of wainting forever - to prevent forever threads
 		
 		//v1 at loading resetEvents
 		//v3 storing events in queues
-		//4 if client dont ask for event in 1 min - unregister from event queue
 		//v5 pick up event from client event queue and send it if present otherwise pass to next steps
 		
 		$clipc = new DVIPCUser($sid); //client ipc
@@ -159,6 +159,12 @@ class DVService {
 			$sysipc = new DVIPCSys();
 			$sysipc->register($sid);
 			$sysevent = $sysipc->listenForEvent();
+			
+			if( $sysevent['type'] == 'idle' ){
+				$ret['event'] = $sysevent;
+				$ret['result'] = 'success';
+				return $ret;
+			}
 			
 			//echo "---sysevent-------------------\n";
 			//print_r($sysevent);
@@ -219,6 +225,9 @@ class DVService {
 
 	private function putObject($inp, $user){
 		
+		$ret['result'] = 'put object is denied now';
+		return $ret;
+				
 		$inp = $inp['obj'];
 		
 		$uid = $user['uid'];
@@ -240,18 +249,8 @@ class DVService {
 			$rights['ow'] = '0';
 		}
 		
-		if( isset($obj['id'])) $ismod = true;
-		else $ismod = false;
-		
 		$id = $this->db->putObject($obj, $tags, $user, $rights);
 		$obj['id'] = "$id";
-		
-		$ipc = new DVIPCSys();
-		if( $ismod ) $event['type'] = 'mod';
-		else $event['type'] = 'add';
-		$event['obj'] = $obj;
-		$event['tags'] = $tags;
-		$ipc->invokeEvent($event);
 		
 		$ret['result'] = 'success';
 		$ret['objs']['id'] = "$id";

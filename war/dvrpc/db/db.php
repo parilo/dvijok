@@ -32,6 +32,7 @@
 	$user['gids'] - array: groups ids 
 */
 
+require_once "dvipc.php";
 require_once 'dbfilesdrv.php';
 
 class DataBase {
@@ -39,6 +40,7 @@ class DataBase {
 	private $drv;
 	private $defuser;
 	private $defrights;
+	private $ipc;
 	
 	public function __construct($dir){
 		$this->drv = new DataBaseFilesDriver($dir);
@@ -54,6 +56,8 @@ class DataBase {
 		$this->defrights['gw'] = '0';
 		$this->defrights['or'] = '0';
 		$this->defrights['ow'] = '0';
+		
+		$this->ipc = new DVIPCSys();
 	}
 	
 	public function isInitialized() {
@@ -125,6 +129,12 @@ class DataBase {
 				$obj['dbo'] = $dbo;
 				$obj['rights'] = $rights;
 				$this->drv->store($id, $obj, $tagsarr);
+				
+				$event['type'] = 'mod';
+				$event['obj'] = $dbo;
+				$event['tags'] = $tags;
+				$this->ipc->invokeEvent($event);
+				
 				return $id;
 			} else return false;
 				
@@ -138,6 +148,12 @@ class DataBase {
 			$obj['dbo'] = $dbo;
 			$obj['rights'] = $rights;
 			$this->drv->store($id, $obj, $tagsarr);
+			
+			$event['type'] = 'add';
+			$event['obj'] = $dbo;
+			$event['tags'] = $tags;
+			$this->ipc->invokeEvent($event);
+			
 			return $id;
 			
 		}
@@ -158,6 +174,11 @@ class DataBase {
 				( $rights['ow'] == '1' )
 			){
 				$this->drv->deleteById($id);
+
+				$event['type'] = 'del';
+				$event['id'] = $id;
+				$this->ipc->invokeEvent($event);
+				
 				return true;
 			} else return "deletion failed";
 			
