@@ -43,6 +43,7 @@ public class Table extends Composite {
 
 	private FlexTable table;
 	private DataModel header = null;
+	private DataModel headerStyles = null;
 	private TableModel headerT = null; // header as TableModel
 	private TableModel data;
 	private TableModel formattedData;
@@ -162,6 +163,12 @@ public class Table extends Composite {
 
 						this.table.setWidget(0, ri, w);
 						this.table.getCellFormatter().addStyleName(0, ri, "th");
+						if( headerStyles != null ){
+							String hstyle = headerStyles.getString(ri);
+							if( hstyle != null && !hstyle.equals("") ){
+								table.getCellFormatter().addStyleName(0, ri, hstyle);
+							}
+						}
 
 						ri++;
 					}
@@ -172,6 +179,12 @@ public class Table extends Composite {
 				for(int i=0; i<this.header.getSize(); i++){
 					this.table.setWidget(0, i, new Label(this.header.getString(i)));
 					this.table.getCellFormatter().addStyleName(0, i, "th");
+					if( headerStyles != null ){
+						String hstyle = headerStyles.getString(i);
+						if( hstyle != null && !hstyle.equals("") ){
+							table.getCellFormatter().addStyleName(0, i, hstyle);
+						}
+					}
 				}
 		} else if( headerT != null ){
 			
@@ -421,6 +434,11 @@ public class Table extends Composite {
 		header = dm;
 		headerT = null;
 		processHeader();
+	}
+	
+	public void setHeaderStyles(DataModel dm){
+		headerStyles = dm;
+		refreshHeader();
 	}
 	
 	public void clear(){

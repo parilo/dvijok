@@ -23,21 +23,11 @@ import java.util.Date;
 import org.dvijok.db.dvrpc.DBRequestMakerDVRPC;
 import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.db.event.DataBaseEventsDB;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.handlers.Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
-
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.ClosingEvent;
-import com.google.gwt.user.client.Window.ClosingHandler;
-import com.google.gwt.user.client.Window.ScrollEvent;
-import com.google.gwt.user.client.Window.ScrollHandler;
-import com.sun.java.swing.plaf.windows.WindowsBorders;
 
 public class DataBaseImpl implements DataBase {
 
@@ -46,7 +36,7 @@ public class DataBaseImpl implements DataBase {
 	private DataBaseEventsDB dbe;
 	private DBRequest dbEventsRequest;
 	
-	public DataBaseImpl(){
+	public DataBaseImpl(final CustomEventListener inited){
 		dbRequest = new DBRequestMakerDVRPC(Resources.getInstance().conf.dbUrl);
 		dbe = new DataBaseEventsDB(this);
 		if( restoreSession() ){
@@ -54,47 +44,18 @@ public class DataBaseImpl implements DataBase {
 
 				@Override
 				public void success(DBObject result) {
-					Lib.alert("reset events sucess");
+					inited.customEventOccurred(null);
+					test();
 				}
 
 				@Override
 				public void fail(DBObject result) {}});
 		}
 		
-//		Window.addResizeHandler(new ResizeHandler(){
-//
-//			@Override
-//			public void onResize(ResizeEvent event) {
-//				Lib.alert("resize 1");
-//			}});
-//		
-//		com.google.gwt.user.client.Window.addWindowScrollHandler(new ScrollHandler(){
-//
-//			@Override
-//			public void onWindowScroll(ScrollEvent event) {
-//				Lib.alert("scroll");
-//				
-//			}
-//			
-//		});
-//		
-//		com.google.gwt.user.client.Window.addCloseHandler(new CloseHandler<Window>(){
-//
-//			@Override
-//			public void onClose(CloseEvent<Window> event) {
-//				Lib.alert("close 1");
-//			}});
-//		
-//		com.google.gwt.user.client.Window.addWindowClosingHandler(new ClosingHandler(){
-//
-//			@Override
-//			public void onWindowClosing(ClosingEvent event) {
-//				event.setMessage("aaaaa");
-//				Lib.alert("close 2");
-//			}});
 		
-		
-		
+	}
+	
+	private void test(){
 		new DataBaseTest(this);
 	}
 	

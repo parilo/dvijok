@@ -24,6 +24,8 @@ import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.Resources;
 import org.dvijok.tmpl.TmplsDB;
+import org.dvijok.event.CustomEvent;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.DwidgetCreator;
 import org.dvijok.widgets.SubPanel;
@@ -47,22 +49,27 @@ public class Dvijok implements EntryPoint {
 public void onModuleLoad() {
 
 	Resources.getInstance().conf = new Config();
-	Resources.getInstance().db = new DataBaseImpl();
-	Resources.getInstance().dwidgets = new Dwidgets();
-	
-	Loader l = new Loader();
+	Resources.getInstance().db = new DataBaseImpl(new CustomEventListener(){
+		@Override
+		public void customEventOccurred(CustomEvent evt) {
+			Resources.getInstance().dwidgets = new Dwidgets();
 
-	Resources.getInstance().loader = l;
-	Resources.getInstance().tmpls = new TmplsDB();//this must be init after DataBaseImpl
-	
-	this.registerDwidgets();
+			Resources.getInstance().loader = new Loader();
+			Resources.getInstance().tmpls = new TmplsDB();//this must be init after DataBaseImpl
+			
+			registerDwidgets();
+			
+			Resources.getInstance().loader.load();
+			Resources.getInstance().init();
+			
+		}});
 	
 //	Resources.getInstance().Get_User_Info(new DV_Request_Handler<Integer>(){
 //
 //		@Override
 //		public void Success(Integer result) {
-			Resources.getInstance().loader.load();
-			Resources.getInstance().init();
+//			Resources.getInstance().loader.load();
+//			Resources.getInstance().init();
 //			String pagehash = Lib.Get_Hash_Token();
 //			if( pagehash.equals("") ){
 //				String lasthash = Resources.getInstance().userInfo.Get_String("pagehash");
