@@ -1,0 +1,9 @@
+4,funcSTR9,getObject3,sidSTR5,asdfg4,tagsSTR9,tag1 tag2
+
+6,resultSTR7,success7,objectsDBA111233,(DBA content...)
+
+DBA - array
+DBA: STR3,aaaDBO111,(dbo content...)DBO123,(dbo content....)
+
+DBO - DBObject - hashmap of DVSerializable objects
+DBO: 6,field1STR3,asd6,field2DBO123,(dbo content...)6,field3DBA234,(DBA contents....)
