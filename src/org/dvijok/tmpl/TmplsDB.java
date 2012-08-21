@@ -20,6 +20,9 @@ package org.dvijok.tmpl;
 
 import java.util.HashMap;
 
+import org.dvijok.event.CustomEvent;
+import org.dvijok.event.CustomEventListener;
+import org.dvijok.event.CustomEventTool;
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.HttpFunctions;
 import org.dvijok.resources.Resources;
@@ -31,34 +34,48 @@ import com.google.gwt.http.client.Response;
 public class TmplsDB {
 
 	private HashMap<String,String> tmpls;
+	private HashMap<String, CustomEventTool> waiters;
 	
 	public TmplsDB(){
 		this.tmpls = new HashMap<String,String>();
+		waiters = new HashMap<String, CustomEventTool>();
 	}
 	
-	public void getTemplate(final String url, final DVRequestHandler<String> req){
+	public void getTemplate(final String url, final CustomEventListener req){
 		
 		if( this.tmpls.containsKey(url) ){
-			req.success(this.tmpls.get(url));
+			req.customEventOccurred(new CustomEvent(this.tmpls.get(url)));
 		} else {
+
+			if( waiters.containsKey(url) ){
+				waiters.get(url).addCustomEventListener(req);
+			} else {
 			
-//			Resources.getInstance().db.pauseListenForEvents();
-			HttpFunctions.doGet(url, new RequestCallback(){
-	
-				@Override
-				public void onError(Request request, Throwable exception) {
-					req.fail(exception.getMessage());
-				}
-	
-				@Override
-				public void onResponseReceived(Request request, Response response) {
-					String text = response.getText();
-					tmpls.put(url, text);
-					req.success(text);
-				}
+				waiters.put(url, new CustomEventTool());
 				
-			});
-//			Resources.getInstance().db.resumeListenForEvents();
+	//			Resources.getInstance().db.pauseListenForEvents();
+				HttpFunctions.doGet(url, new RequestCallback(){
+		
+					@Override
+					public void onError(Request request, Throwable exception) {
+						CustomEvent ev = new CustomEvent(exception.getMessage());
+						ev.setFailed(true);
+						req.customEventOccurred(ev);
+						if( waiters.containsKey(url) ) waiters.get(url).invokeListeners(ev);
+					}
+		
+					@Override
+					public void onResponseReceived(Request request, Response response) {
+						String text = response.getText();
+						tmpls.put(url, text);
+						req.customEventOccurred(new CustomEvent(text));
+						if( waiters.containsKey(url) ) waiters.get(url).invokeListeners(text);
+					}
+					
+				});
+	//			Resources.getInstance().db.resumeListenForEvents();
+			
+			}
 
 		}
 	}

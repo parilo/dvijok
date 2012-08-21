@@ -73,6 +73,35 @@ public class Lib {
 		return Document.get().getDomain();
 	}
 	
+	public static String getUrl(){
+		return Document.get().getURL();
+	}
+	
+	public static String getUrlParameter(String paramName){
+		return com.google.gwt.user.client.Window.Location.getParameter(paramName);
+	}
+	
+	public static String getUrlHashParameter(String name){
+		String token = History.getToken();
+		int beg = token.indexOf(name+"=");
+		if( beg == -1 ) return null;
+		else {
+			beg += name.length()+1;
+			int end = token.indexOf("&", beg);
+			if( end == -1 ) return token.substring(beg);
+			else return token.substring(beg, end);
+		}
+	}
+	
+	public static String getUrlWithoutParameters(){
+		String path = com.google.gwt.user.client.Window.Location.getPath();
+		String host = com.google.gwt.user.client.Window.Location.getHost();
+		String protocol = com.google.gwt.user.client.Window.Location.getProtocol();
+//		String hash = com.google.gwt.user.client.Window.Location.getHash();
+		String url = protocol + "//" + host + path /*+ "?gwt.codesvr=127.0.0.1:9997"*/;
+		return url;
+	}
+	
 	public static void redirect(String url){
 		Window.open(url, "_self", ""); 
 	}
@@ -91,6 +120,14 @@ public class Lib {
 		if( pointer ) im.addStyleName("pointer");
 		
 		return im;
+	}
+	
+	public static String getTitle(){
+		return Window.getTitle();
+	}
+	
+	public static void setTitle(String title){
+		Window.setTitle(title);
 	}
 	
 }

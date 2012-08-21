@@ -26,7 +26,7 @@ import org.dvijok.lib.Lib;
 
 /**
  * Class for delivery database events through DataBase class, it means through method used by DataBase
- * @author Pechenko Anton Vladimirovich aka Parilo.   mailto: forpost78 at gmail dot com
+ * @author Pechenko Anton Vladimirovich aka Parilo.   mailto: forpost78 at gmail dououououot com
  *
  */
 public class DataBaseEventsDB implements DataBaseEventsInterface {
@@ -34,6 +34,7 @@ public class DataBaseEventsDB implements DataBaseEventsInterface {
 	private DataBase db;
 	private DBArray allParams;
 	private DataBaseEventTool evTool;
+	private String queueid = "";
 	
 	public DataBaseEventsDB(DataBase db){
 		this.db = db;
@@ -43,12 +44,13 @@ public class DataBaseEventsDB implements DataBaseEventsInterface {
 	
 	@Override
 	public void addEventListener(DBObject params, DataBaseEventListener listener) {
+		listener.setTagsArray(params.getString("tags"));
 		if( !allParams.contains(params) ){
 			allParams.add(params);
-			evTool.addDataBaseListener(listener);
-			db.stopListenForEvents();
-			listenForEvents();
 		}
+		evTool.addDataBaseListener(listener);
+		db.stopListenForEvents();
+		listenForEvents();
 	}
 
 	@Override
@@ -69,19 +71,42 @@ public class DataBaseEventsDB implements DataBaseEventsInterface {
 	private void listenForEvents() {
 		DBObject dbo = new DBObject();
 		dbo.put("need", allParams);
+		if( !queueid.equals("") ) dbo.put("qid", queueid);
 		db.listenForEvents(dbo, new DVRequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
-				listenForEvents();
 				
 				DBObject event = result.getDBObject("event");
-				if( event.getString("type").equals("add") ){
-					
-					evTool.invokeAddListeners(new DataBaseEvent(event));
-					
-				} else Lib.alert("DataBaseEventsDB: other event: "+result);
 				
+				if( event.containsKey("qid") ){
+					queueid = event.getString("qid");
+				}
+				
+//				if( event.getString("type").equals("add") ){
+//					
+//					evTool.invokeAddListeners(new DataBaseEvent(event));
+//					
+//				} else if( event.getString("type").equals("mod") ){
+//					
+//					evTool.invokeModifyListeners(new DataBaseEvent(event));
+//					
+//				} else if( event.getString("type").equals("del") ){
+//					
+//					evTool.invokeDelListeners(new DataBaseEvent(event));
+//					
+//				} else
+				
+				if( event.getString("type").equals("idle") ){
+				} else {
+					
+					evTool.invokeListeners(new DataBaseEvent(event));
+					
+				}
+				
+				//Lib.alert("DataBaseEventsDB: other event: "+result);
+				
+				listenForEvents();
 			}
 
 			@Override

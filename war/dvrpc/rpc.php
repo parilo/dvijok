@@ -17,9 +17,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+require_once 'config.php';
+/*
 require_once "config.def.php";
 require_once "dvrpc.php";
 require_once "dvservice.php";
+*/
 
 function get_client_ip_address(){
 	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -53,7 +56,8 @@ try {
 } catch ( DBException $ex ){
 	//echo "aaaaaaaaaaaaaaaaaaa\n";
 	//echo $ex->getTraceAsString();
-	$ret['result'] = 'notdb';
+	//$ret['result'] = 'notdb';
+	$ret['result'] = '->'.$ex->getValue().'<- '.$ex->getTraceAsString();
 	echo $proto->hashMapCode($ret)."\n";
 }
 

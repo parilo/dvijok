@@ -23,22 +23,30 @@ require_once "lib.php";
 class DVIPCFiles extends DVIPCResponses {
 
 	private $dir;
+	private $timeout;
 	
 	public function __construct($ipcid, $filesdir, $timeout){
 		parent::__construct($ipcid, $timeout);
 		$this->dir = $filesdir;
+		$this->timeout = $timeout;
+	}
+	
+	protected function newDVIPC($id){
+		return new DVIPCFiles($id, $this->dir, $this->timeout);
 	}
 	
 	private function readFromFile($filename){
 		if( file_exists($filename) ){
-			$content = file_get_contents($filename);
+// 			$content = file_get_contents($filename);
+			$content = fileRead($filename);
 			return unserialize($content);
 		} else return false;			
 	}
 	
 	private function writeToFile($filename, $val){
-		$serval = serialize($val);
-		file_put_contents($filename, $serval);
+ 		$serval = serialize($val);
+// 		file_put_contents($filename, $serval);
+		fileWrite($filename, $serval);
 	}
 	
 	protected function getEnvFromBus($name){
@@ -63,6 +71,15 @@ class DVIPCFiles extends DVIPCResponses {
 		$val = array_shift($queue);
 		if( count($queue) > 0 )	$this->writeToFile($fname, $queue);
 		else unlink($fname);
+		return $val;
+	}
+	
+	//gets from queue without removing
+	protected function peekFromQueue($name){
+		$fname = $this->dir.'/'.$name.'_queue';
+		$queue = $this->readFromFile($fname);
+		if( $queue === false ) return false;
+		$val = array_shift($queue);
 		return $val;
 	}
 	

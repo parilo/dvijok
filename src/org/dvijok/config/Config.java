@@ -25,11 +25,18 @@ public class Config {
 	public String dbUrl;
 	public Date sessExpTime;
 	
+	//vk auth see http://vk.com/developers.php?oid=-1&p=%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F_%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2
+	public String appid;
+	public String settings;
+	
 	public Config(){
 
+//		this.dbUrl = "http://127.0.0.1:8888/dvrpc/rpc.php";
 		this.dbUrl = "dvrpc/rpc.php";
 		this.sessExpTime = new Date(365*24*60*60*1000); //cookie exp time
 		
+		this.appid = "2977906";
+		this.settings = "notify";
 	}
 	
 }

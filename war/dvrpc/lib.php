@@ -21,16 +21,70 @@ function randHash(){
 	return md5(time()+mt_rand(0,10000));
 }
 
+function isValidMd5($md5){
+	return !empty($md5) && preg_match('/^[a-f0-9]{32}$/', strtolower($md5));
+}
+
+function fileWrite($filename, $data){
+	clearstatcache();
+	$res = fopen($filename, 'w');
+	if( $res === false ) return false;
+
+	if (flock($res, LOCK_EX)) {
+		fwrite($res, $data);
+		fflush($res);
+		flock($res, LOCK_UN);
+		fclose($res);
+		return true;
+	} else return false;
+}
+
+function fileRead($filename){
+	clearstatcache();
+	$handle = fopen($filename, "r");
+	if( $handle === false ) return false;
+
+	if (flock($handle, LOCK_EX)) {
+		$fsize = filesize($filename);
+		if( $fsize > 0 ) $contents = fread($handle, filesize($filename));
+		else $contents = '';
+		fclose($handle);
+		return $contents;
+	} else return false;
+}
+
+function callTrace(){
+	$e = new Exception;
+	return print_r($e->getTraceAsString(),true);
+}
+
+function stripSpace($str){
+	return preg_replace ( '/\s+/', ' ', $str );
+}
+
 /**
-*
-* returns current minuts since the Unix Epoch (January 1 1970 00:00:00 GMT)
-*/
+ *
+ * returns current minuts since the Unix Epoch (January 1 1970 00:00:00 GMT)
+ */
 function nowMinuts(){
 	return floor(time()/60);
 }
 
 function retarr($str){
 	return array( 'result' => $str );
+}
+
+
+function curlGetContent($url){
+	return curlGetContentId($url, '');
+}
+
+function curlGetContentId($url, $id){
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	$html = curl_exec($ch);
+	curl_close($ch);
+	return $html;
 }
 
 ?>

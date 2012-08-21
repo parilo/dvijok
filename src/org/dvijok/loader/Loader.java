@@ -21,16 +21,22 @@ package org.dvijok.loader;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
+import org.dvijok.lib.Lib;
+import org.dvijok.resources.Resources;
+import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.SubPanel;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Loader {
 
 	private DwidgetFactory factory;
-	private HTMLPanel root;
+//	private HTMLPanel root;
+//	private RootPanel root;
 	
 	private boolean loading;
 	private boolean needLoad;
@@ -39,7 +45,7 @@ public class Loader {
 		
 		this.loading = false;
 		this.needLoad = false;
-		this.root = null;
+//		this.root = null;
 		this.factory = new DwidgetFactory();
 		
 	}
@@ -85,25 +91,15 @@ public class Loader {
 		return null;
 	}
 	
-	private void initRoot(){
-		RootPanel p = RootPanel.get("dvijokroot");
-		String html = p.getElement().getInnerHTML();
-		p.clear();
-		p.getElement().setInnerHTML("");
-		this.root = new HTMLPanel(html);
-		p.add(root);
-	}
-	
 	public void load(){
-		this.initRoot();
-		this.Load(this.root);
+		Load();
 	}
 	
 	public void loadNew(){
-		this.Load(this.root);
+		Load();
 	}
 	
-	private void Load(HTMLPanel html){
+	private void Load(){
 
 		//protecting from simultaneous loading from different threads
 		if(!this.loading){
@@ -111,11 +107,51 @@ public class Loader {
 			this.loading = true;
 			
 			com.google.gwt.user.client.Element w;
-			if( (w = html.getElementById("dvijokw")) != null ){
+			RootPanel wp;
+//			if( (w = html.getElementById("dvijokw")) != null ){
+			while( (wp = RootPanel.get("dvijokw")) != null ){
+//Lib.alert("load1: "+wp);				
+//				w = html.get("dvijokw").getElement();
+				w = wp.getElement();
 				w.setAttribute("id", "dvijokw_l");
 				String name = w.getAttribute("name");
-				html.add(this.factory.getDwidget(name, new SubPanel(w)), "dvijokw_l");
+//				html.add(this.factory.getDwidget(name, new SubPanel(w)), "dvijokw_l");
+				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+				dw.beforeAttach();
+				wp.add(dw);
+				dw.afterAttach();
 				w.setAttribute("id", "dvijokw_");
+			}
+			
+			this.loading = false;
+
+			if( this.needLoad == true ){
+				this.needLoad = false;
+				this.loadNew();
+			}
+			
+		} else this.needLoad = true;
+		
+	}
+	
+	public void load(Dwidget widget){
+
+		//protecting from simultaneous loading from different threads
+		if(!this.loading){
+
+			this.loading = true;
+			
+			HTMLPanel html = widget.getHTMLPanel();
+			com.google.gwt.user.client.Element w;
+			if( (w = html.getElementById("dvijokw")) != null ){
+//Lib.alert("load2: "+w);				
+				w.setAttribute("id", "dvijokw_l");
+				String name = w.getAttribute("name");
+				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+				dw.beforeAttach();
+				html.add(dw, "dvijokw_l");
+				dw.afterAttach();
+				w.setAttribute("id", "dvijokw_asd");
 			}
 			
 			this.loading = false;

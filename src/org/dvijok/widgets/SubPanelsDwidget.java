@@ -38,6 +38,7 @@ public abstract class SubPanelsDwidget extends Dwidget {
 	}
 	
 	protected abstract void beforeSubPanelsLoading();
+	protected void afterLoading(){}
 	
 	@Override
 	protected void beforeTmplInit(){
@@ -49,6 +50,7 @@ public abstract class SubPanelsDwidget extends Dwidget {
 		this.initTmpl();
 		this.loadSubPanels();
 		this.attachTmpl();
+		afterLoading();
 	}
 	
 	protected abstract Widget genSubWidget(String dwname, ArrayList<DBObject> params);

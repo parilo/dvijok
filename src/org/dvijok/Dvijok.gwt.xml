@@ -11,10 +11,10 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
-  <inherits name='com.fredhat.gwt.xmlrpc.XMLRPC'/>
+  <!-- inherits name='com.fredhat.gwt.xmlrpc.XMLRPC'/ -->
   
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='org.dvijok.client.Dvijok'/>
+  <!-- entry-point class='org.dvijok.client.Dvijok'/ -->
 
   <!-- Specify the paths for translatable code                    -->
   <source path='lib'/>

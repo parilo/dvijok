@@ -90,22 +90,22 @@ public class ContentHashDB extends SubPanelsDwidget {
 	}
 	
 	private void initContents(){
-		DBObject req = new DBObject();
-		req.put("dbid", this.getDbid());
-		Resources.getInstance().db.getObject(req, new DVRequestHandler<DBObject>(){
-
-			@Override
-			public void success(DBObject result) {
-				initContents(result.getDBObject("objects"));
-				loadContent(Lib.getHashToken());
-			}
-
-			@Override
-			public void fail(DBObject result) {
-				Lib.alert("Content_Hash_DB: Init_Contents: fail: "+result);
-			}
-			
-		});
+//		DBObject req = new DBObject();
+//		req.put("dbid", this.getDbid());
+//		Resources.getInstance().db.getObject(req, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				initContents(result.getDBObject("objects"));
+//				loadContent(Lib.getHashToken());
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				Lib.alert("Content_Hash_DB: Init_Contents: fail: "+result);
+//			}
+//			
+//		});
 	}
 	
 	private void initContents(DBObject dbo){

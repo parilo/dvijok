@@ -35,14 +35,24 @@ $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
 
 #$config['shmemkey'] = 100;
 
+//vkontakte
+$config['appid'] = '2977906';
+$config['appsecret'] = '7PrS5eoa08XuZFuUitrj';
+
 $config['ipcfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/ipcfiles/';
 $config['ipcsystimeout'] = 600;//in seconds
 $config['ipcusertimeout'] = 600;//in seconds
 
 $config['dbfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/dbfiles/';
 
-date_default_timezone_set('Asia/Omsk');
+date_default_timezone_set('Asia/Yekaterinburg');
 
-if( file_exists('config.php') ) require_once 'config.php';
+if( file_exists('../custom/config/config.php') ) require_once '../custom/config/config.php';
+
+//moderator vk ids
+$config['moderatorVkIds'] = array('38844032', '3243536', '3050005');
+
+//modules
+require_once 'modules/vk.php';
 
 ?>

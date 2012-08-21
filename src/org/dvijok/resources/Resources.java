@@ -26,6 +26,7 @@ import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
 import org.dvijok.tmpl.TmplsDB;
+import org.dvijok.widgets.busy.BigBusy;
 import org.dvijok.widgets.busy.Busy;
 
 import com.google.gwt.user.client.ui.RootPanel;
@@ -42,7 +43,9 @@ public class Resources {
 	public DataBase db;
 	public Dwidgets dwidgets;
 	public DBObject userInfo = null;
-	private String idUserInfo;
+	public DBObject userData = null;
+	public AuthTool authTool;
+	public String initTitle;
 	
 	private Busy busy;
 	private int busycount;
@@ -55,71 +58,86 @@ public class Resources {
 		this.conf = null;
 		this.db = null;
 		this.dwidgets = null;
+		authTool = new AuthTool();
 		
 		userInfo = new DBObject();
-		userInfo.put("fullname", "guest");
-		userInfo.put("isadmin", "0");
+//		userInfo.put("fullname", "guest");
+//		userInfo.put("isadmin", "0");
 	}
 
 	public static Resources getInstance(){
 		if(self == null){
 			self = new Resources();
-		}
 		
-		RootPanel rp = RootPanel.get("dvijokbusypane");
-		rp.setStylePrimaryName("dvijoktmp");
-		tmpcont = new VerticalPanel();
-		rp.add(tmpcont);
+			RootPanel rp = RootPanel.get("dvijokbusypane");
+			rp.setStylePrimaryName("dvijoktmp");
+			tmpcont = new VerticalPanel();
+			rp.add(tmpcont);
+		
+		}
 		
 		return self;
 	}
 	
-	public void getUserInfo(){
-		this.getUserInfo(null);
+	public boolean isAuthorized(){
+		if( userInfo != null ){
+			return userInfo.containsKey("type");
+		}
+		return false;
 	}
+//	
+//	public void getUserInfo(String login, final DVRequestHandler<Integer> handler){
+//		DBObject reqp = new DBObject();
+//		reqp.put("tags", "userinfo "+login);
+//		
+//		Resources.getInstance().db.getObject(reqp, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				Resources.getInstance().userInfo = result;
+//				if( handler != null ) handler.success(0);
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				Lib.alert("Resources: getUserInfo: failed: "+result);
+//			}
+//			
+//		});
+//	}
 	
-	public void getUserInfo(final DVRequestHandler<Integer> handler){
-		DBObject reqp = new DBObject();
-		reqp.put("dbid", "userinfo");
-		
-		Resources.getInstance().db.getObject(reqp, new DVRequestHandler<DBObject>(){
-
-			@Override
-			public void success(DBObject result) {
-				Resources.getInstance().userInfo = result.getDBObject("objects");
-				Resources.getInstance().idUserInfo = result.getString("id");
-				if( handler != null ) handler.success(0);
-			}
-
-			@Override
-			public void fail(DBObject result) {
-				Lib.alert("Resources: Get_User_Info: failed: "+result);
-			}
-			
-		});
-	}
-	
-	public void saveUserInfo(){
-		DBObject reqp = new DBObject();
-		reqp.put("dbid", "userinfo");
-		reqp.put("id", Resources.getInstance().idUserInfo);
-		reqp.put("dbo", Resources.getInstance().userInfo);
-		
-		Resources.getInstance().db.putObject(reqp, new DVRequestHandler<DBObject>(){
+	public void saveUserData(){
+		db.saveUserData(userData, new DVRequestHandler<DBObject>(){
 			
 			@Override
 			public void success(DBObject result) {}
 			
 			@Override
 			public void fail(DBObject result) {
-				Lib.alert("Resources: Save_User_Info: failed: "+result);
 			}
 			
 		});
+			
+//		DBObject reqp = new DBObject();
+//		reqp.put("dbid", "userinfo");
+//		reqp.put("id", Resources.getInstance().idUserInfo);
+//		reqp.put("dbo", Resources.getInstance().userInfo);
+//		
+//		Resources.getInstance().db.putObject(reqp, new DVRequestHandler<DBObject>(){
+//			
+//			@Override
+//			public void success(DBObject result) {}
+//			
+//			@Override
+//			public void fail(DBObject result) {
+//				Lib.alert("Resources: Save_User_Info: failed: "+result);
+//			}
+//			
+//		});
 	}
 	
 	public void init(){
-		busy = new Busy();
+		busy = new BigBusy();
 	}
 	
 	public void setBusy(boolean b){
@@ -139,5 +157,23 @@ public class Resources {
 	public void removeFromTmp(Widget w){
 		tmpcont.remove(w);
 	}
+
+	public void onAuth(DBObject userinfo){
+		this.userInfo = userinfo;
+		Resources.getInstance().dwidgets.authReload();
+	}
+	
+//	public void onAuth(String loginStr){
+//		Resources.getInstance().getUserInfo(loginStr, new DVRequestHandler<Integer>(){
+//
+//			@Override
+//			public void success(Integer result) {
+//				Resources.getInstance().dwidgets.authReload();
+//			}
+//
+//			@Override
+//			public void fail(Integer result) {}
+//		});
+//	}
 	
 }

@@ -52,23 +52,23 @@ public class TableMenu extends SubPanelsDwidget {
 	}
 
 	private void initMenu(){
-		DBObject req = new DBObject();
-		req.put("dbid", this.getDbid());
-		Resources.getInstance().db.getObject(req, new DVRequestHandler<DBObject>(){
-
-			@Override
-			public void success(DBObject result) {
-				DBObject dbos = result.getDBObject("objects");
-				if( dbos.containsKey("props") ) initProps(dbos.getDBObject("props"));
-				if( dbos.containsKey("items") ) initItems(dbos.getDBObject("items"));
-			}
-
-			@Override
-			public void fail(DBObject result) {
-				Lib.alert("Table_Menu: Init_Menu: fail: "+result);
-			}
-			
-		});
+//		DBObject req = new DBObject();
+//		req.put("dbid", this.getDbid());
+//		Resources.getInstance().db.getObject(req, new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				DBObject dbos = result.getDBObject("objects");
+//				if( dbos.containsKey("props") ) initProps(dbos.getDBObject("props"));
+//				if( dbos.containsKey("items") ) initItems(dbos.getDBObject("items"));
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				Lib.alert("Table_Menu: Init_Menu: fail: "+result);
+//			}
+//			
+//		});
 	}
 	
 	private void initProps(DBObject dbo){

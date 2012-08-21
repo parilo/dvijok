@@ -18,26 +18,10 @@
 
 package org.dvijok.widgets.busy;
 
-import java.util.ArrayList;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import org.dvijok.db.DBObject;
-import org.dvijok.widgets.SubPanelsDwidget;
+public interface Busy extends IsWidget {
 
-import com.google.gwt.user.client.ui.Widget;
-
-public class Busy extends SubPanelsDwidget {
-
-	public Busy(){
-		super("tmpl/widgets/busy/busy.html");
-	}
-
-	@Override
-	protected void beforeSubPanelsLoading() {
-	}
-
-	@Override
-	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
-		return null;
-	}
+	public void setLabel(String text);
 	
 }

@@ -23,9 +23,11 @@ public class CustomEvent {
 	private static final long serialVersionUID = 1L;
 
 	private Object source;
+	private boolean failed;//can be used to send events about fails
 
 	public CustomEvent(Object source) {
         this.source = source;
+        failed = false;
     }
 
 	public Object getSource() {
@@ -34,6 +36,14 @@ public class CustomEvent {
 
 	public void setSource(Object source) {
 		this.source = source;
+	}
+
+	public boolean isFailed() {
+		return failed;
+	}
+
+	public void setFailed(boolean failed) {
+		this.failed = failed;
 	}
 	
 }

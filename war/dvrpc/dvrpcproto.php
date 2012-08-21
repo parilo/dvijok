@@ -165,7 +165,7 @@ class DVRPCProto {
 			} else if( is_array($val) ){
 				$str = $this->hashMapCode($val);
 				$ret .= "DBO".$this->strlen($str).",".$str;
-			} else if( "$key" != "_isarr" ) {
+			} else if( "$key" != '_isarr' ) {
 				$ret .= "STR".$this->strlen($val).",$val";
 			}
 		}

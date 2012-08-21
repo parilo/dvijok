@@ -63,26 +63,26 @@ public class MoreVerticalPanel extends SubPanelsDwidget {
 		
 		Resources.getInstance().setBusy(true);
 		
-		DBObject reqp = new DBObject();
-		reqp.put("dbid", dbid);
-		reqp.put("beg", Integer.toString(begi));
-		reqp.put("count", Integer.toString(count));
-		
-		Resources.getInstance().db.getObjects(reqp, new DVRequestHandler<DBArray>(){
-	
-			@Override
-			public void success(DBArray result) {
-//				load(result.getDBObject("objects"));
+//		DBObject reqp = new DBObject();
+//		reqp.put("dbid", dbid);
+//		reqp.put("beg", Integer.toString(begi));
+//		reqp.put("count", Integer.toString(count));
+//		
+//		Resources.getInstance().db.getObjects(reqp, new DVRequestHandler<DBArray>(){
+//	
+//			@Override
+//			public void success(DBArray result) {
+////				load(result.getDBObject("objects"));
+////				Resources.getInstance().setBusy(false);
+//			}
+//	
+//			@Override
+//			public void fail(DBArray result) {
+//				Lib.alert("Messages: Load_Messages: failed: "+result);
 //				Resources.getInstance().setBusy(false);
-			}
-	
-			@Override
-			public void fail(DBArray result) {
-				Lib.alert("Messages: Load_Messages: failed: "+result);
-				Resources.getInstance().setBusy(false);
-			}
-			
-		});
+//			}
+//			
+//		});
 	
 	}
 	

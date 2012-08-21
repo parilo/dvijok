@@ -18,26 +18,40 @@
 
 package org.dvijok.client;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.dvijok.config.Config;
 import org.dvijok.db.DataBaseImpl;
+import org.dvijok.db.DBObject;
+import org.dvijok.event.CustomEvent;
+import org.dvijok.event.CustomEventListener;
+import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.Resources;
 import org.dvijok.tmpl.TmplsDB;
-import org.dvijok.event.CustomEvent;
-import org.dvijok.event.CustomEventListener;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.DwidgetCreator;
 import org.dvijok.widgets.SubPanel;
 import org.dvijok.widgets.auth.Auth;
+import org.dvijok.widgets.auth.AuthCombo;
+import org.dvijok.widgets.auth.AuthLogPass;
 import org.dvijok.widgets.auth.ChangePassword;
+import org.dvijok.widgets.auth.HiddenAuth;
 import org.dvijok.widgets.auth.LogoutOnHash;
 import org.dvijok.widgets.auth.UserName;
+import org.dvijok.widgets.auth.socauth.VkAuth;
+import org.dvijok.widgets.button.ButtonHash;
 import org.dvijok.widgets.content.Article;
 import org.dvijok.widgets.content.ContentHash;
 import org.dvijok.widgets.content.ContentHashDB;
+import org.dvijok.widgets.content.Hider;
 import org.dvijok.widgets.menu.HMenu;
 import org.dvijok.widgets.menu.TableMenu;
+import org.dvijok.widgets.profile.ProfileSmall;
+import org.dvijok.widgets.toolbar.top.TopToolbar;
 
 import com.google.gwt.core.client.EntryPoint;
 
@@ -46,12 +60,23 @@ import com.google.gwt.core.client.EntryPoint;
 */
 public class Dvijok implements EntryPoint {
 
+	private HashMap<String, DwidgetCreator> dwidgets;
+	
+	public Dvijok(HashMap<String, DwidgetCreator> dwidgets){
+		this.dwidgets = dwidgets;
+	}
+	
 public void onModuleLoad() {
 
+	Resources.getInstance().initTitle = Lib.getTitle();
 	Resources.getInstance().conf = new Config();
 	Resources.getInstance().db = new DataBaseImpl(new CustomEventListener(){
 		@Override
 		public void customEventOccurred(CustomEvent evt) {
+			
+			Resources.getInstance().userInfo = ((DBObject)evt.getSource()).getDBObject("userinfo");
+			Resources.getInstance().userData = ((DBObject)evt.getSource()).getDBObject("userdata");
+
 			Resources.getInstance().dwidgets = new Dwidgets();
 
 			Resources.getInstance().loader = new Loader();
@@ -63,44 +88,6 @@ public void onModuleLoad() {
 			Resources.getInstance().init();
 			
 		}});
-	
-//	Resources.getInstance().Get_User_Info(new DV_Request_Handler<Integer>(){
-//
-//		@Override
-//		public void Success(Integer result) {
-//			Resources.getInstance().loader.load();
-//			Resources.getInstance().init();
-//			String pagehash = Lib.Get_Hash_Token();
-//			if( pagehash.equals("") ){
-//				String lasthash = Resources.getInstance().userInfo.Get_String("pagehash");
-//				if( lasthash.equals("") ) lasthash="main";
-//				Lib.Change_Hash_Token(lasthash);
-//			} else {
-//				Resources.getInstance().userInfo.put("pagehash", pagehash);
-//				Resources.getInstance().Save_User_Info();
-//			}
-//		}
-//
-//		@Override
-//		public void Fail(Integer result) {}
-//	});
-	
-//	Resources.getInstance().loader.Get_Dwidget_Factory().addDwidgetLoadListener(new CustomEventListener(){
-//		@Override
-//		public void customEventOccurred(CustomEvent evt) {
-//			Dwidget w = (Dwidget)evt.getSource();
-//			if( w.Get_dwid().equals("mainmenu") ){
-//				Table_Menu tm = (Table_Menu) w;
-//				tm.addActionListener(new CustomEventListener(){
-//					@Override
-//					public void customEventOccurred(CustomEvent evt) {
-//						Resources.getInstance().userInfo.put("pagehash", ""+evt.getSource());
-//						Resources.getInstance().Save_User_Info();
-//					}});
-//			}
-//		}
-//	});
-
 	
 }
 
@@ -164,12 +151,51 @@ private void registerDwidgets(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
-			return new Auth(p);
+			return new AuthLogPass(p);
 		}
 
 		@Override
 		public boolean needAuthReinit() {
 			return false;
+		}
+	});
+	
+	l.getDwidgetFactory().register("hiddenauth", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new HiddenAuth(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return true;
+		}
+	});
+	
+	l.getDwidgetFactory().register("vkauth", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new VkAuth(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return true;
+		}
+	});
+	
+	l.getDwidgetFactory().register("authcombo", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new AuthCombo(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return true;
 		}
 	});
 	
@@ -224,6 +250,69 @@ private void registerDwidgets(){
 			return true;
 		}
 	});
+	
+	l.getDwidgetFactory().register("hider", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new Hider(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return false;
+		}
+	});
+	
+	l.getDwidgetFactory().register("profilesmall", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new ProfileSmall(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return true;
+		}
+	});
+	
+	l.getDwidgetFactory().register("buttonhash", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new ButtonHash(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return false;
+		}
+	});
+	
+	l.getDwidgetFactory().register("toptoolbar", new DwidgetCreator(){
+
+		@Override
+		public Dwidget getDwidget(SubPanel p) {
+			return new TopToolbar(p);
+		}
+
+		@Override
+		public boolean needAuthReinit() {
+			return true;
+		}
+	});
+	
+	/*
+	 * registering custom dwidgets
+	 */
+	if( dwidgets != null ){
+		Iterator<String> i = dwidgets.keySet().iterator();
+		while( i.hasNext() ){
+			String name = i.next();
+			l.getDwidgetFactory().register(name, dwidgets.get(name));
+		}
+	}
 	
 }
 }

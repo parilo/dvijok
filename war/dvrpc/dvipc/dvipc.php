@@ -19,13 +19,18 @@
 
 interface DVIPC {
 
-	public function register($id);
+	public function register($id);//register queue
 	public function unregister($id);//removes $id's queue
+	
+	public function registerIPC($id);//register another IPC with id
+	public function unregisterIPC($id);//removes another IPC with id
+	
 	public function getEvent();
 	public function listenForEvent();
 	public function invokeEvent($event);
 	public function clear();//removes all ipc meta(files, etc.)
-	
+	public function isNotUsing();//returns true if this IPC is currently not using by user and can be removed from IPC system
+	public function getLastUsed();//returns timestamp of last call listenForEventFunction()
 }
 
 ?>

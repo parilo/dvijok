@@ -162,7 +162,7 @@ public class Table extends Composite {
 						}
 
 						this.table.setWidget(0, ri, w);
-						this.table.getCellFormatter().addStyleName(0, ri, "th");
+						this.table.getCellFormatter().addStyleName(0, ri, "dwt th");
 						if( headerStyles != null ){
 							String hstyle = headerStyles.getString(ri);
 							if( hstyle != null && !hstyle.equals("") ){
@@ -177,8 +177,9 @@ public class Table extends Composite {
 				
 			} else
 				for(int i=0; i<this.header.getSize(); i++){
-					this.table.setWidget(0, i, new Label(this.header.getString(i)));
-					this.table.getCellFormatter().addStyleName(0, i, "th");
+					if( this.header.isWidget(i) ) this.table.setWidget(0, i, this.header.getWidget(i));
+					else this.table.setWidget(0, i, new Label(this.header.getString(i)));
+					this.table.getCellFormatter().addStyleName(0, i, "dwt th");
 					if( headerStyles != null ){
 						String hstyle = headerStyles.getString(i);
 						if( hstyle != null && !hstyle.equals("") ){
@@ -186,6 +187,11 @@ public class Table extends Composite {
 						}
 					}
 				}
+			
+			table.getCellFormatter().addStyleName(0, 0, "luc");// left upper corner
+			table.getCellFormatter().addStyleName(0, header.getSize()-1, "ruc");// right upper corner
+			table.getRowFormatter().addStyleName(0, "dwt tr th");
+			
 		} else if( headerT != null ){
 			
 			drawTableModel(headerT, 0);
@@ -218,10 +224,20 @@ public class Table extends Composite {
 					
 					} else if( colTypes != null ){
 						
-						if( colTypes.getInt(i) == TableModel.COLTYPE_WIDGET ) this.table.setWidget(begri, wi, dm.getWidget(i));
-						else this.table.setWidget(begri, wi, new Label(dm.getString(i)));
 						
-					} else this.table.setWidget(begri, wi, new Label(dm.getString(i)));
+						try{
+							if( colTypes.getInt(i) == TableModel.COLTYPE_WIDGET ) this.table.setWidget(begri, wi, dm.getWidget(i));
+							else this.table.setWidget(begri, wi, new Label(dm.getString(i)));
+						} catch (java.lang.AssertionError ex){
+//							Lib.alert("err: "+new Label(dm.getString(i)));
+						}
+						
+						table.getCellFormatter().addStyleName(begri, wi, "dwt td");
+						
+					} else {
+						this.table.setWidget(begri, wi, new Label(dm.getString(i)));
+						table.getCellFormatter().addStyleName(begri, wi, "dwt td");
+					}
 	
 					int cellCS = dm.getColSpan(i);
 					int cellRS = dm.getRowSpan(i);
@@ -246,6 +262,10 @@ public class Table extends Composite {
 			}
 			
 		}
+		
+		table.getCellFormatter().addStyleName(begri, 0, "blc"); // begin line cell
+		table.getCellFormatter().addStyleName(begri, dm.getSize()-1, "elc"); // end line cell
+		table.getRowFormatter().addStyleName(begri, "dwt tr");
 		
 	}
 	
@@ -397,6 +417,19 @@ public class Table extends Composite {
 			DataModel dm = tm.get(tmind);
 			this.drawRow(dm, tmind, ri);
 			ri++;
+		}
+		
+		
+		int last = table.getRowCount()-1;
+		int lastCC = table.getCellCount(last)-1;
+		if( last > -1 ){
+			table.getCellFormatter().addStyleName(last, 0, "llc"); //left lower corner
+			table.getCellFormatter().addStyleName(last, lastCC, "rlc"); //right lower corner
+		}
+		
+		//mark last row tds
+		for(int i=0; i<=lastCC; i++){
+			table.getCellFormatter().addStyleName(last, i, "lr"); //last row
 		}
 	}
 	

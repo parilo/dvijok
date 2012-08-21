@@ -118,27 +118,27 @@ public class ChangePassword extends SubPanelsDwidget {
 		String password = pass.getText();
 		if( password.equals(passconf.getText()) ){
 			
-		DBObject passdbo = new DBObject();
-		passdbo.put("password", password);
-		DBObject dbo = new DBObject();
-		dbo.put("dbid", "password");
-		dbo.put("dbo", passdbo);
-		
-		final DVRequestHandler<DBObject> chpassrh = new DVRequestHandler<DBObject>(){
-
-			@Override
-			public void success(DBObject result) {
-				onChPassSuccess();
-			}
-
-			@Override
-			public void fail(DBObject result) {
-				onChPassFailed(result, this);
-			}
-			
-		};
-		
-		Resources.getInstance().db.putObject(dbo, chpassrh);
+//		DBObject passdbo = new DBObject();
+//		passdbo.put("password", password);
+//		DBObject dbo = new DBObject();
+//		dbo.put("dbid", "password");
+//		dbo.put("dbo", passdbo);
+//		
+//		final DVRequestHandler<DBObject> chpassrh = new DVRequestHandler<DBObject>(){
+//
+//			@Override
+//			public void success(DBObject result) {
+//				onChPassSuccess();
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				onChPassFailed(result, this);
+//			}
+//			
+//		};
+//		
+//		Resources.getInstance().db.putObject(dbo, chpassrh);
 		
 		} else {
 			Lib.alert("Подтверждение и пароль не совпадают");
@@ -172,7 +172,7 @@ public class ChangePassword extends SubPanelsDwidget {
 			
 		};
 		
-		Resources.getInstance().db.putObject(reqdbo, authkeyrh);
+//		Resources.getInstance().db.putObject(reqdbo, authkeyrh);
 	}
 	
 	private void onChPassFailed(DBObject result, DVRequestHandler<DBObject> loginrh){

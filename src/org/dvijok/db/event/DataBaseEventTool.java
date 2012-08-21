@@ -20,6 +20,8 @@ package org.dvijok.db.event;
 
 import java.util.ArrayList;
 
+import org.dvijok.db.DBArray;
+
 public class DataBaseEventTool {
 
     private ArrayList<DataBaseEventListener> ls;
@@ -37,29 +39,48 @@ public class DataBaseEventTool {
         ls.remove(l);
     }
 
-    public void invokeAddListeners(DataBaseEvent ev){
+    public void invokeListeners(DataBaseEvent ev){
+    	DBArray evtags = ev.getParams().getDBArray("tags");
         for(int i=0; i<ls.size(); i++){
         	DataBaseEventListener l = ls.get(i);
-            l.objectAdded(ev);
-            l.allEvent(ev);
+        	if( evtags.containsAll(l.getTagsArray()) ){
+        		l.eventReceived(ev);
+        	}
         }
     }
 
-    public void invokeModifyListeners(DataBaseEvent ev){
-        for(int i=0; i<ls.size(); i++){
-        	DataBaseEventListener l = ls.get(i);
-            l.objectModifyed(ev);
-            l.allEvent(ev);
-        }
-    }
-
-    public void invokeDelListeners(DataBaseEvent ev){
-        for(int i=0; i<ls.size(); i++){
-        	DataBaseEventListener l = ls.get(i);
-            l.objectDeleted(ev);
-            l.allEvent(ev);
-        }
-    }
+//    public void invokeAddListeners(DataBaseEvent ev){
+//    	DBArray evtags = ev.getParams().getDBArray("tags");
+//        for(int i=0; i<ls.size(); i++){
+//        	DataBaseEventListener l = ls.get(i);
+//        	if( evtags.containsAll(l.getTagsArray()) ){
+//	            l.objectAdded(ev);
+//	            l.allEvent(ev);
+//        	}
+//        }
+//    }
+//
+//    public void invokeModifyListeners(DataBaseEvent ev){
+//    	DBArray evtags = ev.getParams().getDBArray("tags");
+//        for(int i=0; i<ls.size(); i++){
+//        	DataBaseEventListener l = ls.get(i);
+//        	if( evtags.containsAll(l.getTagsArray()) ){
+//	            l.objectModifyed(ev);
+//	            l.allEvent(ev);
+//        	}
+//        }
+//    }
+//
+//    public void invokeDelListeners(DataBaseEvent ev){
+//    	DBArray evtags = ev.getParams().getDBArray("tags");
+//        for(int i=0; i<ls.size(); i++){
+//        	DataBaseEventListener l = ls.get(i);
+//        	if( evtags.containsAll(l.getTagsArray()) ){
+//	            l.objectDeleted(ev);
+//	            l.allEvent(ev);
+//        	}
+//        }
+//    }
     
     public void removeAllListeners(){
     	ls.clear();

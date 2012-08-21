@@ -135,75 +135,51 @@ public class DataBaseTest {
 //			}});
 		
 //EventListener test
-		
-		DBObject dbo = new DBObject();
-		dbo.put("tags", "tag1");
-		db.addEventListener(dbo, new DataBaseEventListener(){
-
-			@Override
-			public void objectAdded(DataBaseEvent evt) {
-				Lib.alert("t1 add: "+evt.getParams());
-			}
-
-			@Override
-			public void objectModifyed(DataBaseEvent evt) {
-				Lib.alert("t1 mod: "+evt.getParams());
-			}
-
-			@Override
-			public void objectDeleted(DataBaseEvent evt) {
-				Lib.alert("t1 del: "+evt.getParams());
-			}
-
-			@Override
-			public void allEvent(DataBaseEvent evt) {
-				Lib.alert("t1 all-------: "+evt.getParams());
-			}});
-
-		
-//		dbo = new DBObject();
-//		dbo.put("tags", "tag2");
+//		
+//		DBObject dbo = new DBObject();
+//		dbo.put("tags", "tag1");
 //		db.addEventListener(dbo, new DataBaseEventListener(){
 //
 //			@Override
 //			public void objectAdded(DataBaseEvent evt) {
-//				Lib.alert("t2 add: "+evt.getParams());
+//				Lib.alert("add: "+evt.getParams());
 //			}
 //
 //			@Override
 //			public void objectModifyed(DataBaseEvent evt) {
-//				Lib.alert("t2 mod: "+evt.getParams());
+//				Lib.alert("mod: "+evt.getParams());
 //			}
 //
 //			@Override
 //			public void objectDeleted(DataBaseEvent evt) {
-//				Lib.alert("t2 del: "+evt.getParams());
+//				Lib.alert("del: "+evt.getParams());
 //			}
 //
 //			@Override
 //			public void allEvent(DataBaseEvent evt) {
-//				Lib.alert("t2 all-------: "+evt.getParams());
+//				Lib.alert("all-------: "+evt.getParams());
 //			}});
-		
+//		
 //		dbo = new DBObject();
 //		dbo.put("dddd", "4444");
 //		dbo.put("ffff", "5555");
 //		
 //		DBObject mdbo = new DBObject();
-//		mdbo.put("tags", "tag1");
+//		mdbo.put("tags", "tag1 tag2");
 //		mdbo.put("dbo", dbo);
 //		
-//		DVRequestHandler<DBObject> dvrh = new DVRequestHandler<DBObject>(){
-//			@Override
-//			public void success(DBObject result) {}
-//			@Override
-//			public void fail(DBObject result) {}};
-//		
-//		db.putObject(mdbo, dvrh);
+//		db.putObject(mdbo, new DVRequestHandler<DBObject>(){
 //
-//		mdbo.put("tags", "tag2");
-//		db.putObject(mdbo, dvrh);
-//		db.putObject(mdbo, dvrh);
+//			@Override
+//			public void success(DBObject result) {
+////				Lib.alert("ret: "+result);
+//			}
+//
+//			@Override
+//			public void fail(DBObject result) {
+//				// TODO Auto-generated method stub
+//				
+//			}});
 		
 		
 		

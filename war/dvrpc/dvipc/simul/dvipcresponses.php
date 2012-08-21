@@ -20,6 +20,7 @@
 require_once 'dvipc/dvipc.php';
 require_once 'lib.php';
 
+//not used now
 abstract class DVIPCResponses implements DVIPC {
 
 	abstract protected function getEnvFromBus($name);

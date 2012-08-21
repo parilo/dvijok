@@ -22,13 +22,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
+import org.dvijok.event.CustomEvent;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.DVRequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
+import org.dvijok.widgets.busy.BigBusy;
+import org.dvijok.widgets.busy.Busy;
+import org.dvijok.widgets.busy.SmallBusy;
+import org.dvijok.widgets.fx.gfx.FadeOut;
+import org.dvijok.widgets.fx.gfx.GFX;
+import org.dvijok.widgets.fx.gfx.VerticalExpansion;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Dwidget extends Composite {
 	
@@ -42,6 +56,7 @@ public class Dwidget extends Composite {
 	private HTMLPanel main;
 	
 	private SubPanel panel;
+	private GFX startAnimation = null;
 	
 	public Dwidget(String templUrl) {
 		this.modes = new HashMap<String, HTMLPanel>();
@@ -73,19 +88,20 @@ public class Dwidget extends Composite {
 	}
 	
 	private void getTmpl(){
-		
-		Resources.getInstance().tmpls.getTemplate(this.tmplUrl, new DVRequestHandler<String>(){
-			@Override
-			public void success(String result) {
-				tmplUrl = result;
-				createGUI();
-			}
+
+		Resources.getInstance().tmpls.getTemplate(this.tmplUrl, new CustomEventListener(){
 
 			@Override
-			public void fail(String message) {
-				Lib.alert("cannot get template "+tmplUrl+" : "+message);
+			public void customEventOccurred(CustomEvent evt) {
+				String text = (String)evt.getSource();
+				if( evt.isFailed() ){
+					Lib.alert("cannot get template "+tmplUrl+" : "+text);
+				} else {
+					tmplUrl = text;
+					createGUI();
+				}
 			}
-		});
+		});		
 		
 	}
 	
@@ -124,12 +140,14 @@ public class Dwidget extends Composite {
 	
 	protected void initTmpl(){
 		this.main = new HTMLPanel(tmplUrl);
+		main.addStyleName("tmplcont");
 		this.modes.put(this.tmplUrl, this.main);
 	}
 	
 	protected void attachTmpl(){
 		this.maincont.setWidget(this.main);
-		Resources.getInstance().loader.loadNew();
+//		Resources.getInstance().loader.loadNew();
+		Resources.getInstance().loader.load(this);
 	}
 	
 	protected void changeTmpl(String url){
@@ -138,6 +156,103 @@ public class Dwidget extends Composite {
 			this.main = this.modes.get(url);
 			this.maincont.setWidget(this.main);
 		} else this.getTmpl();
+	}
+	
+	protected String getTmplUrl() {
+		return tmplUrl;
+	}
+	
+	public void redraw(){
+		createGUI();
+	}
+
+	private Busy busypane;
+	
+	public Busy getBusy(){
+		return busypane;
+	}
+	
+	public void setBusy(boolean busy){
+		if( busy ){
+			int height = getOffsetHeight();
+			if( height > 150 ) busypane = new BigBusy();
+			else busypane = new SmallBusy();
+			
+			Dwidget bp = (Dwidget) busypane;
+			bp.setWidth(getOffsetWidth()+"px");
+			bp.setHeight(height+"px");
+//			busypane.setHeight((getOffsetHeight()-20)+"px");
+			bp.getElement().getStyle().setLeft(getAbsoluteLeft(), Unit.PX);
+			bp.getElement().getStyle().setTop(getAbsoluteTop(), Unit.PX);
+
+//			busypane.setWidth(getElement().getClientWidth()+"px");
+//			busypane.setHeight(getElement().getClientHeight()+"px");
+//			busypane.getElement().getStyle().setLeft(getElement().getAbsoluteLeft(), Unit.PX);
+//			busypane.getElement().getStyle().setTop(getElement().getAbsoluteTop(), Unit.PX);
+			
+			Resources.getInstance().addToTmp(bp);
+		} else {
+			
+			if( busypane != null ){
+				Widget bp = (Widget) busypane;
+				FadeOut fx = new FadeOut();
+				fx.setWidget(bp);
+				DBObject props = new DBObject();
+				props.put("startOpacity", Double.toString(0.5));
+				fx.setProperties(props);
+				fx.start();
+				fx.addEndListener(new CustomEventListener(){
+					@Override
+					public void customEventOccurred(CustomEvent evt) {
+						Widget bp = (Widget) busypane;
+						Resources.getInstance().removeFromTmp(bp);
+					}
+				});
+				
+			}
+		}
+	}
+	
+	public void centerVertical(){
+		getElement().getStyle().setPosition(Position.RELATIVE);
+		getElement().getStyle().setTop(50, Unit.PX);
+		getElement().getStyle().setMarginTop(getOffsetHeight()/2, Unit.PX);
+	}
+	
+	public void centerWidgetPanelVertical(){
+		this.main.getElement().getStyle().setPosition(Position.RELATIVE);
+		this.main.getElement().getStyle().setTop(50, Unit.PX);
+		this.main.getElement().getStyle().setMarginTop(this.main.getOffsetHeight()/2, Unit.PX);
+	}
+
+	/*
+	 * animation
+	 */
+	public void performAnimation(GFX gfx){
+		addStyleName("tmp");
+		gfx.setWidget(this);
+		gfx.init();
+		removeStyleName("tmp");
+		gfx.start();
+	}
+	
+	public void setStartAnimation(GFX gfx){
+		gfx.setWidget(this);
+		startAnimation = gfx;
+	}
+	
+	public void beforeAttach(){
+		if( startAnimation != null ) {
+			addStyleName("tmp");
+		}
+	}
+	
+	public void afterAttach(){
+		if( startAnimation != null ) {
+			startAnimation.init();
+			removeStyleName("tmp");
+			startAnimation.start();
+		}
 	}
 
 }

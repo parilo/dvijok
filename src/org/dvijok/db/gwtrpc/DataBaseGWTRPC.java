@@ -81,7 +81,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 	
 	@Override
-	public void auth(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void login(final DBObject params, final DVRequestHandler<DBObject> handler) {
 		
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
@@ -104,7 +104,7 @@ public class DataBaseGWTRPC implements DataBase {
 
 						@Override
 						public void success(Integer result) {
-							auth(params, handler);
+							login(params, handler);
 						}
 
 						@Override
@@ -189,62 +189,21 @@ public class DataBaseGWTRPC implements DataBase {
 		dataSvc.logout(allparams, cb);
 	}
 
-	@Override
-	public void getObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
-		final DBObject allparams = new DBObject();
-		allparams.put("session", this.session);
-		allparams.put("objects", params);
-		
-		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Lib.alert("DataBase_GWTRPC: authkey request failed");
-			}
-
-			@Override
-			public void onSuccess(DBObject result) {
-				String res = result.getString("result");
-				if( res.equals("success") )	handler.success(result);
-				else if( res.equals("notsid") ){
-					
-					makeSession(new DVRequestHandler<Integer>(){
-
-						@Override
-						public void success(Integer result) {
-							getObject(params, handler);
-						}
-
-						@Override
-						public void fail(Integer result) {
-							Lib.alert("DataBase_GWTRPC: Get_Object: make session failed");
-						}
-						
-					});
-					
-				} else handler.fail(result);
-			}
-			
-		};
-		
-		dataSvc.getObject(allparams, cb);
-	}
-
-	@Override
-	public void getObjects(final DBObject params, final DVRequestHandler<DBArray> handler) {
-		final DBObject allparams = new DBObject();
-		allparams.put("session", this.session);
-		allparams.put("objects", params);
-		
-		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Lib.alert("DataBase_GWTRPC: authkey request failed");
-			}
-
-			@Override
-			public void onSuccess(DBObject result) {
+//	@Override
+//	public void getObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
+//		final DBObject allparams = new DBObject();
+//		allparams.put("session", this.session);
+//		allparams.put("objects", params);
+//		
+//		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Lib.alert("DataBase_GWTRPC: authkey request failed");
+//			}
+//
+//			@Override
+//			public void onSuccess(DBObject result) {
 //				String res = result.getString("result");
 //				if( res.equals("success") )	handler.success(result);
 //				else if( res.equals("notsid") ){
@@ -253,7 +212,89 @@ public class DataBaseGWTRPC implements DataBase {
 //
 //						@Override
 //						public void success(Integer result) {
-//							getObjects(params, handler);
+//							getObject(params, handler);
+//						}
+//
+//						@Override
+//						public void fail(Integer result) {
+//							Lib.alert("DataBase_GWTRPC: Get_Object: make session failed");
+//						}
+//						
+//					});
+//					
+//				} else handler.fail(result);
+//			}
+//			
+//		};
+//		
+//		dataSvc.getObject(allparams, cb);
+//	}
+
+//	@Override
+//	public void getObjects(final DBObject params, final DVRequestHandler<DBArray> handler) {
+//		final DBObject allparams = new DBObject();
+//		allparams.put("session", this.session);
+//		allparams.put("objects", params);
+//		
+//		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Lib.alert("DataBase_GWTRPC: authkey request failed");
+//			}
+//
+//			@Override
+//			public void onSuccess(DBObject result) {
+////				String res = result.getString("result");
+////				if( res.equals("success") )	handler.success(result);
+////				else if( res.equals("notsid") ){
+////					
+////					makeSession(new DVRequestHandler<Integer>(){
+////
+////						@Override
+////						public void success(Integer result) {
+////							getObjects(params, handler);
+////						}
+////
+////						@Override
+////						public void fail(Integer result) {
+////							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
+////						}
+////						
+////					});
+////					
+////				} else handler.fail(result);
+//			}
+//			
+//		};
+//		
+//		dataSvc.getObjects(allparams, cb);
+//	}
+
+//	@Override
+//	public void putObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
+//		final DBObject allparams = new DBObject();
+//		allparams.put("session", this.session);
+//		allparams.put("objects", params);
+//		
+//		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Lib.alert("DataBase_GWTRPC: authkey request failed");
+//			}
+//
+//			@Override
+//			public void onSuccess(DBObject result) {
+//				String res = result.getString("result");
+//				if( res.equals("success") )	handler.success(result);
+//				else if( res.equals("notsid") ){
+//					
+//					makeSession(new DVRequestHandler<Integer>(){
+//
+//						@Override
+//						public void success(Integer result) {
+//							putObject(params, handler);
 //						}
 //
 //						@Override
@@ -264,94 +305,53 @@ public class DataBaseGWTRPC implements DataBase {
 //					});
 //					
 //				} else handler.fail(result);
-			}
-			
-		};
-		
-		dataSvc.getObjects(allparams, cb);
-	}
+//			}
+//			
+//		};
+//		
+//		dataSvc.putObject(allparams, cb);
+//	}
 
-	@Override
-	public void putObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
-		final DBObject allparams = new DBObject();
-		allparams.put("session", this.session);
-		allparams.put("objects", params);
-		
-		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Lib.alert("DataBase_GWTRPC: authkey request failed");
-			}
-
-			@Override
-			public void onSuccess(DBObject result) {
-				String res = result.getString("result");
-				if( res.equals("success") )	handler.success(result);
-				else if( res.equals("notsid") ){
-					
-					makeSession(new DVRequestHandler<Integer>(){
-
-						@Override
-						public void success(Integer result) {
-							putObject(params, handler);
-						}
-
-						@Override
-						public void fail(Integer result) {
-							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
-						}
-						
-					});
-					
-				} else handler.fail(result);
-			}
-			
-		};
-		
-		dataSvc.putObject(allparams, cb);
-	}
-
-	@Override
-	public void delObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
-		final DBObject allparams = new DBObject();
-		allparams.put("session", this.session);
-		allparams.put("objects", params);
-		
-		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Lib.alert("DataBase_GWTRPC: authkey request failed");
-			}
-
-			@Override
-			public void onSuccess(DBObject result) {
-				String res = result.getString("result");
-				if( res.equals("success") )	handler.success(result);
-				else if( res.equals("notsid") ){
-					
-					makeSession(new DVRequestHandler<Integer>(){
-
-						@Override
-						public void success(Integer result) {
-							delObject(params, handler);
-						}
-
-						@Override
-						public void fail(Integer result) {
-							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
-						}
-						
-					});
-					
-				} else handler.fail(result);
-			}
-			
-		};
-		
-		dataSvc.delObject(allparams, cb);
-	}
+//	@Override
+//	public void delObject(final DBObject params, final DVRequestHandler<DBObject> handler) {
+//		final DBObject allparams = new DBObject();
+//		allparams.put("session", this.session);
+//		allparams.put("objects", params);
+//		
+//		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Lib.alert("DataBase_GWTRPC: authkey request failed");
+//			}
+//
+//			@Override
+//			public void onSuccess(DBObject result) {
+//				String res = result.getString("result");
+//				if( res.equals("success") )	handler.success(result);
+//				else if( res.equals("notsid") ){
+//					
+//					makeSession(new DVRequestHandler<Integer>(){
+//
+//						@Override
+//						public void success(Integer result) {
+//							delObject(params, handler);
+//						}
+//
+//						@Override
+//						public void fail(Integer result) {
+//							Lib.alert("DataBase_GWTRPC: Put_Object: make session failed");
+//						}
+//						
+//					});
+//					
+//				} else handler.fail(result);
+//			}
+//			
+//		};
+//		
+//		dataSvc.delObject(allparams, cb);
+//	}
 
 	@Override
 	public void listenForEvents(DBObject params,
@@ -392,7 +392,20 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 
 	@Override
-	public void resetEvents(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void checkSession(DBObject params, DVRequestHandler<DBObject> handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void external(DBObject params, DVRequestHandler<DBObject> handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveUserData(DBObject userData,
+			DVRequestHandler<DBObject> handler) {
 		// TODO Auto-generated method stub
 		
 	}

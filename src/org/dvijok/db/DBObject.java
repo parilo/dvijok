@@ -22,12 +22,16 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class DBObject extends HashMap<String,Serializable> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	private DateTimeFormat dtf;
 
 	public String getString(String s){
 		String r = (String)this.get(s);
@@ -84,6 +88,11 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 		} catch (NumberFormatException e){
 			return new BigDecimal(0);
 		}
+	}
+	
+	public Date getDate(String s){
+		if( dtf == null ) dtf = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
+		return dtf.parse(getString(s));
 	}
 
 	//sort DB_Object inner DB_Objects by string field 

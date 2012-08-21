@@ -49,6 +49,11 @@ public class CustomEventTool {
         invokeListeners();
     }
 
+    public void invokeListeners(CustomEvent event){
+        ev = event;
+        invokeListeners();
+    }
+
     public Object getSource() {
         return source;
     }
