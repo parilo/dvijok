@@ -66,6 +66,11 @@ public class VkAuth extends SubPanelsDwidget implements AuthCancelable {
 	}
 
 	@Override
+	public boolean needAuthReinit() {
+		return true;
+	}
+
+	@Override
 	public void addCancelListener(CustomEventListener listener) {
 		cancelET.addCustomEventListener(listener);
 	}

@@ -17,12 +17,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-//for xmlrpc service database
-#$config['MYSQLHOST'] = "localhost";
-#$config['MYSQLUSER'] = "dvijok";
-#$config['MYSQLPASS'] = "dvijok";
-#$config['MYSQLDBNAME'] = "dvijok";
-
 $config['SESSION_EXPIRATION_TIME_ANON'] = 1440*7; //in minutes //1440 - day
 $config['SESSION_EXPIRATION_TIME_AUTH_LONG'] = 1440*365; //if user checked 'remember me'
 $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
@@ -39,11 +33,18 @@ $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
 $config['appid'] = '2977906';
 $config['appsecret'] = '7PrS5eoa08XuZFuUitrj';
 
-$config['ipcfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/ipcfiles/';
+$config['ipcfilesdir'] = dirname(__FILE__).'/ipcfiles/';
 $config['ipcsystimeout'] = 600;//in seconds
 $config['ipcusertimeout'] = 600;//in seconds
 
-$config['dbfilesdir'] = '/home/anton/devel/workspace/dvijok/war/dvrpc/dbfiles/';
+$config['dbtype'] = 'dbfiles';
+$config['dbfilesdir'] = dirname(__FILE__).'/dbfiles/';
+
+#$config['dbtype'] = 'mysql';
+#$config['MYSQLHOST'] = "localhost";
+#$config['MYSQLUSER'] = "dvijok";
+#$config['MYSQLPASS'] = "dvijok";
+#$config['MYSQLDBNAME'] = "dvijok";
 
 date_default_timezone_set('Asia/Yekaterinburg');
 

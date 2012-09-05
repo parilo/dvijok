@@ -20,7 +20,8 @@
 class DBException extends Exception {
 
     private $val = 'empty';
-    public function __construct($value){
+    
+    public function __construct($value=''){
 	$this->val = $value;
     }
 

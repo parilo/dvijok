@@ -17,46 +17,16 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-/*
- Rights is
-$rights['uid'] - owner id
-$rights['gid'] - owner group id
-$rights['ur'] - user can read: 1 or 0
-$rights['uw'] - user write
-$rights['gr'] - group read
-$rights['gw'] - group write
-$rights['or'] - owner read
-$rights['ow'] - owner write
-
-$user['uid'] - user id
-$user['gids'] - array: groups ids
-*/
-
 require_once "dvipc.php";
 require_once 'dbfilesdrv.php';
 
 class DataBase {
 
 	private $drv;
-// 	private $defuser;
-// 	private $defrights;
 	private $ipc;
 
 	public function __construct($dir){
 		$this->drv = new DataBaseFilesDriver($dir);
-
-// 		$this->defuser['uid'] = 'root';
-// 		$this->defuser['gids'][] = 'root';
-
-// 		$this->defrights['uid'] = 'root';
-// 		$this->defrights['gid'] = 'root';
-// 		$this->defrights['ur'] = '1';
-// 		$this->defrights['uw'] = '1';
-// 		$this->defrights['gr'] = '0';
-// 		$this->defrights['gw'] = '0';
-// 		$this->defrights['or'] = '0';
-// 		$this->defrights['ow'] = '0';
-
 		$this->ipc = new DVIPCSys();
 	}
 
@@ -83,13 +53,8 @@ class DataBase {
 		if( is_numeric($id) ){
 			$obj = $this->drv->readById($id);
 			$obj['dbo']['id'] = $id;
-// 			$rights = $obj['rights'];
 
 			return $obj['dbo'];
-// 			if( $rights['uid'] == $user['uid'] ) return $obj['dbo'];
-// 			else if( ($rights['gr'] == '1') && in_array($rights['gid'], $user['gids']) ) return $obj['dbo'];
-// 			else if( $rights['or'] == '1' ) return $obj['dbo'];
-// 			else return false;
 		} else return false;
 	}
 
@@ -102,35 +67,11 @@ class DataBase {
 	//$tags: string, ' ' - separator
 	public function getObjectsByTags ($tags, /*$user,*/ $count = 0, $offset = 0) {
  		return $this->drv->readByTags(explode(' ',$tags), $count, $offset);
-// 		$objs = $this->drv->readByTags(explode(' ',$tags), $count, $offset);
-		// 		print "objs: ".serialize($objs)."\n";
-// 		$ret = array();
-// 		$uid = $user['uid'];
-// 		$gids = $user['gids'];
-// 		foreach($objs as $obj){
-// 			$rights = $obj['rights'];
-
-// 			if( $rights['uid'] == $uid ) $ret[] = $obj['dbo'];
-// 			else if( ($rights['gr'] == '1') && in_array($rights['gid'], $gids) ) $ret[] = $obj['dbo'];
-// 			else if( $rights['or'] == '1' ) $ret[] = $obj['dbo'];
-// 		}
-// 		return $ret;
 	}
 
 	/** returns id of added object
 	 $tags: string, ' ' - separator */
 	public function putObjects ($dbos, $tags/*, $user = null, $rights = null*/){
-		
-// 		if( count($dbos) > 0 ){
-// 			$dbo = $dbos[0];
-// 			if( isset($dbo['id']) ){
-// 				//array
-// 				$oldtags = $this->getTagsById($dbo['id']);
-// 			}
-// 		}
-		
-// 		$added = array();
-// 		$moded = array();
 
 		$out = array();
 		
@@ -138,124 +79,28 @@ class DataBase {
 
 			$dbo['id'] = $this->putObject_($dbo, $tags/*, $user, $rights*/);
 			$out []= $dbo;			
-// 			if( isset($dbo['id']) ){
-
-// 				if( $id !== false )	$moded[] = $dbo;
-					
-// 			} else {
-// 				$dbo['id'] = $id;
-// 				$added[] = $dbo;
-// 			}
 
 		}
 		
 		return $out;
-
-// 		//add event
-// 		if( count($added) ){
-
-// 			$added['_isarr'] = '1';
-
-// 			$event['type'] = 'add';
-// 			$event['objs'] = $added;
-// 			$event['tags'] = $tags;
-// 			$this->ipc->invokeEvent($event);
-
-// 		}
-
-// 		//mod event
-// 		if( count($moded) ){
-
-// 			$moded['_isarr'] = '1';
-
-// 			$event['type'] = 'mod';
-// 			$event['objs'] = $moded;
-// 			$event['tags'] = implode(" ", array_unique(array_merge($oldtags, explode(" ", $tags))));
-// 			$oldtags['_isarr'] = '_isarr';
-// 			$newtags = explode(" ", $tags);
-// 			$newtags['_isarr'] = '_isarr';
-// 			$event['oldtags'] = $oldtags;
-// 			$event['newtags'] = $newtags;
-// 			$this->ipc->invokeEvent($event);
-
-// 		}
-
-	}
-
-	/** returns id of added object
-	 $tags: string, ' ' - separator */
-	public function putObject ($dbo, $tags/*, $user = null, $rights = null*/){
-
-// 		if( isset($dbo['id']) ){
-// 			//array
-// 			$oldtags = $this->getTagsById($dbo['id']);
-// 		}
-		
-		$id = $this->putObject_($dbo, $tags/*, $user, $rights*/);
-
-// 		if( isset($dbo['id']) ){
-
-// 			if( $id !== false ){
-// 				$event['type'] = 'mod';
-// 				$event['obj'] = $dbo;
-// 				//mixed old and new tags
-// 				$event['tags'] = implode(" ", array_unique(array_merge($oldtags, explode(" ", $tags))));
-// 				$oldtags['_isarr'] = '_isarr';
-// 				$newtags = explode(" ", $tags);
-// 				$newtags['_isarr'] = '_isarr';
-// 				$event['oldtags'] = $oldtags;
-// 				$event['newtags'] = $newtags;
-// 				$this->ipc->invokeEvent($event);
-// 			}
-
-// 		} else {
-
-// 			$dbo['id'] = $id;
-// 			$event['type'] = 'add';
-// 			$event['obj'] = $dbo;
-// 			$event['tags'] = $tags;
-// 			$this->ipc->invokeEvent($event);
-
-// 		}
-
-		return $id;
-
 	}
 
 	/** this function doesn't emit event
 	 returns id of added object
 	 $tags: string, ' ' - separator, if tags is false then tags will not be modified */
-	public function putObject_ ($dbo, $tags = false/*, $user = null, $rights = null*/){
-
-// 		$defrights = false;
-// 		if( $rights == null ){
-// 			$rights = $this->defrights;
-// 			$defrights = true;
-// 		}
-// 		if( $user == null ) $user = $this->defuser;
+	public function putObject ($dbo, $tags = false/*, $user = null, $rights = null*/){
 
 		if( isset($dbo['id']) ){
 
 			$id = $dbo['id'];
 			$obj = $this->drv->readById($id);
-// 			$uid = $user['uid'];
-// 			$gids = $user['gids'];
-// 			$oldrights = $obj['rights'];
-// 			if(
-// 			( $oldrights['uid'] == $user['uid'] ) ||
-// 			( ($oldrights['gw'] == '1') && in_array($oldrights['gid'], $gids) ) ||
-// 			( $oldrights['ow'] == '1' )
-// 			){
-				if( $tags === false ) $tagsarr = false;
-				else $tagsarr = explode(' ',$tags);
-				$obj['id'] = $id;
-				$obj['dbo'] = $dbo;
-// 				if( $defrights === true) $obj['rights'] = $oldrights;
-// 				else $obj['rights'] = $rights;
-				$this->drv->store($id, $obj, $tagsarr);
+			if( $tags === false ) $tagsarr = false;
+			else $tagsarr = explode(' ',$tags);
+			$obj['id'] = $id;
+			$obj['dbo'] = $dbo;
+			$this->drv->store($id, $obj, $tagsarr);
 
-				return $id;
-// 			} else return false;
+			return $id;
 
 		} else {
 
@@ -265,7 +110,6 @@ class DataBase {
 			$id = $this->drv->getNewId();
 			$obj['id'] = $id;
 			$obj['dbo'] = $dbo;
-// 			$obj['rights'] = $rights;
 			$this->drv->store($id, $obj, $tagsarr);
 
 			return $id;
@@ -273,64 +117,20 @@ class DataBase {
 		}
 	}
 
-	public function delObjects ($ids/*, $user*/) {
-// 		$deled = array();
-// 		$tags = array();
+	public function delObjects ($ids) {
 		foreach( $ids as $id ){
-				
-// 			$todeltags = $this->drv->readTagsById($id);
-// 			$ret = $this->delObject_($id, $user);
-			$this->delObject_($id/*, $user*/);
-// 			if( $ret === true ){
-// 				$deled[] = $id;
-// 				$tags = array_unique(array_merge( $tags, $todeltags));
-// 			}
-				
+			$this->delObject_($id);
 		}
-
-// 		if( count($deled) > 0 ){
-				
-// 			$deled['_isarr'] = '1';
-				
-// 			$event['type'] = 'del';
-// 			$event['objs'] = $deled;
-// 			$event['tags'] = implode(' ', $tags);
-// 			$this->ipc->invokeEvent($event);
-// 		}
 	}
 
-	public function delObject ($id/*, $user*/) {
-		if( is_numeric($id) ){
-
-// 			$event['type'] = 'del';
-// 			$event['tags'] = implode(' ', $this->drv->readTagsById($id));
-// 			$event['id'] = $id;
-
-			$ret = $this->delObject_($id/*, $user*/);
-// 			if( $ret === true ) $this->ipc->invokeEvent($event);
-			return $ret;
-				
-		} else return "id must be numeric";
-	}
-
-	// this function doesn't emit event
-	public function delObject_ ($id/*, $user*/) {
+	public function delObject ($id) {
 		if( is_numeric($id) ){
 
 			$obj = $this->drv->readById($id);
 			if( $obj === false ) return true;
-
-// 			$uid = $user['uid'];
-// 			$gids = $user['gids'];
-// 			$rights = $obj['rights'];
-// 			if(
-// 			( $rights['uid'] == $user['uid'] ) ||
-// 			( ($rights['gw'] == '1') && in_array($rights['gid'], $gids) ) ||
-// 			( $rights['ow'] == '1' )
-// 			){
-				$this->drv->deleteById($id);
-				return true;
-// 			} else return "deletion failed";
+			$this->drv->deleteById($id);
+			return true;
+			
 		} else return "id must be numeric";
 	}
 

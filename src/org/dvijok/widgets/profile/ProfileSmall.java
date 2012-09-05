@@ -47,6 +47,11 @@ public class ProfileSmall extends SubPanelsDwidget {
 	}
 
 	@Override
+	public boolean needAuthReinit() {
+		return true;
+	}
+
+	@Override
 	public void reinit() {
 		super.reinit();
 		initUsername();

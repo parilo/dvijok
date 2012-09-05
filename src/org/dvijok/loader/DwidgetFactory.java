@@ -58,7 +58,7 @@ public class DwidgetFactory {
 			if( dwid != null )
 				if(!dwid.equals("")) Resources.getInstance().dwidgets.addDwidedDwidget(dwid, d);
 					
-			if( dc.needAuthReinit() ) Resources.getInstance().dwidgets.addOnAuthReload(d);
+			if( d.needAuthReinit() ) Resources.getInstance().dwidgets.addOnAuthReload(d);
 			
 			dwidgetLoadET.invokeListeners(d);
 			

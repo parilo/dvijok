@@ -100,208 +100,112 @@ private void registerDwidgets(){
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new HMenu(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("content_hash", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new ContentHash(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("content_hash_db", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new ContentHashDB(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("article", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new Article(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("auth", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new AuthLogPass(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("hiddenauth", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new HiddenAuth(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("vkauth", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new VkAuth(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("authcombo", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new AuthCombo(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("table_menu", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new TableMenu(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("logout_on_hash", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new LogoutOnHash(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("user_name", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new UserName(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("change_password", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new ChangePassword(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("hider", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new Hider(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("profilesmall", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new ProfileSmall(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("buttonhash", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new ButtonHash(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return false;
-		}
-	});
+		}});
 	
 	l.getDwidgetFactory().register("toptoolbar", new DwidgetCreator(){
 
 		@Override
 		public Dwidget getDwidget(SubPanel p) {
 			return new TopToolbar(p);
-		}
-
-		@Override
-		public boolean needAuthReinit() {
-			return true;
-		}
-	});
+		}});
 	
 	/*
 	 * registering custom dwidgets

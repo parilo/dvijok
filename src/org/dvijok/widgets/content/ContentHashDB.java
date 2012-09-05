@@ -55,6 +55,11 @@ public class ContentHashDB extends SubPanelsDwidget {
 	}
 
 	@Override
+	public boolean needAuthReinit() {
+		return true;
+	}
+
+	@Override
 	public void reinit() {
 		this.contents.clear();
 		this.loaded.clear();

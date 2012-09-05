@@ -19,23 +19,16 @@
 
 require_once "dvipc.php";
 require_once "lib.php";
-require_once "db/db.php";
-require_once "db/dbinit.php";
 require_once 'dvobjfilter.php';
-require_once 'config.def.php';
 
 class DVService {
 
 	private $db;
-// 	private $root;
 	private $expTimeAnon;
 
 	public function __construct(){
 		$this->initExpTime();
 		$this->initDB();
-
-// 		$this->root['uid'] = 'root';
-// 		$this->root['gids'][] = 'root';
 	}
 
 	private function initExpTime(){
@@ -45,10 +38,12 @@ class DVService {
 
 	private function initDB(){
 		global $config;
-		$this->db = new DataBase($config['dbfilesdir']);
-		if( !$this->db->isInitialized() ){
-			$dbinit = new DataBaseInit();
-			$dbinit->init($this->db);
+		if( $config['dbtype'] == 'dbfiles' ){
+			require_once 'dvdbfiles.php';
+			$this->db = new DvDBFiles();
+		} else if( $config['dbtype'] == 'mysql' ){
+			require_once 'dvdbmysql.php';
+			$this->db = new DvDBMysql();
 		}
 	}
 
@@ -100,7 +95,8 @@ class DVService {
 			
 			if( isValidMd5($sid) ){
 			
-				$sess = $this->db->getObjectByVal('sid', $sid, 'sess'/*, $this->root*/);
+// 				$sess = $this->db->getObjectByVal('sid', $sid, 'sess'/*, $this->root*/);
+				$sess = $this->db->getSession($sid);
 				if( $sess === false ) $ifsess = false;
 				else {
 					//TODO pick correct expiration time for guest and authorized users
@@ -109,7 +105,8 @@ class DVService {
 					if( ($sess['time'] + $expTime) < $now ) $ifsess = false;
 					else {
 						$sess['time'] = $now;
-						$this->db->putObject_($sess, false/*, $this->root*/);
+// 						$this->db->putObject_($sess, false/*, $this->root*/);
+						$this->db->saveSession($sess);
 						$ifsess = true;
 					}
 	
@@ -124,7 +121,9 @@ class DVService {
 			return $ret;
 		} else {
 
-			$user = $this->getUser($sess['uid']);
+// 			$user = $this->getUser($sess['uid']);
+			$user = $this->db->getUser($sess['uid']);
+				
 			if( $user === false ) return retarr('notsid'); //return retarr('notuser');
 			else {
 				$user['ip'] = $ip;
@@ -214,9 +213,11 @@ class DVService {
 		$sess['uid'] = 'guest';
 		$sess['time'] = nowMinuts();
 		$sess['ip'] = $ip;
+		$sess['authed'] = '0';
 // 		$sess['userinfo'] = array();
 
-		$this->db->putObject_($sess, 'sess unauth'/*, $this->root*/);
+// 		$this->db->putObject_($sess, 'sess unauth'/*, $this->root*/);
+		$this->db->saveSession($sess);
 		$retobj['sid'] = $sid;
 
 		$ret['result'] = "success";
@@ -224,19 +225,16 @@ class DVService {
 		return $ret;
 	}
 
-	private function getUser($uid){
-// 		return $this->db->getObjectByVal('uid', $uid, 'user', $this->root);
-		return $this->db->getObjectByTags('user '.$uid/*, $this->root*/);
-	}
-
 	private function saveUserData($inp, $user, $sess){
 		
  		if( $sess['uid'] == 'guest' ){
  			$sess['userdata'] = $inp['userdata'];
- 			$this->db->putObject_($sess);
+//  			$this->db->putObject_($sess);
+			$this->db->saveSession($sess);
  		} else {
  			$user['userdata'] = $inp['userdata'];
- 			$this->db->putObject_($user);
+//  			$this->db->putObject_($user);
+ 			$this->db->saveUser($user);
  		}
 
  		$ret['result'] = "success";
@@ -382,7 +380,9 @@ class DVService {
 // 		if( $user['uid'] != 'guest' ){
 
 			$sess['uid'] = 'guest';
-			$this->db->putObject_($sess, 'sess unauth'/*, $this->root*/);
+			$sess['authed'] = '0';
+// 			$this->db->putObject_($sess, 'sess unauth'/*, $this->root*/);
+			$this->db->saveSession($sess);
 
 			$ret['result'] = 'success';
 

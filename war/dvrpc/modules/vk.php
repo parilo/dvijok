@@ -25,7 +25,7 @@ class vk {
 	//set auth requested by the user
 	public function setAuthReq($inp, $user, $sess, $db){
 		$sess['vkauthreq'] = '1';
-		$db->putObject($sess, false);
+		$db->getDB()->putObject($sess, false);
 		$ret['result'] = 'success';
 		return $ret;
 	}
@@ -69,7 +69,7 @@ class vk {
 					$vkid = $inforesp['uid'];
 					$uid = 'vk'.$vkid;
 
-					$checkuser = $db->getObjectByTags('user '.$uid/*, $root*/);
+					$checkuser = $db->getDB()->getObjectByTags('user '.$uid/*, $root*/);
 					if( $checkuser === false ){
 						//if user with such uid not exists - create user based on $user argument
 						if( isset($user['id']) ) unset($user['id']);
@@ -86,11 +86,11 @@ class vk {
 					if( in_array($vkid, $config['moderatorVkIds']) ) $user['userinfo']['ismoderator'] = '1';
 					else if( isset($user['userinfo']['ismoderator']) ) unset($user['userinfo']['ismoderator']);
 					
- 					$db->putObject_($user, 'user '.$uid/*, $root*/);
+ 					$db->getDB()->putObject($user, 'user '.$uid/*, $root*/);
  					
  					$sess['uid'] = $uid;
 					if( isset($sess['vkauthreq']) ) unset($sess['vkauthreq']);
- 					$db->putObject_($sess, 'sess auth'/*, $root*/);
+ 					$db->getDB()->putObject($sess, 'sess auth'/*, $root*/);
  					
 					$ret['objs']['userinfo'] = $user['userinfo'];
 					$ret['result'] = 'success';
@@ -133,7 +133,7 @@ class vk {
 				$vkid = $inforesp['uid'];
 				$uid = 'vk'.$vkid;
 
-				$checkuser = $db->getObjectByTags('user '.$uid/*, $root*/);
+				$checkuser = $db->getDB()->getObjectByTags('user '.$uid/*, $root*/);
 				if( $checkuser === false ){
 					//if user with such uid not exists - create user based on $user argument
 					if( isset($user['id']) ) unset($user['id']);
@@ -150,11 +150,11 @@ class vk {
 				if( in_array($vkid, $config['moderatorVkIds']) ) $user['userinfo']['ismoderator'] = '1';
 				else if( isset($user['userinfo']['ismoderator']) ) unset($user['userinfo']['ismoderator']);
 				
-				$db->putObject_($user, 'user '.$uid/*, $root*/);
+				$db->getDB()->putObject($user, 'user '.$uid/*, $root*/);
 
 				$sess['uid'] = $uid;
 				if( isset($sess['vkauthreq']) ) unset($sess['vkauthreq']);
-				$db->putObject_($sess, 'sess auth'/*, $root*/);
+				$db->getDB()->putObject($sess, 'sess auth'/*, $root*/);
 
 				$ret['objs']['userinfo'] = $user['userinfo'];
 				$ret['result'] = 'success';

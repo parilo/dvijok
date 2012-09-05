@@ -78,6 +78,7 @@ public class Dwidget extends Composite {
 	
 	protected void beforeTmplInit(){}
 	public void reinit(){}
+	public boolean needAuthReinit(){ return false; }
 	
 	private void init(final String templUrl){
 		

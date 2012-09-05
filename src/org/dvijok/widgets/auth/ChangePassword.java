@@ -54,6 +54,11 @@ public class ChangePassword extends SubPanelsDwidget {
 	}
 
 	@Override
+	public boolean needAuthReinit() {
+		return true;
+	}
+
+	@Override
 	protected void beforeSubPanelsLoading() {
 		
 		KeyDownHandler loginkdh = new KeyDownHandler(){

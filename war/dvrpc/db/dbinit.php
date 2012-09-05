@@ -70,10 +70,10 @@ class DataBaseInit {
 // 		$muirights['or'] = '0';
 // 		$muirights['ow'] = '0';
 		
-		$db->putObject_($root, 'user admin'/*, $root, $rights*/);
+		$db->putObject($root, 'user admin'/*, $root, $rights*/);
 // 		$db->putObject_($moderator, 'user moderator', $root, $rights);
 // 		$db->putObject_($moderatorui, 'userinfo moderator', $root, $muirights);
-		$db->putObject_($guest, 'user guest'/*, $root, $rights*/);
+		$db->putObject($guest, 'user guest'/*, $root, $rights*/);
 		
 		//$db->putTags('comment maincomments', $tr);
 		

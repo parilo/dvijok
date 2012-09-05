@@ -18,6 +18,8 @@
 
 package org.dvijok.controls.zurb;
 
+import java.util.HashMap;
+
 import org.dvijok.controls.LI;
 import org.dvijok.controls.UL;
 import org.dvijok.event.CustomEvent;
@@ -36,9 +38,11 @@ public class Menu extends ComplexPanel {
 	private UL ul;
 	private LI first;
 	private LI last;
-
+	private LI active;
+	private HashMap<Anchor, LI> lis;
+	private boolean needLast;
 	
-/*	
+/*
 <ul id="mainnav" class="nav-bar">
 
 	<li id="mainnavfirst" class="has-flyout">
@@ -65,6 +69,9 @@ public class Menu extends ComplexPanel {
 	
 	public Menu(String ulclassname){
 		
+		needLast = true;
+		lis = new HashMap<Anchor, LI>();
+		
 		Element div = DOM.createDiv();
 		
 		ul = new UL();
@@ -76,12 +83,27 @@ public class Menu extends ComplexPanel {
 		
 	}
 	
+	public void addItem(Anchor a){
+		addItem(a, false);
+	}
+	
+	public void addItem(Anchor a, boolean isActive){
+		LI li = new LI();
+		if( isActive ) setActive(li);
+		initBorderItems(li);
+		registerAnchor(a, li);
+
+		add(li, ul.getElement());
+		add(a, li.getElement());
+	}
+	
 	public void addItem(String label, boolean isActive){
 		LI li = new LI();
-		if( isActive ) li.addStyleName("active");
+		if( isActive ) setActive(li);
 		initBorderItems(li);
 
 		Anchor a = new Anchor(label);
+		registerAnchor(a, li);
 		
 		add(li, ul.getElement());
 		add(a, li.getElement());
@@ -89,10 +111,11 @@ public class Menu extends ComplexPanel {
 	
 	public void addItem(String label, boolean isActive, String href){
 		LI li = new LI();
-		if( isActive ) li.addStyleName("active");
+		if( isActive ) setActive(li);
 		initBorderItems(li);
 
 		Anchor a = new Anchor(label, false, href);
+		registerAnchor(a, li);
 		
 		add(li, ul.getElement());
 		add(a, li.getElement());
@@ -107,7 +130,7 @@ public class Menu extends ComplexPanel {
 	*/
 	public void addItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right){
 		LI li = new LI();
-		if( isActive ) li.addStyleName("active");
+		if( isActive ) setActive(li);
 		li.addStyleName("has-flyout");
 		initBorderItems(li);
 		
@@ -126,6 +149,7 @@ public class Menu extends ComplexPanel {
 		});
 
 		Anchor a = new Anchor(label);
+		registerAnchor(a, li);
 		
 		Anchor a2 = new Anchor();
 		InlineHTML span = new InlineHTML("");
@@ -152,7 +176,7 @@ public class Menu extends ComplexPanel {
 	*/
 	public void addItemFlayout(String label, boolean isActive, final UL subul, boolean right){
 		LI li = new LI();
-		if( isActive ) li.addStyleName("active");
+		if( isActive ) setActive(li);
 		li.addStyleName("has-flyout");
 		initBorderItems(li);
 		
@@ -171,6 +195,7 @@ public class Menu extends ComplexPanel {
 		});
 
 		Anchor a = new Anchor(label);
+		registerAnchor(a, li);
 		
 		Anchor a2 = new Anchor();
 		InlineHTML span = new InlineHTML("");
@@ -192,13 +217,36 @@ public class Menu extends ComplexPanel {
 			added.addStyleName("first");
 		}
 		
-		if( last != null ){
-			last.removeStyleName("last");
+		if( needLast ){
+			if( last != null ){
+				last.removeStyleName("last");
+			}
+			last = added;
+			added.addStyleName("last");
 		}
-		last = added;
-		added.addStyleName("last");
 	}
 
+	public boolean isNeedLast() {
+		return needLast;
+	}
+
+	public void setNeedLast(boolean needLast) {
+		this.needLast = needLast;
+	}
+
+	private void setActive(LI li) {
+		if( active != null ) active.removeStyleName("active");
+		active = li;
+		li.addStyleName("active");
+	}
+	
+	public void setActive(Anchor a){
+		if( lis.containsKey(a) ) setActive(lis.get(a));
+	}
+
+	private void registerAnchor(Anchor a, LI li){
+		lis.put(a, li);
+	}
 	
 	
 }

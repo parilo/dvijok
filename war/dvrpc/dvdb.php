@@ -1,3 +1,5 @@
+<?php
+
 //    dvijok - cms written in gwt
 //    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
@@ -14,12 +16,16 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
-//
 
-package org.dvijok.widgets;
-
-public interface DwidgetCreator {
+interface DvDB {
 	
-	public Dwidget getDwidget(SubPanel p);
-
+	public function getDB();
+	public function getSession($sid);
+	public function saveSession($sess);
+// 	public function setSessionUnauth($sess);
+	public function getUser($uid);
+	public function saveUser($user);
+	
 }
+
+?>
