@@ -1,5 +1,3 @@
-<?php
-
 //    dvijok - cms written in gwt
 //    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
@@ -16,17 +14,27 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
+//
 
-interface DvDB {
+package org.dvijok.controls;
+
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
+
+public class Element extends com.google.gwt.user.client.Element {
+
+	protected Element(){}
 	
-	public function getDB();
-	public function getSession($sid);
-	public function saveSession($sess);
-	public function getSessionUserData($sid);
-	public function getUser($uid);
-	public function saveUser($user);
-	public function getUserData($uid);
+	public final void clear(){
+		
+		NodeList<Node> ns = getChildNodes();
+		int count = getChildCount();
+		for(int i=0; i<count; i++){
+			removeChild(ns.getItem(0));
+		}
+	}
+
+	
+	
 	
 }
-
-?>

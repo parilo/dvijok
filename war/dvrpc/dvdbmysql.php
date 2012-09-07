@@ -59,7 +59,7 @@ class DvDBMysql implements DvDB {
 	public function getSession($sid){
 
 		$result = $this->db->query('
-				SELECT s.id, s.sid, s.uid, s.time, s.ip, s.authed, s.data
+				SELECT s.id, s.sid, s.uid, s.time, s.ip, s.authed
 				FROM dvsession s
 				WHERE s.sid=\''.$this->db->real_escape_string($sid).'\'');
 
@@ -67,18 +67,47 @@ class DvDBMysql implements DvDB {
 		if( is_object($result) ){
 			
 			$sess = $result->fetch_assoc();
-			if( $sess['data'] != '' ){
-				$data = unserialize($sess['data']);
-				unset($sess['data']);
-				if(is_object($data))
-				foreach( $data as $key => $val ){
-					$sess[$key] = $val;
-				}
-			}
+// error_log("db sess: ".print_r($sess, true));
+// 			if( $sess['data'] != '' ){
+// 				$data = unserialize($sess['data']);
+// 				unset($sess['data']);
+// 				if(is_array($data))
+// 				foreach( $data as $key => $val ){
+// 					$sess[$key] = $val;
+// 				}
+// 			}
 			
 			return $sess;
 		}
 		else return false;
+		
+	}
+	
+	public function getSessionUserData($sid){
+		
+		$result = $this->db->query('
+				SELECT s.data
+				FROM dvsession s
+				WHERE s.sid=\''.$this->db->real_escape_string($sid).'\'');
+		
+		if (!$result) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
+		if( is_object($result) ){
+				
+			$sess = $result->fetch_assoc();
+			if( $sess['data'] != '' ){
+				$data = unserialize($sess['data']);
+				unset($sess['data']);
+				if(is_array($data)){
+					$userdata = array();
+					foreach( $data as $key => $val ){
+						$userdata[$key] = $val;
+					}
+					return $userdata;
+				}
+			}
+				
+		}
+		return array();
 		
 	}
 	
@@ -129,7 +158,7 @@ class DvDBMysql implements DvDB {
 	public function getUser($uid){
 		
 		$result = $this->db->query("
-				SELECT id, uid, pass, data
+				SELECT id, uid, pass
 				FROM dvuser
 				WHERE uid='".$this->db->real_escape_string($uid).'\'');
 
@@ -137,18 +166,45 @@ class DvDBMysql implements DvDB {
 		if( is_object($result) ){
 				
 			$user = $result->fetch_assoc();
-			if( $user['data'] != '' ){
-				$data = unserialize($user['data']);
-				unset($user['data']);
-				if(is_object($data))
-				foreach( $data as $key => $val ){
-					$user[$key] = $val;
-				}
-			}
+// 			if( $user['data'] != '' ){
+// 				$data = unserialize($user['data']);
+// 				unset($user['data']);
+// 				if(is_array($data))
+// 				foreach( $data as $key => $val ){
+// 					$user[$key] = $val;
+// 				}
+// 			}
 				
 			return $user;
 		}
 		else return false;
+		
+	}
+	
+	public function getUserData($uid){
+		
+		$result = $this->db->query("
+				SELECT data
+				FROM dvuser
+				WHERE uid='".$this->db->real_escape_string($uid).'\'');
+		
+		if (!$result) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
+		if( is_object($result) ){
+		
+			$user = $result->fetch_assoc();
+			if( $user['data'] != '' ){
+				$data = unserialize($user['data']);
+				unset($user['data']);
+				if(is_array($data)){
+					$userdata = array();
+					foreach( $data as $key => $val ){
+						$userdata[$key] = $val;
+					}
+					return $userdata;
+				}
+			}
+		}
+		return array();
 		
 	}
 	

@@ -20,28 +20,39 @@ package org.dvijok.controls.zurb;
 
 import java.util.HashMap;
 
+import org.dvijok.controls.Element;
 import org.dvijok.controls.LI;
 import org.dvijok.controls.UL;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
+import org.dvijok.event.CustomEventTool;
+import org.dvijok.lib.Lib;
 import org.dvijok.widgets.Dwidget;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.UListElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 
 public class Pagination extends ComplexPanel {
 
-	private UListElement ul;
+	private Element ul;
+	private Anchor left;
+	private Anchor right;
+	private Anchor middle1;
+	private Anchor middle2;
 	
 	private int numberOfAllElements;
 	private int displayCount;
 	private int currentSelected;
+	private CustomEventTool pageSelected;
+	private ClickHandler pageClicked;
 	
 /*
 	<ul class="pagination">
@@ -58,10 +69,32 @@ public class Pagination extends ComplexPanel {
 */
 	
 	public Pagination(){
-		ul = Document.get().createULElement();
+		
+		pageSelected = new CustomEventTool();
+		
+		ul = (Element) Document.get().createULElement().cast();
 		ul.addClassName("pagination");
 
 		setElement(ul);
+		
+		left = new Anchor();
+		left.setHTML("&laquo;");
+		
+		right = new Anchor();
+		right.setHTML("&raquo;");
+		
+		middle1 = new Anchor();
+		middle1.setHTML("&hellip;");
+		
+		middle2 = new Anchor();
+		middle2.setHTML("&hellip;");
+		
+		pageClicked = new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Anchor a = (Anchor) event.getSource();
+				pageSelected.invokeListeners(Lib.getInt(a.getText()));
+			}};
 	}
 
 	public void setParameters(int numberOfAllElements, int displayCount, int currentSelected){
@@ -72,7 +105,134 @@ public class Pagination extends ComplexPanel {
 	}
 	
 	private void draw(){
-		ul.
+		
+		ul.clear();
+		
+		if( numberOfAllElements > 1 ){
+		
+			LI li;
+			Anchor a;
+			
+			int leftBorder = Math.max(currentSelected - displayCount/2, 1);
+			int rightBorder = Math.min(currentSelected + displayCount/2, numberOfAllElements);
+			int count = rightBorder - leftBorder;
+			if( count < displayCount ){
+				if( leftBorder == 1 ) rightBorder = Math.min(displayCount, numberOfAllElements);
+				else if( rightBorder == numberOfAllElements ) leftBorder = Math.max(numberOfAllElements-displayCount, 1);
+			}
+			
+			li = new LI(left);
+			li.addStyleName("arrow");
+			if( currentSelected == 1 ) li.addStyleName("unavailable");
+			add(li, ul);
+			
+			a = new Anchor("1");
+			a.addClickHandler(pageClicked);
+			li = new LI(a);
+			if( 1 == currentSelected ) li.addStyleName("current");
+			add(li, ul);
+
+			if( leftBorder > 3 ) add(new LI(middle1), ul);
+
+			int begi = Math.max(leftBorder, 2);
+			int endi = Math.min(rightBorder, numberOfAllElements-2);
+			if( begi == 3 ) begi=2;
+			if( endi == numberOfAllElements-2 ) endi = numberOfAllElements-1;
+			for( int i=begi; i<=endi; i++ ){
+				a = new Anchor(""+i);
+				a.addClickHandler(pageClicked);
+				li = new LI(a);
+				if( i == currentSelected ){
+					li.addStyleName("current");
+				}
+				add(li, ul);
+			}
+			
+			if( rightBorder < numberOfAllElements-2 ) add(new LI(middle2), ul);
+			
+			a = new Anchor(""+numberOfAllElements);
+			a.addClickHandler(pageClicked);
+			li = new LI(a);
+			if( numberOfAllElements == currentSelected ) li.addStyleName("current");
+			add(li, ul);
+			
+			li = new LI(right);
+			li.addStyleName("arrow");
+			if( currentSelected == numberOfAllElements ) li.addStyleName("unavailable");
+			add(li, ul);
+			
+//			if( numberOfAllElements <= 2*displayCount ){
+//				
+//				
+//				for(int i=1; i<=numberOfAllElements; i++ ){
+//					
+//					Anchor a = new Anchor(""+i);
+//					a.addClickHandler(pageClicked);
+//					li = new LI(a);
+//					if( i == currentSelected ){
+//						li.addStyleName("current");
+//					}
+//					add(li, ul);
+//					
+//				}
+//				
+//			} else {
+//				
+//				for( int i=1; i<=displayCount; i++ ){
+//	
+//					Anchor a = new Anchor(""+i);
+//					a.addClickHandler(pageClicked);
+//					li = new LI(a);
+//					if( i == currentSelected ){
+//						li.addStyleName("current");
+//					}
+//					add(li, ul);
+//					
+//				}
+//				
+//				add(new LI(middle), ul);
+//				
+//				for( int i=numberOfAllElements-displayCount+1; i<=numberOfAllElements; i++ ){
+//	
+//					Anchor a = new Anchor(""+i);
+//					a.addClickHandler(pageClicked);
+//					li = new LI(a);
+//					if( i == currentSelected ){
+//						li.addStyleName("current");
+//					}
+//					add(li, ul);
+//					
+//				}
+//				
+//			}
+//	
+//			li = new LI(right);
+//			li.addStyleName("arrow");
+//			if( currentSelected == numberOfAllElements ) li.addStyleName("unavailable");
+//			add(li, ul);
+		
+		}
+		
+	}
+	
+	public void setSelected(int pageNumber){
+		currentSelected = pageNumber;
+		draw();
+	}
+	
+	public void setNumberOfAllElements(int numberOfAllElements){
+		this.numberOfAllElements = numberOfAllElements;
+		draw();
+	}
+	
+	public void addPageSelectedListener(CustomEventListener listener){
+		pageSelected.addCustomEventListener(listener);
+	}
+	
+	public void removePageSelectedListener(CustomEventListener listener){
+		pageSelected.removeCustomEventListener(listener);
 	}
 	
 }
+
+

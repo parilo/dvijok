@@ -136,9 +136,11 @@ class DVService {
  		$ret['objs']['userinfo'] = isset($user['userinfo'])?$user['userinfo']:array();
  		
  		if( $sess['uid'] == 'guest' ){
- 			$ret['objs']['userdata'] = isset($sess['userdata'])?$sess['userdata']:array();
+			$userdata = $this->db->getSessionUserData($sess['sid']);
+ 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
  		} else {
- 			$ret['objs']['userdata'] = isset($user['userdata'])?$user['userdata']:array();
+			$userdata = $this->db->getUserData($sess['uid']);
+ 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
  		}
  		
 // 		$ret['objs']['login'] = $user['uid'];
