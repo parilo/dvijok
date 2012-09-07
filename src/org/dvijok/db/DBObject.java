@@ -131,5 +131,7 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 		}
 		return objs;
 	}
+	
+//	public DBObject copy()
 
 }

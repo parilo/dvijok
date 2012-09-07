@@ -63,6 +63,9 @@ class DvDBFiles implements DvDB {
 	public function saveUser($user){
 		$this->db->putObject($user);
 	}
+
+	public function getSessionUserData($sid){}
+	public function getUserData($uid){}
 	
 }
 
