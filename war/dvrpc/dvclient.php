@@ -20,29 +20,36 @@
 require_once 'fetcherlib.php';
 require_once 'dvrpcproto.php';
 
+interface DVClientDB {
+	public function getSid();
+	public function saveSid($sid);
+}
+
 class DVClient {
 	
 	private $url;
 	private $sid;
 	private $proto;
 	private $flib;
-
-	public function __construct($sid = false){
+	private $dvclientdb;
+	private $userinfo;
+	private $userdata;
+	
+	public function __construct($dvclientdb){
 		
 		global $config;
 		$this->url = $config['rpcurl'];
 		
 		$this->proto = new DVRPCProto();
 		$this->flib = new FetcherLib();
+		$this->dvclientdb = $dvclientdb;
+		$this->sid = $dvclientdb->getSid();
 		
-		if( $sid == false ) $this->initSession();
-		else {
-			$this->sid = $sid;
-			$this->checkSession();
-		}
+		if( $this->sid === false ) $this->initSession();
+		else $this->checkSession();
 	}
 	
-	private function ifSuccess($result){
+	private function isSuccess($result){
 		
 		if( isset($result['result']) ){
 			if( $result['result'] == 'success' ){
@@ -52,98 +59,92 @@ class DVClient {
 		return false;
 	}
 	
+	private function storeSession(){
+		$this->dvclientdb->saveSid($this->sid);
+	}
+	
 	private function initSession(){
 		$result = $this->initSessionReq();
 
 		if( $this->isSuccess($result) ){
 			$this->sid = $result['objs']['sid'];
-			storeSession();
-			checkSession();
+			$this->storeSession();
 		}
-		
-// 		initSession( new Handler<Boolean>(){
-// 			@Override
-// 			public void onHandle(Boolean param) {
-// 				checkSession();
-// 				storeSession();
-// 			}});
-		echo print_r($res, true)."\n";
-		exit(0);
 	}
 	
 	private function initSessionReq() {
-		
 		$req['func'] = 'initSession';
 		$reqstr = $this->proto->hashMapCode($req);
 		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
  		return $this->proto->hashMapDecode($resstr);
-// 		DBObject dbo = new DBObject();
-// 		dbo.put("func", "initSession");
-		
-// 		dbRequest.request(dbo, new DVRequestHandler<DBObject>(){
-
-// 			@Override
-// 			public void success(DBObject result) {
-// 				if( result.getString("result").equals("success") ){
-// 					sid = result.getDBObject("objs").getString("sid");
-// 					storeSession();
-// 					if( handler != null ) handler.onHandle(true);
-// 				}
-// 			}
-
-// 			@Override
-// 			public void fail(DBObject result) {
-// 				Lib.alert("DataBaseDVRPC: B: init session failed: "+result);
-// 			}});
 	}
 	
-// 	private function checkSession(){
-// 		checkSession(new DBObject(),  new DVRequestHandler<DBObject>(){
-	
-// 			@Override
-// 			public void success(DBObject result) {
-// 				inited.customEventOccurred(new CustomEvent(result));
-// 			}
-	
-// 			@Override
-// 			public void fail(DBObject result) {
-// 			}
-// 		});
-// 	}
-	
-// 	public function checkSession($sid) {
-// 		DBObject req = new DBObject();
-// 		req.put("sid", sid);
-// 		req.put("func", "checkSession");
-// 		req.put("obj", params);
-	
-// 		dbEventsRequest = dbRequest.request(req, new DVRequestHandler<DBObject>(){
-	
-// 			@Override
-// 			public void success(DBObject result) {
-// 				String res = result.getString("result");
-// 				if( res.equals("success") ){
-// 					handler.success(result.getDBObject("objs"));
-// 				} else {
-// 					//					if(
-// 					checkNotSid(res, new Handler<Boolean>(){
-// 						@Override
-// 						public void onHandle(Boolean param) {
-// 							checkSession(params, handler);
-// 						}
-// 					});
-// 					//					) Lib.alert("DataBase: resetEvents A: fail: ->"+result+"<-");
-// 				}
-// 			}
-	
-// 			@Override
-// 			public void fail(DBObject result) {
-// 				Lib.alert("DataBase: resetEvents B: fail: "+result);
-// 			}
-// 		});
-// 	}
-	
+	public function checkSession() {
+		
+		$req['func'] = 'checkSession';
+		$req['sid'] = $this->sid;
+		$reqstr = $this->proto->hashMapCode($req);
+		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
+		$result = $this->proto->hashMapDecode($resstr);
 
+		if( !$this->isSuccess($result) ) return $this->initSession();
+
+		$this->userinfo = $result['objs']['userinfo'];
+		$this->userdata = $result['objs']['userdata'];
+		
+	}
+	
+	public function isAuthorized(){
+		return isset($userinfo['type']);
+	}
+	
+	public function login($logpass){
+		
+		$loginp['login'] = $logpass['login'];
+		$challange = $this->loginReq($loginp);
+		$logpass['chal'] = $challange;
+		$res = $this->loginResponseReq($logpass);
+		
+	}
+	
+	/*
+	 * need $params['login']
+	 */
+	private function loginReq($params) {
+		
+		$req['func'] = 'login';
+		$req['sid'] = $this->sid;
+		$req['obj'] = $params;
+		$reqstr = $this->proto->hashMapCode($req);
+		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
+		$result = $this->proto->hashMapDecode($resstr);
+		
+		if( $result['result'] != 'challange' ) echo "dvclient login error. We have no challange: ".print_r($result, true);
+		return $result['chal'];
+	}
+	
+	/*
+	 * need $data['login'], $data['pass'] and $data['chal']
+	 */
+	private function loginResponseReq($data){
+		
+		$resp = md5($data['chal'].$data['pass']);
+		
+		$params['login'] = $data['login'];
+		$params['response'] = $resp;
+
+		$req['func'] = 'login';
+		$req['sid'] = $this->sid;
+		$req['obj'] = $params;
+		$reqstr = $this->proto->hashMapCode($req);
+		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
+		$result = $this->proto->hashMapDecode($resstr);
+		
+		echo print_r($result, true)."\n";
+		exit(0);
+		
+	}
+	
 
 }
 

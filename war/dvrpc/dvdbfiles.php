@@ -52,10 +52,6 @@ class DvDBFiles implements DvDB {
 		else $this->db->putObject($sess, 'sess unauth');
 	}
 	
-// 	public function setSessionUnauth($sess){
-// 		$this->db->putObject($sess, 'sess unauth');
-// 	}
-	
 	public function getUser($uid){
 		return $this->db->getObjectByTags('user '.$uid);
 	}

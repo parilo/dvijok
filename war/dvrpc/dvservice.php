@@ -242,107 +242,34 @@ class DVService {
  		$ret['result'] = "success";
  		return $ret;
 	}
-	
-// 	private function putObject($inp, $user, $sess){
-
-// 		$ret['result'] = 'put object is denied now';
-// 		return $ret;
-
-// 		$inp = $inp['obj'];
-
-// 		$uid = $user['uid'];
-// 		if( isset($inp['dbo']) ) $obj = $inp['dbo'];
-// 		else return retarr('specify DBObject');
-
-// 		if( isset($inp['tags']) ) $tags = $inp['tags'];
-// 		else return retarr('specify tags');
-
-// 		if( isset($inp['rights']) ) $rights = $inp['rights'];
-// 		else {
-// 			$rights['uid'] = $uid;
-// 			$rights['gid'] = $uid;
-// 			$rights['ur'] = '1';
-// 			$rights['uw'] = '1';
-// 			$rights['gr'] = '0';
-// 			$rights['gw'] = '0';
-// 			$rights['or'] = '0';
-// 			$rights['ow'] = '0';
-// 		}
-
-// 		$id = $this->db->putObject($obj, $tags, $user, $rights);
-// 		$obj['id'] = "$id";
-
-// 		$ret['result'] = 'success';
-// 		$ret['objs']['id'] = "$id";
-// 		return $ret;
-// 	}
-
-// 	private function getObjects($inp, $user, $sess){
-
-// 		$inp = $inp['obj'];
-
-// 		if( !isset($inp['tags']) ) return retarr('specify tags');
-// 		$tags = $inp['tags'];
-// 		if( $tags == "" ) return retarr('specify tags');
-
-// 		if( isset($inp['count']) ) $count = $inp['count'];
-// 		else $count = 0;
-
-// 		if( isset($inp['offset']) ) $offset = $inp['offset'];
-// 		else $offset = 0;
-
-// 		$objs = $this->db->getObjectsByTags($tags, $user, $count, $offset);
-// 		$filter = new DvObjFilter();
-// 		$objs = $filter->filter($objs, $user, $tags);
-// 		$objs['_isarr'] = '1';
-		
-// 		$ret['result'] = 'success';
-// 		$ret['objs'] = $objs;
-
-// 		return $ret;
-// 	}
-
-// 	private function delObject($inp, $user, $sess){
-
-// 		$inp = $inp['obj'];
-
-// 		if( isset($inp['id']) ) $id = $inp['id'];
-// 		else return retarr('specify id');
-
-// 		$res = $this->db->delObject($id, $user);
-// 		if( $res === true ){
-// 			$ret['return'] = 'success';
-// 			$ret['id'] = $id;
-// 			return $ret;
-// 		}
-// 		else return retarr($res);
-
-// 	}
 
 	private function login($inp, $user, $sess){
 		// need rewriting
-/*		$inp = $inp['obj'];
+		$inp = $inp['obj'];
 
 		if( $user['uid'] == 'guest' ){
 
 			if( isset($inp['login']) ){
 					
 				$login = $inp['login'];
-				$loginuser = $this->db->getObjectByVal('uid', $login, 'user', $this->root);
+// 				$loginuser = $this->db->getObjectByVal('uid', $login, 'user', $this->root);
+				$loginuser = $this->db->getUser($login);
 				
-				if( !isset($loginuser['nologin']) ){
+				if( ($loginuser != false) && !isset($loginuser['nologin']) ){
 
 					if( isset($inp['response']) ){
 
 						$resp = strtolower($inp['response']);
 						
-						if( isset($sess['chal']) && isset($loginuser['pass']) ){
+						if( isset($sess['serverdata']['chal']) && isset($loginuser['pass']) ){
 														
-							if( $resp === md5($sess['chal'].$loginuser['pass']) ){
+							if( $resp === md5($sess['serverdata']['chal'].$loginuser['pass']) ){
 
-								unset($sess['chal']);
+								unset($sess['serverdata']['chal']);
 								$sess['uid'] = $loginuser['uid'];
-								$this->db->putObject_($sess, 'sess auth', $this->root);
+								//$this->db->putObject_($sess, 'sess auth', $this->root);
+								$sess['authed'] = '1';
+								$db->saveSession($sess);
 
 								$ret['result'] = 'success';
 
@@ -357,8 +284,9 @@ class DVService {
 						$ret['result'] = 'challange';
 
 						//store challange
-						$sess['chal'] = $randhash;
-						$this->db->putObject_($sess, 'sess chal', $this->root);
+						$sess['serverdata']['chal'] = $randhash;
+						$this->db->saveSession($sess);
+// 						$this->db->putObject_($sess, 'sess chal', $this->root);
 
 					}
 
@@ -370,10 +298,10 @@ class DVService {
 			$ret['result'] = 'only guest session can login. Just create new session.';
 		}
 
-		return $ret;*/
-		
-		$ret['result'] = 'unavailable';
 		return $ret;
+		
+// 		$ret['result'] = 'unavailable';
+// 		return $ret;
 	}
 
 	private function logout($inp, $user, $sess){
