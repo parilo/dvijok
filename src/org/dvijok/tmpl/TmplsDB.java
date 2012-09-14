@@ -23,7 +23,7 @@ import java.util.HashMap;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.HttpFunctions;
 import org.dvijok.resources.Resources;
 

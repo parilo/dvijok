@@ -19,7 +19,7 @@
 package org.dvijok.resources;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 
 public class AuthTool {
 
@@ -27,9 +27,9 @@ public class AuthTool {
 		logout(null);
 	}
 	
-	public void logout( final DVRequestHandler<DBObject> onLogout ){
+	public void logout( final RequestHandler<DBObject> onLogout ){
 		
-		Resources.getInstance().db.logout(null, new DVRequestHandler<DBObject>(){
+		Resources.getInstance().db.logout(null, new RequestHandler<DBObject>(){
 	
 			@Override
 			public void success(DBObject result) {

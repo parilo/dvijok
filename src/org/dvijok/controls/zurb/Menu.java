@@ -248,5 +248,12 @@ public class Menu extends ComplexPanel {
 		lis.put(a, li);
 	}
 	
+	public void clearActive(){
+		if( active != null ){
+			active.removeStyleName("active");
+			active = null;
+		}
+	}
+	
 	
 }

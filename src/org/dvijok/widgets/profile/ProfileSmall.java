@@ -21,7 +21,7 @@ package org.dvijok.widgets.profile;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.SubPanel;
@@ -77,7 +77,7 @@ public class ProfileSmall extends SubPanelsDwidget {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Resources.getInstance().authTool.logout(new DVRequestHandler<DBObject>(){
+				Resources.getInstance().authTool.logout(new RequestHandler<DBObject>(){
 
 					@Override
 					public void success(DBObject result) {

@@ -24,7 +24,7 @@ import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
 import org.dvijok.db.event.DataBaseEventListener;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
@@ -45,7 +45,7 @@ public class DataBaseGWTRPC implements DataBase {
 		this.makeSession(null);
 	}
 	
-	private void makeSession(final DVRequestHandler<Integer> handler){
+	private void makeSession(final RequestHandler<Integer> handler){
 		AsyncCallback<DBObject> cb = new AsyncCallback<DBObject>(){
 
 			@Override
@@ -81,7 +81,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 	
 	@Override
-	public void login(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void login(final DBObject params, final RequestHandler<DBObject> handler) {
 		
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
@@ -100,7 +100,7 @@ public class DataBaseGWTRPC implements DataBase {
 				if( res.equals("success") ) handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					makeSession(new DVRequestHandler<Integer>(){
+					makeSession(new RequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -123,7 +123,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 
 	@Override
-	public void sendKey(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void sendKey(final DBObject params, final RequestHandler<DBObject> handler) {
 		
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
@@ -142,7 +142,7 @@ public class DataBaseGWTRPC implements DataBase {
 				if( res.equals("success") )	handler.success(result);
 				else if( res.equals("notsid") ){
 					
-					makeSession(new DVRequestHandler<Integer>(){
+					makeSession(new RequestHandler<Integer>(){
 
 						@Override
 						public void success(Integer result) {
@@ -165,7 +165,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 
 	@Override
-	public void logout(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void logout(final DBObject params, final RequestHandler<DBObject> handler) {
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
 		allparams.put("objects", params);
@@ -355,7 +355,7 @@ public class DataBaseGWTRPC implements DataBase {
 
 	@Override
 	public void listenForEvents(DBObject params,
-			DVRequestHandler<DBObject> handler) {
+			RequestHandler<DBObject> handler) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -392,20 +392,20 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 
 	@Override
-	public void checkSession(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void checkSession(DBObject params, RequestHandler<DBObject> handler) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void external(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void external(DBObject params, RequestHandler<DBObject> handler) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void saveUserData(DBObject userData,
-			DVRequestHandler<DBObject> handler) {
+			RequestHandler<DBObject> handler) {
 		// TODO Auto-generated method stub
 		
 	}

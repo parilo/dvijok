@@ -21,7 +21,7 @@ package org.dvijok.widgets.auth;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.SubPanel;
@@ -48,7 +48,7 @@ public class LogoutOnHash extends SubPanelsDwidget {
 					
 					DBObject dbo = new DBObject();
 
-					final DVRequestHandler<DBObject> handler = new DVRequestHandler<DBObject>(){
+					final RequestHandler<DBObject> handler = new RequestHandler<DBObject>(){
 
 						@Override
 						public void success(DBObject result) {

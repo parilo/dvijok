@@ -21,7 +21,7 @@ package org.dvijok.db.event;
 import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 
 /**
@@ -72,7 +72,7 @@ public class DataBaseEventsDB implements DataBaseEventsInterface {
 		DBObject dbo = new DBObject();
 		dbo.put("need", allParams);
 		if( !queueid.equals("") ) dbo.put("qid", queueid);
-		db.listenForEvents(dbo, new DVRequestHandler<DBObject>(){
+		db.listenForEvents(dbo, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {

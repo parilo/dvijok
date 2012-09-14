@@ -20,7 +20,7 @@ package org.dvijok.db;
 
 import org.dvijok.db.event.DataBaseEvent;
 import org.dvijok.db.event.DataBaseEventListener;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 
 public class DataBaseTest {

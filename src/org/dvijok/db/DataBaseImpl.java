@@ -25,7 +25,7 @@ import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.db.event.DataBaseEventsDB;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.handlers.Handler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
@@ -46,7 +46,7 @@ public class DataBaseImpl implements DataBase {
 	}
 	
 	private void checkSession(){
-		checkSession(new DBObject(),  new DVRequestHandler<DBObject>(){
+		checkSession(new DBObject(),  new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -84,7 +84,7 @@ public class DataBaseImpl implements DataBase {
 		DBObject dbo = new DBObject();
 		dbo.put("func", "initSession");
 		
-		dbRequest.request(dbo, new DVRequestHandler<DBObject>(){
+		dbRequest.request(dbo, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -106,14 +106,14 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void login(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void login(final DBObject params, final RequestHandler<DBObject> handler) {
 
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "login");
 		req.put("obj", params);
 		
-		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -136,17 +136,17 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void sendKey(DBObject params, DVRequestHandler<DBObject> handler) {
+	public void sendKey(DBObject params, RequestHandler<DBObject> handler) {
 	}
 
 	@Override
-	public void logout(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void logout(final DBObject params, final RequestHandler<DBObject> handler) {
 
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "logout");
 		
-		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -289,13 +289,13 @@ public class DataBaseImpl implements DataBase {
 //	}
 
 	@Override
-	public void listenForEvents(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void listenForEvents(final DBObject params, final RequestHandler<DBObject> handler) {
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "listenForEvents");
 		req.put("obj", params);
 		
-		dbEventsRequest = dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbEventsRequest = dbRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -340,13 +340,13 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void checkSession(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void checkSession(final DBObject params, final RequestHandler<DBObject> handler) {
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "checkSession");
 		req.put("obj", params);
 		
-		dbEventsRequest = dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbEventsRequest = dbRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -371,13 +371,13 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void external(final DBObject params, final DVRequestHandler<DBObject> handler) {
+	public void external(final DBObject params, final RequestHandler<DBObject> handler) {
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "external");
 		req.put("obj", params);
 		
-		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -406,13 +406,13 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void saveUserData(final DBObject userData, final DVRequestHandler<DBObject> handler) {
+	public void saveUserData(final DBObject userData, final RequestHandler<DBObject> handler) {
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "saveUserData");
 		req.put("userdata", userData);
 		
-		dbRequest.request(req, new DVRequestHandler<DBObject>(){
+		dbRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {

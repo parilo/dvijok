@@ -18,17 +18,23 @@
 
 package org.dvijok.controls;
 
+import org.dvijok.lib.Lib;
+
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class TimeBox extends TextBox {
 
-	private char[] time; 
+	private char[] time;
+	private NumberFormat format;
 	
 	public TimeBox(){
+		format = NumberFormat.getFormat("00");
+		
 		this.time = new char[4];
 		this.time[0] = '0';
 		this.time[1] = '0';
@@ -122,6 +128,17 @@ public class TimeBox extends TextBox {
 		time[2] = text.charAt(3);
 		time[3] = text.charAt(4);
 		super.setText(text);
+	}
+	
+	public int getAsSeconds(){
+		String hs = ""+time[0]+time[1];
+		String ms = ""+time[2]+time[3];
+		int ret = Lib.getInt(hs)*3600+Lib.getInt(ms)*60;
+		return ret;
+	}
+	
+	public void setTime(int h, int m){
+		setText(format.format(h)+":"+format.format(m));
 	}
 	
 }

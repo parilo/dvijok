@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
@@ -91,7 +91,7 @@ public class VkAuth extends SubPanelsDwidget implements AuthCancelable {
 		dbo.put("module", "vk");
 		dbo.put("func", "setAuthReq");
 		
-		Resources.getInstance().db.external(dbo, new DVRequestHandler<DBObject>(){
+		Resources.getInstance().db.external(dbo, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -128,7 +128,7 @@ public class VkAuth extends SubPanelsDwidget implements AuthCancelable {
 		dbo.put("func", "authCode");
 		dbo.put("params", params);
 		
-		Resources.getInstance().db.external(dbo, new DVRequestHandler<DBObject>(){
+		Resources.getInstance().db.external(dbo, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -154,7 +154,7 @@ public class VkAuth extends SubPanelsDwidget implements AuthCancelable {
 		dbo.put("func", "authAccessToken");
 		dbo.put("params", params);
 		
-		Resources.getInstance().db.external(dbo, new DVRequestHandler<DBObject>(){
+		Resources.getInstance().db.external(dbo, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -187,7 +187,7 @@ public class VkAuth extends SubPanelsDwidget implements AuthCancelable {
 			dbo.put("module", "vk");
 			dbo.put("func", "isAuthReq");
 			
-			Resources.getInstance().db.external(dbo, new DVRequestHandler<DBObject>(){
+			Resources.getInstance().db.external(dbo, new RequestHandler<DBObject>(){
 	
 				@Override
 				public void success(DBObject result) {

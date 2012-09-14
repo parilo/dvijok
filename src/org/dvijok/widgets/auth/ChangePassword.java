@@ -21,7 +21,7 @@ package org.dvijok.widgets.auth;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
@@ -161,7 +161,7 @@ public class ChangePassword extends SubPanelsDwidget {
 		reqdbo.put("dbid", "seckey");
 		reqdbo.put("dbo", dbo);
 
-		final DVRequestHandler<DBObject> authkeyrh = new DVRequestHandler<DBObject>(){
+		final RequestHandler<DBObject> authkeyrh = new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -180,7 +180,7 @@ public class ChangePassword extends SubPanelsDwidget {
 //		Resources.getInstance().db.putObject(reqdbo, authkeyrh);
 	}
 	
-	private void onChPassFailed(DBObject result, DVRequestHandler<DBObject> loginrh){
+	private void onChPassFailed(DBObject result, RequestHandler<DBObject> loginrh){
 
 		String res = result.getString("result");
 		

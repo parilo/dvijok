@@ -19,24 +19,24 @@
 package org.dvijok.db;
 
 import org.dvijok.db.event.DataBaseEventListener;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 
 public interface DataBase {
 
-	public void login(DBObject params, final DVRequestHandler<DBObject> handler);
-	public void sendKey(DBObject params, final DVRequestHandler<DBObject> handler);
-	public void logout(DBObject params, final DVRequestHandler<DBObject> handler);
-	public void saveUserData(DBObject userData, final DVRequestHandler<DBObject> handler);
+	public void login(DBObject params, final RequestHandler<DBObject> handler);
+	public void sendKey(DBObject params, final RequestHandler<DBObject> handler);
+	public void logout(DBObject params, final RequestHandler<DBObject> handler);
+	public void saveUserData(DBObject userData, final RequestHandler<DBObject> handler);
 //	public void getObject(DBObject params, final DVRequestHandler<DBObject> handler);
 //	public void getObjects(DBObject params, final DVRequestHandler<DBArray> handler);
 //	public void putObject(DBObject params, final DVRequestHandler<DBObject> handler);
 //	public void delObject(DBObject params, final DVRequestHandler<DBObject> handler);
-	public void external(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void external(DBObject params, final RequestHandler<DBObject> handler);
 	
 	public void addEventListener(DBObject params, DataBaseEventListener listener);
 	public void removeEventListener(DBObject params, DataBaseEventListener listener);
-	public void listenForEvents(DBObject params, final DVRequestHandler<DBObject> handler);
-	public void checkSession(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void listenForEvents(DBObject params, final RequestHandler<DBObject> handler);
+	public void checkSession(DBObject params, final RequestHandler<DBObject> handler);
 	public void stopListenForEvents();
 	public void pauseListenForEvents();
 	public void resumeListenForEvents();

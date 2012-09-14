@@ -117,6 +117,7 @@ class DVClient {
 		$req['obj'] = $params;
 		$reqstr = $this->proto->hashMapCode($req);
 		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
+echo "res: $resstr\n";
 		$result = $this->proto->hashMapDecode($resstr);
 		
 		if( $result['result'] != 'challange' ) echo "dvclient login error. We have no challange: ".print_r($result, true);

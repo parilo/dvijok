@@ -18,7 +18,7 @@
 
 package org.dvijok.handlers;
 
-public interface DVRequestHandler<T> {
+public interface RequestHandler<T> {
 
 	public void success(T result);
 	public void fail(T result);

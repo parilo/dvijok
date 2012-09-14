@@ -21,7 +21,7 @@ package org.dvijok.db.dvrpc;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DBRequest;
 import org.dvijok.db.DBRequestMaker;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.HttpClient;
 import org.dvijok.lib.Lib;
 
@@ -39,7 +39,7 @@ public class DBRequestMakerDVRPC implements DBRequestMaker {
 		proto = new DVRPCProto();
 	}
 	
-	public DBRequest request(DBObject data, final DVRequestHandler<DBObject> handler){
+	public DBRequest request(DBObject data, final RequestHandler<DBObject> handler){
 
 		RequestCallback rcb = new RequestCallback(){
 

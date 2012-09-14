@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
-import org.dvijok.handlers.DVRequestHandler;
+import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
@@ -154,7 +154,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 		DBObject dbo = new DBObject();
 		dbo.put("login", loginStr);
 		
-		final DVRequestHandler<DBObject> loginrh = new DVRequestHandler<DBObject>(){
+		final RequestHandler<DBObject> loginrh = new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -179,7 +179,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 		dbo.put("authkey", this.authkey.getValue());
 		dbo.put("response", md5.md5(this.authkeychal+pass.getValue()));
 
-		final DVRequestHandler<DBObject> authkeyrh = new DVRequestHandler<DBObject>(){
+		final RequestHandler<DBObject> authkeyrh = new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -196,7 +196,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 		Resources.getInstance().db.sendKey(dbo, authkeyrh);
 	}
 	
-	private void onLoginFailed(DBObject result, DVRequestHandler<DBObject> loginrh){
+	private void onLoginFailed(DBObject result, RequestHandler<DBObject> loginrh){
 
 		String res = result.getString("result");
 		

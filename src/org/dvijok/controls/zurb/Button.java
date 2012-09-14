@@ -1,5 +1,5 @@
 //    dvijok - cms written in gwt
-//    Copyright (C) 2010-2011  Pechenko Anton Vladimirovich aka Parilo
+//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,31 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.controls.zurb;
 
-import org.dvijok.handlers.RequestHandler;
+import com.google.gwt.user.client.ui.Anchor;
 
-public interface DBRequestMaker {
+public class Button extends Anchor {
+
+	/*
+	 * type - tiny, small, medium, large
+	 * addition - radius, round
+	 */
+	public Button(String title, String type, String addition){
+		super(title);
+		addStyleName("button");
+		addStyleName(type);
+		addStyleName(addition);
+		//success, alert, secondary
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		if( isEnabled() != enabled )
+		if( enabled ) removeStyleName("secondary");
+		else addStyleName("secondary");
+		
+		super.setEnabled(enabled);
+	}
 	
-	public DBRequest request(DBObject data, RequestHandler<DBObject> handler);
-
 }
