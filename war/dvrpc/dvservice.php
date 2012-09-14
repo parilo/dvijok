@@ -133,15 +133,16 @@ class DVService {
 	}
 
 	private function checkSessionFunc($inp, $user, $sess){
- 		$ret['objs']['userinfo'] = isset($user['userinfo'])?$user['userinfo']:array();
  		
  		if( $sess['uid'] == 'guest' ){
 			$userdata = $this->db->getSessionUserData($sess['sid']);
- 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
  		} else {
 			$userdata = $this->db->getUserData($sess['uid']);
- 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
+# 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
+# 			$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
  		}
+		$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
+ 		$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
  		
 // 		$ret['objs']['login'] = $user['uid'];
 		$ret['result'] = "success";
@@ -269,7 +270,7 @@ class DVService {
 								$sess['uid'] = $loginuser['uid'];
 								//$this->db->putObject_($sess, 'sess auth', $this->root);
 								$sess['authed'] = '1';
-								$db->saveSession($sess);
+								$this->db->saveSession($sess);
 
 								$ret['result'] = 'success';
 
