@@ -1,0 +1,16 @@
+Options -Indexes
+DirectoryIndex index.html
+
+#<FilesMatch ".">
+#    Order Allow,deny
+#    Deny from all
+#</FilesMatch>
+
+#<FilesMatch "index.html$">
+#    Order Allow,deny
+#    Allow from all
+#</FilesMatch>
+
+RewriteEngine on
+RewriteCond %{QUERY_STRING} _escaped_fragment_(.*)=(.*)
+RewriteRule (.*\.html)? dvrpc/hash-bang.php?page=$1&key=%1&val=%2

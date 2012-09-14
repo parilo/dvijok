@@ -1,0 +1,17 @@
+Options -Indexes
+DirectoryIndex rpc.php
+
+<FilesMatch ".">
+    Order Allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "rpc.php$">
+    Order Allow,deny
+    Allow from all
+</FilesMatch>
+
+<FilesMatch "hash-bang.php$">
+    Order Allow,deny
+    Allow from all
+</FilesMatch>

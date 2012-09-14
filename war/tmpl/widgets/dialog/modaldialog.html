@@ -1,0 +1,35 @@
+<style>
+.modaloverlay {
+    text-align: center;
+	position: fixed;
+	margin: auto;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+	background-color:black;
+  filter:alpha(opacity=70);
+  -khtml-opacity:0.7;
+  -moz-opacity:0.70;
+  opacity:0.70;
+}
+
+.modalcont{
+	position: fixed;
+    margin: auto;
+	z-index: 5;
+	top: 50%;
+	left: 50%;
+	margin-top: -170px;
+	margin-left: -300px; 
+	width: 600px;
+	height: 340px;
+  filter:alpha(opacity=1);
+  -khtml-opacity:1;
+  -moz-opacity:1;
+  opacity:1;
+}
+</style>
+<div class="modaloverlay"></div>
+<div class="modalcont" id="dw" dwname="content"></div>
