@@ -77,7 +77,7 @@ class DataBase {
 		
 		foreach( $dbos as $dbo ){
 
-			$dbo['id'] = $this->putObject_($dbo, $tags/*, $user, $rights*/);
+			$dbo['id'] = $this->putObject($dbo, $tags/*, $user, $rights*/);
 			$out []= $dbo;			
 
 		}
@@ -119,7 +119,7 @@ class DataBase {
 
 	public function delObjects ($ids) {
 		foreach( $ids as $id ){
-			$this->delObject_($id);
+			$this->delObject($id);
 		}
 	}
 
