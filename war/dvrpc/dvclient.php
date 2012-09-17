@@ -154,6 +154,7 @@ class DVClient {
 		$req['obj'] = $params;
 		$reqstr = $this->proto->hashMapCode($req);
 		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
+echo "$resstr\n";
 		$result = $this->proto->hashMapDecode($resstr);
 		
 		return $result;
