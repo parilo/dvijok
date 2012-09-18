@@ -27,7 +27,6 @@ import org.dvijok.db.DBArray;
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
-import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.user.client.ui.Label;
@@ -36,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class Gallery extends SubPanelsDwidget {
 
 	private GalleryBigItem big;
-//	private ArrayList<GalleryItem> items; 
+//	private ArrayList<GalleryItem> items;
 	private DivPanel itemsPanel;
 	
 	private GalleryItemFactory factory;
@@ -64,33 +63,33 @@ public class Gallery extends SubPanelsDwidget {
 	private void draw(){
 
 		itemsPanel.clear();
+		big = null;
 
 		DBArray dba = model.getDBA();
 		Iterator<Serializable> i = dba.iterator();
 		
-		if( i.hasNext() ){
+		while( i.hasNext() ){
+			DBObject ph = (DBObject) i.next();
 			
-			if( selected == null ){
-				GalleryItemModel itemModel = new GalleryItemModel();
-				itemModel.setDB0((DBObject)i.next());
+			GalleryItemModel itemModel = new GalleryItemModel();
+			itemModel.setDB0(ph);
+			if( itemModel.equals(selected) ){
 				big = factory.getBigItem(itemModel);
-				i = dba.iterator();
-			} else {
-				big = factory.getBigItem(selected);
 			}
-			
-			while( i.hasNext() ){
-				DBObject ph = (DBObject) i.next();
-				
-				GalleryItemModel itemModel = new GalleryItemModel();
-				itemModel.setDB0(ph);
-				GalleryItem gitem = factory.getItem(itemModel);
-				gitem.addItemSelectedListsner(itemSelected);
-				itemsPanel.addWidget(gitem.asWidget());
-			}
-			
-			redraw();
+			GalleryItem gitem = factory.getItem(itemModel);
+			gitem.addItemSelectedListsner(itemSelected);
+			itemsPanel.addWidget(gitem.asWidget());
 		}
+		
+		if( big == null )
+		if( dba.size() > 0 ){
+			GalleryItemModel itemModel = new GalleryItemModel();
+			itemModel.setDB0((DBObject)dba.get(0));
+			big = factory.getBigItem(itemModel);
+		}
+		
+		redraw();
+			
 	}
 
 	public GalleryItemFactory getFactory() {

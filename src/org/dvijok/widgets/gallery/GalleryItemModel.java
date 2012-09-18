@@ -33,6 +33,31 @@ public class GalleryItemModel {
 	public DBObject getDB0(){
 		return dbo;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dbo == null) ? 0 : dbo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GalleryItemModel other = (GalleryItemModel) obj;
+		if (dbo == null) {
+			if (other.dbo != null)
+				return false;
+		} else if (!dbo.equals(other.dbo))
+			return false;
+		return true;
+	}
 	
 }
 
