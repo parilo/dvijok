@@ -21,6 +21,8 @@ package org.dvijok.widgets.editor;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
+import org.dvijok.event.CustomEvent;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -33,10 +35,16 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private SimplePanel ed;
 	private String edId;
 	private JavaScriptObject editor;
-	private String html = "1111";
+	private String html;
+	private boolean inited;
 
 	public EditorCKEditor(){
 		super("tmpl/widgets/editor/editorckeditor.html");
+	}
+
+	@Override
+	public Widget asWidget() {
+		return this;
 	}
 
 	@Override
@@ -45,9 +53,11 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	}
 
 	@Override
-	public void setHTML(String html) {
-		this.html = html;
-		setHTML(editor, html);
+	public void setHTML(String htmlstr) {
+//		this.html = htmlstr;
+//		if( inited ){
+//			setHTML(editor, htmlstr);
+//		}
 	}
 	
 	public void destroy(){
@@ -56,6 +66,8 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 
 	@Override
 	protected void beforeSubPanelsLoading() {
+		inited = false;
+		html = "1111";
 		edId = "ed" + Random.nextInt();
 		SimplePanel sp = new SimplePanel();
 		ed = new SimplePanel();
@@ -85,10 +97,17 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 		var editor = $wnd.CKEDITOR.appendTo( edId, config );
 		editor.on( 'instanceReady', function(){
 			editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
+			ed.@org.dvijok.widgets.editor.EditorCKEditor::inited = true;
 		} );
 		return editor;
 	}-*/;	
 
+
+//	editor.on( 'instanceReady', function(){
+//		editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
+//		ed.@org.dvijok.widgets.editor.EditorCKEditor::inited = true;
+//	} );
+	
 	@Override
 	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("editor") ){

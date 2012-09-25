@@ -18,7 +18,9 @@
 
 package org.dvijok.widgets.editor;
 
-public interface Editor {
+import com.google.gwt.user.client.ui.IsWidget;
+
+public interface Editor extends IsWidget {
 
 	public String getHTML();
 	public void setHTML(String html);
