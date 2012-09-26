@@ -24,5 +24,6 @@ public interface Editor extends IsWidget {
 
 	public String getHTML();
 	public void setHTML(String html);
+	public void initEditor();
 	
 }

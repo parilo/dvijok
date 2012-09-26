@@ -23,27 +23,22 @@ import java.util.ArrayList;
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
-import org.dvijok.event.CustomEventTool;
-import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EditorCKEditor extends SubPanelsDwidget implements Editor {
+public class EditorCKEditor_old extends SubPanelsDwidget implements Editor {
 
 	private SimplePanel ed;
 	private String edId;
 	private JavaScriptObject editor;
 	private String html;
-//	private boolean inited;
-	private CustomEventTool ready;
+	private boolean inited;
 
-	public EditorCKEditor(){
+	public EditorCKEditor_old(){
 		super("tmpl/widgets/editor/editorckeditor.html");
 	}
 
@@ -59,23 +54,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 
 	@Override
 	public void setHTML(String htmlstr) {
-//		Lib.alert("set: "+htmlstr);
-//		if( editor == null ) this.html = htmlstr;
-//		else
-		setHTML(editor, htmlstr);
-	}
-	
-	public void addReadyListener(CustomEventListener listener){
-		ready.addCustomEventListener(listener);
-	}
-	
-	public void removeReadyListener(CustomEventListener listener){
-		ready.removeCustomEventListener(listener);
-	}
-	
-	private void invokeReady(){
-//		Lib.alert("ready");
-		ready.invokeListeners();
+//		this.html = htmlstr;
+//		if( inited ){
+//			setHTML(editor, htmlstr);
+//		}
 	}
 	
 	public void destroy(){
@@ -84,34 +66,22 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 
 	@Override
 	protected void beforeSubPanelsLoading() {
-//		inited = false;
-		ready = new CustomEventTool();
-		editor = null;
-		html = "11111";
+		inited = false;
+		html = "1111";
 		edId = "ed" + Random.nextInt();
+		SimplePanel sp = new SimplePanel();
 		ed = new SimplePanel();
 		ed.getElement().setId(edId);
-		
-		ed.addAttachHandler(new Handler(){
-			@Override
-			public void onAttachOrDetach(AttachEvent event) {
-//				Lib.alert("attached: "+event.isAttached());
-				if( event.isAttached() ){
-					initEditor();
-				} else {
-					destroy();
-				}
-			}});
-
+		sp.add(ed);
+		org.dvijok.resources.Resources.getInstance().addToTmp(sp);
+		editor = initEditor(edId, this);
+		org.dvijok.resources.Resources.getInstance().removeFromTmp(sp);
 	}
 	
 	@Override
 	protected void afterLoading() {
-	}
-
-	@Override
-	public void initEditor() {
-		editor = initEditorJS(edId, this);
+		// TODO Auto-generated method stub
+		super.afterLoading();
 	}
 
 	private static native void destroy(JavaScriptObject editor)/*-{
@@ -124,26 +94,37 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	}-*/;
 	
 	private static native void setHTML(JavaScriptObject editor, String html)/*-{
-//		editor.insertHtml( html );
-		editor.setData( html );
+		editor.insertHtml( html );
 	}-*/;
 	
-	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
+	private static native JavaScriptObject initEditor(String edId, EditorCKEditor_old ed)/*-{
 		var config = {};
 		config.language = 'ru';
 		var editor = $wnd.CKEDITOR.appendTo( edId, config );
 		editor.on( 'instanceReady', function(){
-//			editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
-			ed.@org.dvijok.widgets.editor.EditorCKEditor::invokeReady()();
+			editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
+			ed.@org.dvijok.widgets.editor.EditorCKEditor_old::inited = true;
 		} );
 		return editor;
 	}-*/;	
+
+
+//	editor.on( 'instanceReady', function(){
+//		editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
+//		ed.@org.dvijok.widgets.editor.EditorCKEditor::inited = true;
+//	} );
 	
 	@Override
 	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("editor") ){
 			return ed;
 		} else return null;
+	}
+
+	@Override
+	public void initEditor() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

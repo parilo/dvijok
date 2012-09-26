@@ -114,4 +114,7 @@ public class SimpleEditor extends SubPanelsDwidget implements Editor {
 		textarea.setText(html.replace("<br>", "\n"));
 	}
 
+	@Override
+	public void initEditor() {}
+
 }

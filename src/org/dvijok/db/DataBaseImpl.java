@@ -385,17 +385,18 @@ public class DataBaseImpl implements DataBase {
 				if( res.equals("success") ){
 					handler.success(result.getDBObject("objs"));
 				} else {
-//					if(
+					if(
 					checkNotSid(res, new Handler<Boolean>(){
 						@Override
 						public void onHandle(Boolean param) {
 							external(params, handler);
-						}});
-//						)
-//					{
+						}})
+						)
+					{
+						handler.fail(result);
 //						System.out.println("res: "+result);
 //						Lib.alert("DataBase: external A: fail: "+result);
-//					}
+					}
 				}
 			}
 
