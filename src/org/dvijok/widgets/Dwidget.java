@@ -225,6 +225,11 @@ public class Dwidget extends Composite {
 		this.main.getElement().getStyle().setTop(50, Unit.PX);
 		this.main.getElement().getStyle().setMarginTop(this.main.getOffsetHeight()/2, Unit.PX);
 	}
+	
+	public void setInline(boolean isInline){
+		getElement().getStyle().setDisplay(Display.INLINE);
+//		this.main.getElement().getStyle().setDisplay(Display.INLINE);
+	}
 
 	/*
 	 * animation

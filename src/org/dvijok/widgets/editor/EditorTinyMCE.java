@@ -61,6 +61,10 @@ public class EditorTinyMCE extends SubPanelsDwidget implements Editor {
 //			setHTML(editor, htmlstr);
 //		}
 	}
+
+	@Override
+	public void setHeight(String height) {
+	}
 	
 //	public void destroy(){
 //		destroy(editor);

@@ -40,7 +40,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private String edId;
 	private JavaScriptObject editor;
 	private String html;
-//	private boolean inited;
+	private String height;
 	private CustomEventTool ready;
 
 	public EditorCKEditor(){
@@ -59,10 +59,13 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 
 	@Override
 	public void setHTML(String htmlstr) {
-//		Lib.alert("set: "+htmlstr);
-//		if( editor == null ) this.html = htmlstr;
-//		else
 		setHTML(editor, htmlstr);
+	}
+
+	@Override
+	public void setHeight(String height) {
+		this.height = height;
+		setHeight(editor, height);
 	}
 	
 	public void addReadyListener(CustomEventListener listener){
@@ -74,7 +77,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	}
 	
 	private void invokeReady(){
-//		Lib.alert("ready");
+		setHeight(height);
 		ready.invokeListeners();
 	}
 	
@@ -84,10 +87,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 
 	@Override
 	protected void beforeSubPanelsLoading() {
-//		inited = false;
 		ready = new CustomEventTool();
 		editor = null;
 		html = "11111";
+		height = "400";
 		edId = "ed" + Random.nextInt();
 		ed = new SimplePanel();
 		ed.getElement().setId(edId);
@@ -95,7 +98,6 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 		ed.addAttachHandler(new Handler(){
 			@Override
 			public void onAttachOrDetach(AttachEvent event) {
-//				Lib.alert("attached: "+event.isAttached());
 				if( event.isAttached() ){
 					initEditor();
 				} else {
@@ -124,8 +126,11 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	}-*/;
 	
 	private static native void setHTML(JavaScriptObject editor, String html)/*-{
-//		editor.insertHtml( html );
 		editor.setData( html );
+	}-*/;
+	
+	private static native void setHeight(JavaScriptObject editor, String hsize)/*-{
+		editor.resize('100%', hsize);
 	}-*/;
 	
 	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
@@ -137,7 +142,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 			ed.@org.dvijok.widgets.editor.EditorCKEditor::invokeReady()();
 		} );
 		return editor;
-	}-*/;	
+	}-*/;
 	
 	@Override
 	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {

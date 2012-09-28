@@ -115,6 +115,10 @@ public class SimpleEditor extends SubPanelsDwidget implements Editor {
 	}
 
 	@Override
+	public void setHeight(String height) {
+	}
+
+	@Override
 	public void initEditor() {}
 
 }
