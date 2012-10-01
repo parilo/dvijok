@@ -7,10 +7,20 @@ class Loader {
     private $found;
 
     public function __construct(){
-	foreach (glob("hash-bang/dwidgets/*.php") as $filename)
-	{
-	    require_once($filename);
+
+	$paths = explode(PATH_SEPARATOR, get_include_path());
+	foreach($paths as $p) {
+	    $dirpath = $p.DIRECTORY_SEPARATOR.'hash-bang/dwidgets/';
+	    if( is_dir($dirpath) ) if( $dh = opendir($dirpath) ){
+	    
+		while (($file = readdir($dh)) !== false) {
+		    if( strEndsWith($file, 'php') ) require_once($dirpath.$file);
+		}
+		closedir($dh);
+
+	    }
 	}
+
     }
 
     public function load($page){

@@ -87,4 +87,10 @@ function curlGetContentId($url, $id){
 	return $html;
 }
 
+function strEndsWith($haystack, $needle){
+    $a = strlen($haystack);
+    $b = strlen($needle);
+    return (substr_compare($haystack, $needle, $a-$b, $b) === 0);
+}
+
 ?>
