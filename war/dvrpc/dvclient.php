@@ -35,10 +35,9 @@ class DVClient {
 	private $userinfo;
 	private $userdata;
 	
-	public function __construct($dvclientdb){
+	public function __construct($url, $dvclientdb){
 		
-		global $config;
-		$this->url = $config['rpcurl'];
+		$this->url = $url;
 		
 		$this->proto = new DVRPCProto();
 		$this->flib = new FetcherLib();
@@ -117,7 +116,7 @@ class DVClient {
 		$reqstr = $this->proto->hashMapCode($req);
 		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
 		$result = $this->proto->hashMapDecode($resstr);
-		
+		//echo $this->url."->$resstr<-\n";
 		if( $result['result'] != 'challange' ){
 			exit("dvclient login error. We have no challange: ".print_r($result, true));
 		}
@@ -154,7 +153,7 @@ class DVClient {
 		$req['obj'] = $params;
 		$reqstr = $this->proto->hashMapCode($req);
 		$resstr = $this->flib->curlPostContent($this->url, $reqstr, true);
-// echo "$resstr\n";
+# echo "$resstr\n";
 		$result = $this->proto->hashMapDecode($resstr);
 		
 		return $result;

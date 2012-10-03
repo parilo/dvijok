@@ -31,7 +31,9 @@ class DVRPCProto {
 	}
 	
 	private function strpos($haystack, $needle, $offset = 0){
-		//echo "hs: $haystack, n: $needle, o: $offset\n";
+#		echo "n: ->$needle<-, o: $offset len: ".strlen($haystack)." mblen: ".mb_strlen($haystack, mb_detect_encoding($haystack));
+#		echo " enc: ".mb_detect_encoding($haystack)."\n";
+#		echo "hs: $haystack, n: $needle, o: $offset\n";
 		return mb_strpos($haystack, $needle, $offset, mb_detect_encoding($haystack));
 	}
 	
@@ -44,7 +46,7 @@ class DVRPCProto {
 	}
 	
 	private function extractLen(){
-		if( $this->i >= strlen($this->req) ) return false;
+		if( $this->i >= $this->strlen($this->req) ) return false;
 		$pos = $this->strpos($this->req, ",", $this->i);
 		if( $pos === false ) return false;
 		$len = $this->substr($this->req, $this->i, $pos - $this->i );
