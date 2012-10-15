@@ -23,6 +23,7 @@ import org.dvijok.handlers.RequestHandler;
 
 public interface DataBase {
 
+	public String getSid();
 	public void login(DBObject params, final RequestHandler<DBObject> handler);
 	public void sendKey(DBObject params, final RequestHandler<DBObject> handler);
 	public void logout(DBObject params, final RequestHandler<DBObject> handler);

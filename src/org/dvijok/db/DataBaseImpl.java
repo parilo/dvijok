@@ -439,5 +439,10 @@ public class DataBaseImpl implements DataBase {
 				Lib.alert("DataBase: saveUserData B: fail: "+result);
 			}});
 	}
+
+	@Override
+	public String getSid() {
+		return sid;
+	}
 	
 }

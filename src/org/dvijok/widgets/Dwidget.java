@@ -51,6 +51,7 @@ public class Dwidget extends Composite {
 	private HashMap<String, HTMLPanel> modes;
 	private String dbid;
 	private String dwid;
+	private boolean inline;
 	
 	private SimplePanel maincont;
 	private HTMLPanel main;
@@ -81,7 +82,7 @@ public class Dwidget extends Composite {
 	public boolean needAuthReinit(){ return false; }
 	
 	private void init(final String templUrl){
-		
+		inline = false;
 		this.maincont = new SimplePanel();
 		this.initWidget(this.maincont);
 		this.tmplUrl = templUrl;
@@ -142,6 +143,7 @@ public class Dwidget extends Composite {
 	protected void initTmpl(){
 		this.main = new HTMLPanel(tmplUrl);
 		main.addStyleName("tmplcont");
+		if( inline ) main.getElement().getStyle().setDisplay(Display.INLINE);
 		this.modes.put(this.tmplUrl, this.main);
 	}
 	
@@ -227,8 +229,8 @@ public class Dwidget extends Composite {
 	}
 	
 	public void setInline(boolean isInline){
-		getElement().getStyle().setDisplay(Display.INLINE);
-//		this.main.getElement().getStyle().setDisplay(Display.INLINE);
+		inline = isInline;
+		maincont.getElement().getStyle().setDisplay(Display.INLINE);
 	}
 
 	/*

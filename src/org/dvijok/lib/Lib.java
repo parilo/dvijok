@@ -18,8 +18,11 @@
 
 package org.dvijok.lib;
 
+import java.util.Date;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 
@@ -128,6 +131,12 @@ public class Lib {
 	
 	public static void setTitle(String title){
 		Window.setTitle(title);
+	}
+	
+	// get random hash: md5( current_timestamp + ' ' + random_number )
+	public static String getRandHash(){
+		Date d = new Date();
+		return md5.md5(d.getTime()+""+Random.nextInt());
 	}
 	
 }

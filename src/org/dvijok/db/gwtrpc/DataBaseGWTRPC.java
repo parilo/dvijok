@@ -410,6 +410,12 @@ public class DataBaseGWTRPC implements DataBase {
 		
 	}
 
+	@Override
+	public String getSid() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 /*	@Override
 	public void Send_Request(final DB_Object params, final DV_Request_Handler<DB_Object> handler) {
 		final DB_Object allparams = new DB_Object();
