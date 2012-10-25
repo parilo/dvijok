@@ -37,6 +37,10 @@ class DvDBMysql implements DvDB {
 		if ($this->db->connect_error) {
 			die('DB Connect Error (' . $this->db->connect_errno . ') '. $this->db->connect_error);
 		}
+
+		if (!$this->db->set_charset("utf8")) {
+			die("Error loading character set utf8: ".$mysqli->error."\n");
+		}
 		
 		/*
 		$result = $this->db->query("SELECT COUNT(id) AS count FROM dvuser");
