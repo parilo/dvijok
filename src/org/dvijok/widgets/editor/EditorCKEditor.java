@@ -42,6 +42,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private String html;
 	private String height;
 	private CustomEventTool ready;
+	private boolean isReady;
 
 	public EditorCKEditor(){
 		super("tmpl/widgets/editor/editorckeditor.html");
@@ -79,17 +80,24 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private void invokeReady(){
 		setHeight(height);
 		ready.invokeListeners();
+		isReady = true;
 	}
 	
 	public void destroy(){
+		isReady = false;
 		destroy(editor);
+	}
+
+	public boolean isReady() {
+		return isReady;
 	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
+		isReady = false;
 		ready = new CustomEventTool();
 		editor = null;
-		html = "11111";
+		html = "";
 		height = "400";
 		edId = "ed" + Random.nextInt();
 		ed = new SimplePanel();
