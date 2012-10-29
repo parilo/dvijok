@@ -41,6 +41,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private JavaScriptObject editor;
 	private String html;
 	private String height;
+	private String externalCss;
 	private CustomEventTool ready;
 	private boolean isReady;
 
@@ -92,12 +93,21 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 		return isReady;
 	}
 
+	public String getExternalCss() {
+		return externalCss;
+	}
+
+	public void setExternalCss(String externalCss) {
+		this.externalCss = externalCss;
+	}
+
 	@Override
 	protected void beforeSubPanelsLoading() {
 		isReady = false;
 		ready = new CustomEventTool();
 		editor = null;
 		html = "";
+		externalCss = "";
 		height = "400";
 		edId = "ed" + Random.nextInt();
 		ed = new SimplePanel();
@@ -144,6 +154,8 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
 		var config = {};
 		config.language = 'ru';
+		config.ignoreEmptyParagraph = true;
+		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss != "" ) config.contentsCss = ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss;
 		var editor = $wnd.CKEDITOR.appendTo( edId, config );
 		editor.on( 'instanceReady', function(){
 //			editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
