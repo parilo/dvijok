@@ -42,6 +42,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private String html;
 	private String height;
 	private String externalCss;
+	private String templatesFile;
 	private CustomEventTool ready;
 	private boolean isReady;
 
@@ -101,6 +102,14 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 		this.externalCss = externalCss;
 	}
 
+	public String getTemplatesFile() {
+		return templatesFile;
+	}
+
+	public void setTemplatesFile(String templatesFile) {
+		this.templatesFile = templatesFile;
+	}
+
 	@Override
 	protected void beforeSubPanelsLoading() {
 		isReady = false;
@@ -108,6 +117,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 		editor = null;
 		html = "";
 		externalCss = "";
+		templatesFile = "";
 		height = "400";
 		edId = "ed" + Random.nextInt();
 		ed = new SimplePanel();
@@ -154,8 +164,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
 		var config = {};
 		config.language = 'ru';
-		config.ignoreEmptyParagraph = true;
+		config.ignoreEmptyParackgraph = true;
 		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss != "" ) config.contentsCss = ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss;
+		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::templatesFile != "" ) config.templates_files = [ ed.@org.dvijok.widgets.editor.EditorCKEditor::templatesFile ];
+		config.templates_replaceContent = false;
 		var editor = $wnd.CKEDITOR.appendTo( edId, config );
 		editor.on( 'instanceReady', function(){
 //			editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
