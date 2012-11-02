@@ -163,11 +163,15 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	
 	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
 		var config = {};
+//		config.extraPlugins = 'autogrow';
 		config.language = 'ru';
 		config.ignoreEmptyParackgraph = true;
 		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss != "" ) config.contentsCss = ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss;
 		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::templatesFile != "" ) config.templates_files = [ ed.@org.dvijok.widgets.editor.EditorCKEditor::templatesFile ];
 		config.templates_replaceContent = false;
+//		config.autoGrow_onStartup = true;
+//		config.removePlugins = 'resize';
+		
 		var editor = $wnd.CKEDITOR.appendTo( edId, config );
 		editor.on( 'instanceReady', function(){
 //			editor.insertHtml( ed.@org.dvijok.widgets.editor.EditorCKEditor::html );
