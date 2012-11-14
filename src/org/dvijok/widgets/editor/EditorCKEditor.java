@@ -64,6 +64,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	public void setHTML(String htmlstr) {
 		setHTML(editor, htmlstr);
 	}
+	
+	public void insertHTML(String htmlstr){
+		insertHTML(editor, htmlstr);
+	}
 
 	@Override
 	public void setHeight(String height) {
@@ -155,6 +159,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	
 	private static native void setHTML(JavaScriptObject editor, String html)/*-{
 		editor.setData( html );
+	}-*/;
+	
+	private static native void insertHTML(JavaScriptObject editor, String html)/*-{
+		editor.insertHtml( html );
 	}-*/;
 	
 	private static native void setHeight(JavaScriptObject editor, String hsize)/*-{

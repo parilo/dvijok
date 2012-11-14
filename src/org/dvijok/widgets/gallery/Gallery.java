@@ -91,6 +91,12 @@ public class Gallery extends SubPanelsDwidget {
 		redraw();
 			
 	}
+	
+	public void clear(){
+		itemsPanel.clear();
+		big = null;
+		redraw();
+	}
 
 	public GalleryItemFactory getFactory() {
 		return factory;
