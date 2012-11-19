@@ -24,6 +24,7 @@ import java.util.HashMap;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
+import org.dvijok.lib.Lib;
 import org.dvijok.widgets.Dwidget;
 
 public class Dwidgets {
@@ -43,6 +44,7 @@ public class Dwidgets {
 	}
 	
 	public void authReload(){
+		Lib.alert("reload");
 		for(int i=0; i<this.onAuthReinit.size(); i++) this.onAuthReinit.get(i).reinit();
 	}
 	

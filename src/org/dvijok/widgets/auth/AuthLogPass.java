@@ -64,6 +64,10 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 	public void setFocus(boolean focused){
 		login.setFocus(focused);
 	}
+	
+	public void setCancelVisible(boolean visible){
+		cancel.setVisible(visible);
+	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
@@ -104,7 +108,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 		});
 		this.sendauthkey.addKeyDownHandler(authkeykdh);
 		
-		this.dologin = new Button();
+		this.dologin = new Button("Войти");
 		this.dologin.addClickHandler(new ClickHandler(){
 
 			@Override
@@ -144,9 +148,9 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 		cancelET.removeCustomEventListener(listener);
 	}
 	
-	private void onAuthSuccess(String loginStr){
-//!!!		Resources.getInstance().onAuth(loginStr);
-//!!!		loginedET.invokeListeners();
+	private void onAuthSuccess(DBObject result){
+		Resources.getInstance().userData = result.getDBObject("userdata");
+		Resources.getInstance().onAuth(result.getDBObject("userinfo"));
 	}
 	
 	private void doLogin(){
@@ -158,7 +162,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 
 			@Override
 			public void success(DBObject result) {
-				onAuthSuccess(loginStr);
+				onAuthSuccess(result);
 			}
 
 			@Override
@@ -183,7 +187,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 
 			@Override
 			public void success(DBObject result) {
-				onAuthSuccess(loginStr);
+				onAuthSuccess(result);
 			}
 
 			@Override

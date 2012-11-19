@@ -83,21 +83,40 @@ public class Menu extends ComplexPanel {
 		
 	}
 	
+	
+	
+	
 	public void addItem(Anchor a){
 		addItem(a, false);
 	}
 	
+	public void insertItem(Anchor a, int beforeIndex){
+		insertItem(a, false, -1);
+	}
+	
 	public void addItem(Anchor a, boolean isActive){
+		insertItem(a, isActive, -1);
+	}
+	
+	public void insertItem(Anchor a, boolean isActive, int beforeIndex){
 		LI li = new LI();
 		if( isActive ) setActive(li);
 		initBorderItems(li);
 		registerAnchor(a, li);
 
-		add(li, ul.getElement());
+		if( beforeIndex == -1 ) add(li, ul.getElement());
+		else insert(li, ul.getElement(), beforeIndex, true);
+		
 		add(a, li.getElement());
 	}
 	
+	
+	
 	public void addItem(String label, boolean isActive){
+		insertItem(label, isActive, -1);
+	}
+		
+	public void insertItem(String label, boolean isActive, int beforeIndex){
 		LI li = new LI();
 		if( isActive ) setActive(li);
 		initBorderItems(li);
@@ -105,11 +124,19 @@ public class Menu extends ComplexPanel {
 		Anchor a = new Anchor(label);
 		registerAnchor(a, li);
 		
-		add(li, ul.getElement());
+		if( beforeIndex == -1 ) add(li, ul.getElement());
+		else insert(li, ul.getElement(), beforeIndex, true);
+		
 		add(a, li.getElement());
 	}
 	
+	
+	
 	public void addItem(String label, boolean isActive, String href){
+		insertItem(label, isActive, href, -1);
+	}
+	
+	public void insertItem(String label, boolean isActive, String href, int beforeIndex){
 		LI li = new LI();
 		if( isActive ) setActive(li);
 		initBorderItems(li);
@@ -117,10 +144,15 @@ public class Menu extends ComplexPanel {
 		Anchor a = new Anchor(label, false, href);
 		registerAnchor(a, li);
 		
-		add(li, ul.getElement());
+		if( beforeIndex == -1 ) add(li, ul.getElement());
+		else insert(li, ul.getElement(), beforeIndex, true);
+		
 		add(a, li.getElement());
 	}
 
+	
+	
+	
 	/*
 	<li id="mainnavfirst" class="has-flyout">
 	  <a href="javascript:;">Вход</a>
@@ -128,7 +160,11 @@ public class Menu extends ComplexPanel {
 	  <div class="enterpane flyout large" id="dvijokw" name="authcombo"></div>
 	</li>
 	*/
-	public void addItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right){
+	public void insertItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right){
+		addItemFlayoutLarge(label, isActive, div, right, -1);
+	}
+	
+	public void addItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right, int beforeIndex){
 		LI li = new LI();
 		if( isActive ) setActive(li);
 		li.addStyleName("has-flyout");
@@ -158,13 +194,18 @@ public class Menu extends ComplexPanel {
 		div.addStyleName("large");
 		if( right ) div.addStyleName("right");
 		
-		add(li, ul.getElement());
+		if( beforeIndex == -1 ) add(li, ul.getElement());
+		else insert(li, ul.getElement(), beforeIndex, true);
+		
 		add(a, li.getElement());
 		add(a2, li.getElement());
 		add(span, a2.getElement());
 		add(div, li.getElement());
 	}
 
+	
+	
+	
 	/*
 	<li id="mainnavlast" class="has-flyout">
 	  <a href="javascript:;">Полезное</a>
@@ -175,6 +216,10 @@ public class Menu extends ComplexPanel {
 	</li>
 	*/
 	public void addItemFlayout(String label, boolean isActive, final UL subul, boolean right){
+		insertItemFlayout(label, isActive, subul, right, -1);
+	}
+	
+	public void insertItemFlayout(String label, boolean isActive, final UL subul, boolean right, int beforeIndex){
 		LI li = new LI();
 		if( isActive ) setActive(li);
 		li.addStyleName("has-flyout");
@@ -203,12 +248,16 @@ public class Menu extends ComplexPanel {
 		subul.addStyleName("flyout");
 		if( right ) subul.addStyleName("right");
 		
-		add(li, ul.getElement());
+		if( beforeIndex == -1 ) add(li, ul.getElement());
+		else insert(li, ul.getElement(), beforeIndex, true);
+		
 		add(a, li.getElement());
 		add(a2, li.getElement());
 		add(span, a2.getElement());
 		add(subul, li.getElement());
 	}
+	
+	
 	
 	
 	private void initBorderItems(LI added){

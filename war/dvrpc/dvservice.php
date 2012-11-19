@@ -261,17 +261,23 @@ class DVService {
 					if( isset($inp['response']) ){
 
 						$resp = strtolower($inp['response']);
+						$sessuserdata = $this->db->getSessionUserData($sess['sid']);
 						
-						if( isset($sess['serverdata']['chal']) && isset($loginuser['pass']) ){
+						if( isset($sessuserdata['serverdata']['chal']) && isset($loginuser['pass']) ){
 														
-							if( $resp === md5($sess['serverdata']['chal'].$loginuser['pass']) ){
+							if( $resp === md5($sessuserdata['serverdata']['chal'].$loginuser['pass']) ){
 
-								unset($sess['serverdata']['chal']);
+								unset($sessuserdata['serverdata']['chal']);
+								$sess['data'] = $sessuserdata;
 								$sess['uid'] = $loginuser['uid'];
 								//$this->db->putObject_($sess, 'sess auth', $this->root);
 								$sess['authed'] = '1';
 								$this->db->saveSession($sess);
+								
+								$userdata = $this->db->getUserData($sess['uid']);
 
+								$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
+								$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
 								$ret['result'] = 'success';
 
 							} else $ret['result'] = 'failed';

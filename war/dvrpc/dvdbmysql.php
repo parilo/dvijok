@@ -96,10 +96,11 @@ class DvDBMysql implements DvDB {
 		
 		if (!$result) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
 		if( is_object($result) ){
-				
+
 			$sess = $result->fetch_assoc();
 			if( $sess['data'] != '' ){
-				$data = unserialize($sess['data']);
+// 				$data = unserialize($sess['data']);
+				$data = json_decode($sess['data'], true);
 				unset($sess['data']);
 				if(is_array($data)){
 					$userdata = array();
@@ -127,7 +128,13 @@ class DvDBMysql implements DvDB {
 			unset($sess['userinfo']);
 		}
 		
-		if( isset($sess['data']) ) $sess['data'] = serialize($sess['data']);
+		if( isset($sess['serverdata']) ){
+			$sess['data']['serverdata'] = $sess['serverdata'];
+			unset($sess['serverdata']);
+		}
+		
+// 		if( isset($sess['data']) ) $sess['data'] = serialize($sess['data']);
+		if( isset($sess['data']) ) $sess['data'] = json_encode($sess['data']);
 		
 		$sess = $this->quoteSession($sess);
 		
@@ -197,7 +204,8 @@ class DvDBMysql implements DvDB {
 		
 			$user = $result->fetch_assoc();
 			if( $user['data'] != '' ){
-				$data = unserialize($user['data']);
+// 				$data = unserialize($user['data']);
+				$data = json_decode($user['data'], true);
 				unset($user['data']);
 				if(is_array($data)){
 					$userdata = array();
@@ -224,7 +232,8 @@ class DvDBMysql implements DvDB {
 			unset($user['userinfo']);
 		}
 		
-		if( isset($user['data']) ) $user['data'] = serialize($user['data']);
+// 		if( isset($user['data']) ) $user['data'] = serialize($user['data']);
+ 		if( isset($user['data']) ) $user['data'] = json_encode($user['data']);
 		
 		$user = $this->quoteUser($user);
 		

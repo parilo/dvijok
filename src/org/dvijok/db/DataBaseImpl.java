@@ -119,7 +119,7 @@ public class DataBaseImpl implements DataBase {
 			public void success(DBObject result) {
 				String res = result.getString("result");
 				if( res.equals("success") ){
-					handler.success(null);
+					handler.success(result.getDBObject("objs"));
 				} else {
 					if( checkNotSid(res, new Handler<Boolean>(){
 						@Override
