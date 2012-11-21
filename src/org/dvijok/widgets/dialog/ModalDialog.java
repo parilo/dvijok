@@ -35,6 +35,7 @@ import org.dvijok.widgets.SubPanelsDwidget;
 import org.dvijok.widgets.content.Hider;
 import org.dvijok.widgets.dialog.DialogYesNo;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -48,6 +49,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ModalDialog extends SubPanelsDwidget {
 
 	private boolean visible = false;
+	private SimplePanel wpanel;
 	private Widget w;
 	
 	public ModalDialog(){
@@ -67,19 +69,28 @@ public class ModalDialog extends SubPanelsDwidget {
 	}
 	
 	public void setWidget(Widget widget){
-		w = widget;
-		redraw();
+//		w = widget;
+//		redraw();
+		wpanel.setWidget(widget);
+	}
+	
+	public void setWidth(int width){
+		wpanel.getElement().getStyle().setWidth(width, Unit.PX);
+		wpanel.getElement().getStyle().setMarginLeft(-width/2, Unit.PX);
 	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
-		w = new Label();
+//		w = new Label();
+		wpanel = new SimplePanel();
+		wpanel.setWidget(new Label());
+		wpanel.addStyleName("modalcont");
 	}
 
 	@Override
 	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("content") ){
-			return w;
+			return wpanel;
 		} else return null;
 	}
 

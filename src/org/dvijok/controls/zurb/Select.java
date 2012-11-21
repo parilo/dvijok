@@ -58,6 +58,7 @@ public class Select extends ComplexPanel implements IsSelectable {
 			@Override
 			public void customEventOccurred(CustomEvent evt) {
 				redraw();
+				ul.removeStyleName("show-dropdown");
 				changedET.invokeListeners(evt.getSource());
 			}};
 			
@@ -153,6 +154,7 @@ public class Select extends ComplexPanel implements IsSelectable {
 					@Override
 					public void onClick(ClickEvent event) {
 						getSelectModel().setSelectedItem(label);
+						event.stopPropagation();
 					}});
 				LI li = new LI(a);
 				ul.add(li);

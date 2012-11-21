@@ -46,6 +46,7 @@ public class Resources {
 	public DBObject userData = null;
 	public AuthTool authTool;
 	public String initTitle;
+	public DBObject commonData;
 	
 	private Busy busy;
 	private int busycount;
@@ -63,6 +64,8 @@ public class Resources {
 		userInfo = new DBObject();
 //		userInfo.put("fullname", "guest");
 //		userInfo.put("isadmin", "0");
+		
+		commonData = new DBObject();
 	}
 
 	public static Resources getInstance(){
