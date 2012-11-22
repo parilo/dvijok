@@ -237,6 +237,7 @@ class DVService {
  		} else {
  			$user['userdata'] = $inp['userdata'];
 //  			$this->db->putObject_($user);
+			if( isset($user['ip']) ) unset($user['ip']);
  			$this->db->saveUser($user);
  		}
 

@@ -195,7 +195,7 @@ class DvDBMysql implements DvDB {
 	public function getUserData($uid){
 		
 		$result = $this->db->query("
-				SELECT data
+				SELECT *
 				FROM dvuser
 				WHERE uid='".$this->db->real_escape_string($uid).'\'');
 		
@@ -212,9 +212,20 @@ class DvDBMysql implements DvDB {
 					foreach( $data as $key => $val ){
 						$userdata[$key] = $val;
 					}
-					return $userdata;
 				}
 			}
+			
+			$fields = array('id', 'uid', 'pass', 'data');
+			$ui = array(); 
+			foreach( $user as $key => $val ){
+				if( !in_array($key, $fields) ){
+					$ui[$key] = $val;
+				}
+			}
+			$userdata['userinfo'] = $ui;
+
+			return $userdata;
+				
 		}
 		return array();
 		
@@ -228,7 +239,7 @@ class DvDBMysql implements DvDB {
 		}
 		
 		if( isset($user['userinfo']) ){
-			$user['data']['userinfo'] = $user['userinfo'];
+// 			$user['data']['userinfo'] = $user['userinfo'];
 			unset($user['userinfo']);
 		}
 		
@@ -242,7 +253,8 @@ class DvDBMysql implements DvDB {
 			$id = $user['id'];
 			unset($user['id']);
 			$upd = $this->formatUpdate($user);
-			$result = $this->db->query('UPDATE dvuser SET '.$upd.' WHERE id='.$id);
+			$sql = 'UPDATE dvuser SET '.$upd.' WHERE id='.$id;
+			$result = $this->db->query($sql);
 			if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
 			
 		} else {

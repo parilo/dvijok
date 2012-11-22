@@ -44,7 +44,6 @@ public class Dwidgets {
 	}
 	
 	public void authReload(){
-		Lib.alert("reload");
 		for(int i=0; i<this.onAuthReinit.size(); i++) this.onAuthReinit.get(i).reinit();
 	}
 	

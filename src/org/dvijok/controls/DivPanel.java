@@ -37,4 +37,10 @@ public class DivPanel extends ComplexPanel {
 		add(w, div);
 	}
 	
+	public void replaceWidget(Widget from, Widget to){
+		int i = getWidgetIndex(from);
+		insert(to, div, i, true);
+		remove(from);
+	}
+	
 }
