@@ -314,8 +314,8 @@ class DVService {
 
 	private function logout($inp, $user, $sess){
 
-		if( isset($user['userinfo']['type']) ){
-// 		if( $user['uid'] != 'guest' ){
+// 		if( isset($user['userinfo']['role']) ){
+		if( $user['uid'] != 'guest' ){
 
 			$sess['uid'] = 'guest';
 			$sess['authed'] = '0';

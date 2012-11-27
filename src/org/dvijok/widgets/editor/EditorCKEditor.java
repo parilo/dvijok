@@ -113,6 +113,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	public void setTemplatesFile(String templatesFile) {
 		this.templatesFile = templatesFile;
 	}
+	
+	public void setReadOnly(boolean isReadOnly){
+		setReadOnly(editor, isReadOnly);
+	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
@@ -167,6 +171,10 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	
 	private static native void setHeight(JavaScriptObject editor, String hsize)/*-{
 		editor.resize('100%', hsize);
+	}-*/;
+	
+	private static native void setReadOnly(JavaScriptObject editor, boolean isReadOnly)/*-{
+		editor.setReadOnly(isReadOnly);
 	}-*/;
 	
 	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
