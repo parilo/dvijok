@@ -138,6 +138,7 @@ class DVService {
 			$userdata = $this->db->getSessionUserData($sess['sid']);
  		} else {
 			$userdata = $this->db->getUserData($sess['uid']);
+			if( $userdata == false ) retarr('notsid');
 # 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
 # 			$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
  		}
@@ -249,6 +250,7 @@ class DVService {
 		// need rewriting
 		$inp = $inp['obj'];
 
+		if( isset($user['uid']) )
 		if( $user['uid'] == 'guest' ){
 
 			if( isset($inp['login']) ){
@@ -302,9 +304,11 @@ class DVService {
 				
 			} else $ret['result'] = 'specify login';
 
-		} else {
-			$ret['result'] = 'only guest session can login. Just create new session.';
+			return $ret;
 		}
+		
+		$ret['result'] = 'notsid';
+// 		$ret['result'] = 'only guest session can login. Just create new session.';
 
 		return $ret;
 		

@@ -203,6 +203,8 @@ class DvDBMysql implements DvDB {
 		if( is_object($result) ){
 		
 			$user = $result->fetch_assoc();
+			if( $user == false ) return false;
+			
 			if( $user['data'] != '' ){
 // 				$data = unserialize($user['data']);
 				$data = json_decode($user['data'], true);
