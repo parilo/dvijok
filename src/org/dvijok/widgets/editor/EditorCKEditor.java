@@ -117,6 +117,14 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	public void setReadOnly(boolean isReadOnly){
 		setReadOnly(editor, isReadOnly);
 	}
+	
+	public void replaceSelected(String html){
+		replaceSelected(editor, html);
+	}
+	
+	public boolean hasSelected(){
+		return hasSelected(editor);
+	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
@@ -175,6 +183,25 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	
 	private static native void setReadOnly(JavaScriptObject editor, boolean isReadOnly)/*-{
 		editor.setReadOnly(isReadOnly);
+	}-*/;
+	
+	private static native void replaceSelected(JavaScriptObject editor, String replacement)/*-{
+		var ranges = editor.getSelection().getRanges();
+		if( ranges.length > 0 ){
+			var range = ranges[0];
+			range.deleteContents();
+			editor.insertHtml(replacement);
+		}
+	}-*/;
+
+	private static native boolean hasSelected(JavaScriptObject editor)/*-{
+		var ranges = editor.getSelection().getRanges();
+		if( ranges.length == 1 ){
+			var range = ranges[0];
+			return !range.collapsed;
+		}
+		if( ranges < 1 ) return false;
+		return true;
 	}-*/;
 	
 	private static native JavaScriptObject initEditorJS(String edId, EditorCKEditor ed)/*-{
