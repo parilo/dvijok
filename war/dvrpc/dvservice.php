@@ -138,9 +138,9 @@ class DVService {
 			$userdata = $this->db->getSessionUserData($sess['sid']);
  		} else {
 			$userdata = $this->db->getUserData($sess['uid']);
-			if( $userdata == false ) retarr('notsid');
-# 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
-# 			$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
+// 			if( $userdata == false ) retarr('notsid');
+ 			$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
+ 			$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
  		}
 		$ret['objs']['userdata'] = isset($userdata['userdata'])?$userdata['userdata']:array();
  		$ret['objs']['userinfo'] = isset($userdata['userinfo'])?$userdata['userinfo']:array();
@@ -249,9 +249,9 @@ class DVService {
 	private function login($inp, $user, $sess){
 		// need rewriting
 		$inp = $inp['obj'];
-
-		if( isset($user['uid']) )
-		if( $user['uid'] == 'guest' ){
+// let all users to login
+// 		if( isset($user['uid']) )
+// 		if( $user['uid'] == 'guest' ){
 
 			if( isset($inp['login']) ){
 					
@@ -305,12 +305,12 @@ class DVService {
 			} else $ret['result'] = 'specify login';
 
 			return $ret;
-		}
+// 		}
 		
-		$ret['result'] = 'notsid';
+// 		$ret['result'] = 'notsid';
 // 		$ret['result'] = 'only guest session can login. Just create new session.';
 
-		return $ret;
+// 		return $ret;
 		
 // 		$ret['result'] = 'unavailable';
 // 		return $ret;
