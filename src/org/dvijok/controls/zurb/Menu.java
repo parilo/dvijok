@@ -160,11 +160,11 @@ public class Menu extends ComplexPanel {
 	  <div class="enterpane flyout large" id="dvijokw" name="authcombo"></div>
 	</li>
 	*/
-	public void insertItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right){
-		addItemFlayoutLarge(label, isActive, div, right, -1);
+	public void addItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right){
+		insertItemFlayoutLarge(label, isActive, div, right, -1);
 	}
 	
-	public void addItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right, int beforeIndex){
+	public void insertItemFlayoutLarge(String label, boolean isActive, final Dwidget div, boolean right, int beforeIndex){
 		LI li = new LI();
 		if( isActive ) setActive(li);
 		li.addStyleName("has-flyout");
