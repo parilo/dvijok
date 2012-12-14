@@ -23,6 +23,8 @@ import org.dvijok.db.DBObject;
 public class GalleryItemModel {
 
 	private DBObject dbo;
+	private boolean isFirst;
+	private boolean isLast;
 	
 	public GalleryItemModel(){}
 
@@ -32,6 +34,22 @@ public class GalleryItemModel {
 	
 	public DBObject getDB0(){
 		return dbo;
+	}
+
+	public boolean isFirst() {
+		return isFirst;
+	}
+
+	public void setFirst(boolean isFirst) {
+		this.isFirst = isFirst;
+	}
+
+	public boolean isLast() {
+		return isLast;
+	}
+
+	public void setLast(boolean isLast) {
+		this.isLast = isLast;
 	}
 
 	@Override

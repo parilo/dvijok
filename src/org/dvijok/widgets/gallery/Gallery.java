@@ -67,12 +67,20 @@ public class Gallery extends SubPanelsDwidget {
 
 		DBArray dba = model.getDBA();
 		Iterator<Serializable> i = dba.iterator();
+		boolean first = true;
 		
 		while( i.hasNext() ){
 			DBObject ph = (DBObject) i.next();
 			
 			GalleryItemModel itemModel = new GalleryItemModel();
 			itemModel.setDB0(ph);
+			if( first ){
+				itemModel.setFirst(true);
+				first = false;
+			}
+			if( !i.hasNext() ) itemModel.setLast(true);
+			
+			
 			if( itemModel.equals(selected) ){
 				big = factory.getBigItem(itemModel);
 			}
