@@ -17,37 +17,33 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-require_once 'dvipc/dvipcfiles.php';
-// require_once 'dvipc/dvipcnull.php';
-require_once 'config.def.php';
+require_once 'dvipc/dvipc.php';
 
-/*
-class DVIPCSys extends DVIPCNULL {
+class DVIPCNULL implements DVIPC {
+
+	public function register($id){}
+	public function unregister($id){}
+	
+	public function registerIPC($id){}
+	public function unregisterIPC($id){}
+	
+	public function getEvent(){}
+	public function listenForEvent(){}
+	
+	public function invokeEvent($event){
+// 		echo "----------------------------------------\n";
+// 		echo "------------EVENT-----------------------\n";
+// 		echo "----------------------------------------\n";
+// 		echo print_r($event, true)."\n";
+// 		echo "----------------------------------------\n";
+// 		echo "----------------------------------------\n";
+// 		echo "----------------------------------------\n";
+	}
+	
+	public function clear(){}
+	public function isNotUsing(){}
+	public function getLastUsed(){}
 	
 }
-
-class DVIPCUser extends DVIPCNULL {
-	
-}
-*/
-
-class DVIPCSys extends DVIPCFiles {
-
-	public function __construct(){
-		global $config;
-		parent::__construct('sys', $config['ipcfilesdir'], $config['ipcsystimeout']);
-	}
-
-}
-
-class DVIPCUser extends DVIPCFiles {
-
-	public function __construct($ipcid){
-		global $config;
-		parent::__construct($ipcid, $config['ipcfilesdir'], $config['ipcusertimeout']);
-	}
-
-}
-
 
 ?>

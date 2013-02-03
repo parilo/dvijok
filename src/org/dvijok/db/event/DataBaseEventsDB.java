@@ -55,6 +55,7 @@ public class DataBaseEventsDB implements DataBaseEventsInterface {
 
 	@Override
 	public void removeEventListener(DBObject params, DataBaseEventListener listener) {
+		
 		if( allParams.contains(params) ){
 			allParams.remove(params);
 			evTool.removeDataBaseListener(listener);

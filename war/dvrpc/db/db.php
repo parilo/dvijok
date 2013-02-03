@@ -71,7 +71,7 @@ class DataBase {
 
 	/** returns id of added object
 	 $tags: string, ' ' - separator */
-	public function putObjects ($dbos, $tags/*, $user = null, $rights = null*/){
+	public function putObjects ($dbos, $tags = false/*, $user = null, $rights = null*/){
 
 		$out = array();
 		
