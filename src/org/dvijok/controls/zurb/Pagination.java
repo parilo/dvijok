@@ -18,27 +18,19 @@
 
 package org.dvijok.controls.zurb;
 
-import java.util.HashMap;
-
 import org.dvijok.controls.Element;
 import org.dvijok.controls.LI;
-import org.dvijok.controls.UL;
-import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
-import org.dvijok.widgets.Dwidget;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.LIElement;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Pagination extends ComplexPanel {
 
@@ -104,6 +96,38 @@ public class Pagination extends ComplexPanel {
 		draw();
 	}
 	
+	private int mode=1; //1 - normal, 2 - links
+	private String prefix;
+	
+	public void setLinksMode(String prefix){
+		this.prefix = prefix;
+		mode = 2;
+		draw();
+	}
+	
+	public void setNormalMode(){
+		mode = 1;
+		draw();
+	}
+	
+	private Widget getPageAnchor(String pageNumber){
+		
+		if( mode == 2 ){
+			
+			Hyperlink l = new Hyperlink();
+			l.setText(pageNumber);
+			l.setTargetHistoryToken(prefix+pageNumber);
+			return l;
+			
+		} else {
+			
+			Anchor a = new Anchor(pageNumber);
+			a.addClickHandler(pageClicked);
+			return a;
+			
+		}
+	}
+	
 	private void draw(){
 		
 		ul.clear();
@@ -111,7 +135,7 @@ public class Pagination extends ComplexPanel {
 		if( numberOfAllElements > 1 ){
 		
 			LI li;
-			Anchor a;
+//			Widget a;
 			
 			int leftBorder = Math.max(currentSelected - displayCount/2, 1);
 			int rightBorder = Math.min(currentSelected + displayCount/2, numberOfAllElements);
@@ -126,9 +150,9 @@ public class Pagination extends ComplexPanel {
 			if( currentSelected == 1 ) li.addStyleName("unavailable");
 			add(li, ul);
 			
-			a = new Anchor("1");
-			a.addClickHandler(pageClicked);
-			li = new LI(a);
+//			a = new Anchor("1");
+//			a.addClickHandler(pageClicked);
+			li = new LI(getPageAnchor("1"));
 			if( 1 == currentSelected ) li.addStyleName("current");
 			add(li, ul);
 
@@ -139,9 +163,9 @@ public class Pagination extends ComplexPanel {
 			if( begi == 3 ) begi=2;
 			if( endi == numberOfAllElements-2 ) endi = numberOfAllElements-1;
 			for( int i=begi; i<=endi; i++ ){
-				a = new Anchor(""+i);
-				a.addClickHandler(pageClicked);
-				li = new LI(a);
+//				a = new Anchor(""+i);
+//				a.addClickHandler(pageClicked);
+				li = new LI(getPageAnchor(""+i));
 				if( i == currentSelected ){
 					li.addStyleName("current");
 				}
@@ -150,9 +174,9 @@ public class Pagination extends ComplexPanel {
 			
 			if( rightBorder < numberOfAllElements-2 ) add(new LI(middle2), ul);
 			
-			a = new Anchor(""+numberOfAllElements);
-			a.addClickHandler(pageClicked);
-			li = new LI(a);
+//			a = new Anchor(""+numberOfAllElements);
+//			a.addClickHandler(pageClicked);
+			li = new LI(getPageAnchor(""+numberOfAllElements));
 			if( numberOfAllElements == currentSelected ) li.addStyleName("current");
 			add(li, ul);
 			
