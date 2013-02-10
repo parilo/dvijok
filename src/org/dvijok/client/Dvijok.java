@@ -85,7 +85,7 @@ public void onModuleLoad() {
 			registerDwidgets();
 			
 			Resources.getInstance().loader.load();
-			Resources.getInstance().init();
+//			Resources.getInstance().init();
 			
 		}});
 	

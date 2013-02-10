@@ -76,7 +76,7 @@ public class Resources {
 			rp.setStylePrimaryName("dvijoktmp");
 			tmpcont = new VerticalPanel();
 			rp.add(tmpcont);
-		
+			
 		}
 		
 		return self;
@@ -139,11 +139,14 @@ public class Resources {
 //		});
 	}
 	
-	public void init(){
-		busy = new BigBusy();
-	}
+//	public void init(){
+//		busy = new BigBusy();
+//	}
 	
 	public void setBusy(boolean b){
+		
+		if( busy == null ) busy = new BigBusy();
+		
 		busycount += b?1:busycount==0?0:-1;
 		
 		if( b == true && busycount == 1 ){
