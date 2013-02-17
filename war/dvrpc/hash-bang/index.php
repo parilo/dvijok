@@ -5,6 +5,8 @@ if( $page == '' ) $page='index.html';
 $key = $_GET["key"];
 $val = $_GET["val"];
 
+if( $key == '' ) $key = $val;
+
 #echo "$page : $key : $val <br/>";
 require_once('loader.php');
 
