@@ -62,6 +62,38 @@ function stripSpace($str){
 	return preg_replace ( '/\s+/', ' ', $str );
 }
 
+function objcmpAsc($a, $b){
+	global $sortfield;
+	return strcmp($a[$sortfield], $b[$sortfield]);
+}
+
+function objcmpDesc($a, $b){
+	global $sortfield;
+	return strcmp($b[$sortfield], $a[$sortfield]);
+}
+
+function array_sort_by_field(&$array, $key, $asc=true){
+	global $sortfield;
+	$sortfield = $key;
+	usort($array, $asc?"objcmpAsc":"objcmpDesc");
+}
+
+// function aoaObjcmpAsc($a, $b){
+// 	global $sortfield;
+// 	return strcmp($a[$sortfield], $b[$sortfield]);
+// }
+
+// function aoaObjcmpDesc($a, $b){
+// 	global $sortfield;
+// 	return strcmp($b[$sortfield], $a[$sortfield]);
+// }
+
+// function array_of_array_sort_by_field(&$array, $key, $asc=true){
+// 	global $sortfield;
+// 	$sortfield = $key;
+// 	usort($array, $asc?"aoaObjcmpAsc":"aoaObjcmpDesc");
+// }
+
 /**
  *
  * returns current minuts since the Unix Epoch (January 1 1970 00:00:00 GMT)
