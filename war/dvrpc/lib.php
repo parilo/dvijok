@@ -69,6 +69,8 @@ function objcmpAsc($a, $b){
 
 function objcmpDesc($a, $b){
 	global $sortfield;
+	if( !isset($a[$sortfield]) ) return -1;
+	if( !isset($b[$sortfield]) ) return 1;
 	return strcmp($b[$sortfield], $a[$sortfield]);
 }
 
