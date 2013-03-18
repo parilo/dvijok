@@ -273,7 +273,23 @@ class DvDBMysql implements DvDB {
 	
 	public function saveUserData($uid, $userinfo, $types){
 
+		$uid = $this->db->real_escape_string($uid);
 		
+		$set = '';
+		foreach( $userinfo as $name => $value ){
+			$name = $this->db->real_escape_string($name);
+			
+			if( $types[$name] == 'str' ) $value = "'".$this->db->real_escape_string($value)."'";
+			else if( $types[$name] == 'float' ) settype($value, 'float');
+			else settype($value, 'integer');
+			
+			$set .= ', `'.$name.'` = '.$value;
+		}
+		$set = substr($set, 2);
+		
+		$sql = "UPDATE dvuser SET $set WHERE uid='$uid'";
+		$result = $this->db->query($sql);
+		if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error.' sql: '.$sql);
 		
 	}
 	
