@@ -39,7 +39,7 @@ class DvDBMysql implements DvDB {
 		}
 
 		if (!$this->db->set_charset("utf8")) {
-			die("Error loading character set utf8: ".$mysqli->error."\n");
+			die("Error loading character set utf8: ".$this->db->error."\n");
 		}
 		
 		/*
@@ -250,14 +250,15 @@ class DvDBMysql implements DvDB {
 		
 		$user = $this->quoteUser($user);
 		
-		if( isset($user['id']) ){
-			
+ 		if( isset($user['id']) )
+		if( $this->userExistsById($user['id']) ){
+		
 			$id = $user['id'];
 			unset($user['id']);
 			$upd = $this->formatUpdate($user);
 			$sql = 'UPDATE dvuser SET '.$upd.' WHERE id='.$id;
 			$result = $this->db->query($sql);
-			if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
+			if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error.' sql: '.$sql);
 			
 		} else {
 				
@@ -267,6 +268,22 @@ class DvDBMysql implements DvDB {
 			
 		}
 		
+	}
+	
+	
+	public function saveUserData($uid, $userinfo, $types){
+
+		
+		
+	}
+	
+	private function userExistsById($id){
+		$sql = "SELECT count(*) count FROM dvuser WHERE id=$id";
+		$result = $this->db->query($sql);
+		if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error.' sql: '.$sql);
+		$row = $result->fetch_assoc();
+		if( $row['count'] > 0 ) return true;
+		else return false;
 	}
 	
 	private function quoteUser($user){

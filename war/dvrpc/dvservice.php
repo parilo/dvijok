@@ -19,7 +19,7 @@
 
 require_once "dvipc.php";
 require_once "lib.php";
-require_once 'dvobjfilter.php';
+// require_once 'dvobjfilter.php';
 
 class DVService {
 
@@ -191,8 +191,8 @@ class DVService {
 				$clevent['tags'] = $systagsarr;
 				
 				if( isset($clevent['objs']) ) {
-					$filter = new DvObjFilter();
-					$clevent['objs'] = $filter->filter($clevent['objs'], $user, $clevent['tags']);
+// 					$filter = new DvObjFilter();
+// 					$clevent['objs'] = $filter->filter($clevent['objs'], $user, $clevent['tags']);
 				}
 
 				if( $needsendqid ) $clevent['qid'] = $queueid;

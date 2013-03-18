@@ -25,13 +25,18 @@ class DvDBFiles implements DvDB {
 
 	private $db;
 	
-	public function __construct(){
+	public function __construct($dbfilesdir = false){
+		
+		if( $dbfilesdir === false ){
+			global $config;
+			$dbfilesdir = $config['dbfilesdir'];
+		}
+		
+		$this->db = new DataBase( $dbfilesdir );
 		$this->initDB();
 	}
 	
 	private function initDB(){
-		global $config;
-		$this->db = new DataBase($config['dbfilesdir']);
 		if( !$this->db->isInitialized() ){
 			$dbinit = new DataBaseInit();
 			$dbinit->init($this->db);
