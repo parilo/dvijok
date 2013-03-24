@@ -25,14 +25,14 @@ class DvDBMysql implements DvDB {
 
 	private $db;
 	
-	public function __construct(){
-		$this->initDB();
+	public function __construct($dbname=false){
+		$this->initDB($dbname);
 	}
 	
-	private function initDB(){
+	private function initDB($dbname){
 		global $config;
 		
-		$this->db = new mysqli($config['MYSQLHOST'], $config['MYSQLUSER'], $config['MYSQLPASS'], $config['MYSQLDBNAME']);
+		$this->db = new mysqli($config['MYSQLHOST'], $config['MYSQLUSER'], $config['MYSQLPASS'], $dbname?$dbname:$config['MYSQLDBNAME']);
 		
 		if ($this->db->connect_error) {
 			die('DB Connect Error (' . $this->db->connect_errno . ') '. $this->db->connect_error);

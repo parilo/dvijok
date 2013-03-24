@@ -209,6 +209,8 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 //		config.extraPlugins = 'autogrow';
 		config.language = 'ru';
 		config.ignoreEmptyParackgraph = true;
+		config.disableNativeSpellChecker = false;
+		config.removePlugins = 'contextmenu';
 		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss != "" ) config.contentsCss = ed.@org.dvijok.widgets.editor.EditorCKEditor::externalCss;
 		if( ed.@org.dvijok.widgets.editor.EditorCKEditor::templatesFile != "" ) config.templates_files = [ ed.@org.dvijok.widgets.editor.EditorCKEditor::templatesFile ];
 		config.templates_replaceContent = false;
