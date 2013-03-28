@@ -139,4 +139,9 @@ public class Lib {
 		return md5.md5(d.getTime()+""+Random.nextInt());
 	}
 	
+	public static String insertPostfix(String url, String postfix){
+		int dotpos = url.lastIndexOf(".");
+		return url.substring(0, dotpos)+postfix+url.substring(dotpos);
+	}
+	
 }
