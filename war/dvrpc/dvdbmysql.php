@@ -87,6 +87,21 @@ class DvDBMysql implements DvDB {
 		
 	}
 	
+	public function delOutdatedSessions($expmin){
+	
+		$exptime = nowMinuts() - $expmin;
+		settype($exptime, 'integer');
+		
+		$sql = "DELETE FROM dvsession WHERE time < $exptime";
+
+		$result = $this->db->query($sql);
+		
+		if (!$result) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
+	
+		return $result->num_rows;
+		
+	}
+	
 	public function getSessionUserData($sid){
 		
 		$result = $this->db->query('
