@@ -33,8 +33,16 @@ public abstract class SubPanelsDwidget extends Dwidget {
 		super(templUrl);
 	}
 	
+	public SubPanelsDwidget(String templUrl, boolean debug){
+		super(templUrl, debug);
+	}
+	
 	public SubPanelsDwidget(String templUrl, SubPanel panel){
 		super(templUrl, panel);
+	}
+	
+	public SubPanelsDwidget(String templUrl, SubPanel panel, boolean debug){
+		super(templUrl, panel, debug);
 	}
 	
 	protected abstract void beforeSubPanelsLoading();
@@ -50,6 +58,7 @@ public abstract class SubPanelsDwidget extends Dwidget {
 		this.initTmpl();
 		this.loadSubPanels();
 		this.attachTmpl();
+		continiueLoadTmpl();
 		afterLoading();
 	}
 	

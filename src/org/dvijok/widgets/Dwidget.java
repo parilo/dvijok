@@ -20,6 +20,7 @@ package org.dvijok.widgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
@@ -47,26 +48,44 @@ import com.google.gwt.user.client.ui.Widget;
 public class Dwidget extends Composite {
 	
 	private String tmplUrl;
+	private String tmplData;
 	private ArrayList<DBObject> params;
 	private HashMap<String, HTMLPanel> modes;
 	private String dbid;
 	private String dwid;
 	private boolean inline;
+	private LinkedList<String> tmplQueue;
+	private boolean isloading;
+	private boolean debug;
 	
 	private SimplePanel maincont;
 	private HTMLPanel main;
 	
 	private SubPanel panel;
 	private GFX startAnimation = null;
-	
+
 	public Dwidget(String templUrl) {
+		this(templUrl, false);
+	}
+	
+	public Dwidget(String templUrl, boolean debug) {
+		this.debug = debug; 
 		this.modes = new HashMap<String, HTMLPanel>();
+		tmplQueue = new LinkedList<String>();
+		isloading = false;
 		this.beforeTmplInit();
 		this.init(templUrl);
 	}
-	
+
 	public Dwidget(String templUrl, SubPanel p) {
+		this(templUrl, p, false);
+	}
+	
+	public Dwidget(String templUrl, SubPanel p, boolean debug) {
+		this.debug = debug; 
 		this.modes = new HashMap<String, HTMLPanel>();
+		tmplQueue = new LinkedList<String>();
+		isloading = false;
 		this.panel = p;
 		this.readParams();
 		this.readDbid();
@@ -85,25 +104,37 @@ public class Dwidget extends Composite {
 		inline = false;
 		this.maincont = new SimplePanel();
 		this.initWidget(this.maincont);
-		this.tmplUrl = templUrl;
+		loadTmpl(templUrl);
+	}
+	
+	private void loadTmpl(String url){
+		tmplQueue.add(url);
 		this.getTmpl();
 	}
 	
 	private void getTmpl(){
 
-		Resources.getInstance().tmpls.getTemplate(this.tmplUrl, new CustomEventListener(){
-
-			@Override
-			public void customEventOccurred(CustomEvent evt) {
-				String text = (String)evt.getSource();
-				if( evt.isFailed() ){
-					Lib.alert("cannot get template "+tmplUrl+" : "+text);
-				} else {
-					tmplUrl = text;
-					createGUI();
+		if( isloading == false && tmplQueue.size() > 0 ){
+			
+			isloading = true;
+			
+			final String url = tmplQueue.poll();
+			Resources.getInstance().tmpls.getTemplate(url, new CustomEventListener(){
+	
+				@Override
+				public void customEventOccurred(CustomEvent evt) {
+					String text = (String)evt.getSource();
+					if( evt.isFailed() ){
+						Lib.alert("cannot get template "+url+" : "+text);
+					} else {
+						tmplUrl = url;
+						tmplData = text;
+						createGUI();
+					}
 				}
-			}
-		});		
+			});
+		
+		}
 		
 	}
 	
@@ -138,10 +169,16 @@ public class Dwidget extends Composite {
 	protected void createGUI(){
 		this.initTmpl();
 		this.attachTmpl();
+		continiueLoadTmpl();
+	}
+	
+	protected void continiueLoadTmpl(){
+		isloading = false;
+		getTmpl();
 	}
 	
 	protected void initTmpl(){
-		this.main = new HTMLPanel(tmplUrl);
+		this.main = new HTMLPanel(tmplData);
 		main.addStyleName("tmplcont");
 		if( inline ) main.getElement().getStyle().setDisplay(Display.INLINE);
 		this.modes.put(this.tmplUrl, this.main);
@@ -154,11 +191,10 @@ public class Dwidget extends Composite {
 	}
 	
 	protected void changeTmpl(String url){
-		this.tmplUrl = url;
 		if( this.modes.containsKey(url) ){
 			this.main = this.modes.get(url);
 			this.maincont.setWidget(this.main);
-		} else this.getTmpl();
+		} else this.loadTmpl(url);
 	}
 	
 	protected String getTmplUrl() {
