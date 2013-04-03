@@ -98,7 +98,7 @@ class DvDBMysql implements DvDB {
 		
 		if (!$result) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
 	
-		return $result->num_rows;
+		return is_object($result)?$result->num_rows:0;
 		
 	}
 	
