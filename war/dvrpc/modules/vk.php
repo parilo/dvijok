@@ -91,12 +91,12 @@ class vk {
 					
 					$user['userinfo']['type'] = 'vk';
 // 					$user['userinfo']['id'] = $uid;
-					$user['userinfo']['profile.id'] = $vkid;
+					$user['userinfo']['profile.id'] = 'vk'.$vkid;
 					$user['userinfo']['profile.url'] = 'http://vk.com/id'.$vkid;
 					$user['userinfo']['picture'] = $inforesp['photo_rec'];
 					$user['userinfo']['name'] = $inforesp['first_name'].' '.$inforesp['last_name'];
 					if( in_array($vkid, $config['moderatorVkIds']) ) $user['userinfo']['ismoderator'] = '1';
-					else if( isset($user['userinfo']['ismoderator']) ) unset($user['userinfo']['ismoderator']);
+					else $user['userinfo']['ismoderator'] = '0';
 					
 					$uitypes['type'] = 'str';
 					$uitypes['picture'] = 'str';
