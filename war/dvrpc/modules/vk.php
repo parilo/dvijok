@@ -24,15 +24,25 @@ class vk {
 
 	//set auth requested by the user
 	public function setAuthReq($inp, $user, $sess, $db){
-		$sess['vkauthreq'] = '1';
-		$db->getDB()->putObject($sess, false);
+		$sess['userdata']['vkauthreq'] = '1';
+#		$db->getDB()->putObject($sess, false);
+		$db->saveSession($sess);
 		$ret['result'] = 'success';
 		return $ret;
 	}
 	
 	//if auth through vk was requested by this user
 	public function isAuthReq($inp, $user, $sess, $db){
-		$ret['objs']['isreq'] = isset($sess['vkauthreq'])?'1':'0';
+		$userdata = $db->getSessionUserData($sess['sid']);
+		$userdata = $userdata['userdata'];
+
+		$isreq = '0';
+
+		if( isset($userdata['vkauthreq']) )
+		if( $userdata['vkauthreq'] == '1' ) $isreq = '1';
+		
+		$ret['objs']['isreq'] = $isreq;
+
 		$ret['result'] = 'success';
 		return $ret;
 	}
@@ -69,7 +79,8 @@ class vk {
 					$vkid = $inforesp['uid'];
 					$uid = 'vk'.$vkid;
 
-					$checkuser = $db->getDB()->getObjectByTags('user '.$uid/*, $root*/);
+// 					$checkuser = $db->getDB()->getObjectByTags('user '.$uid/*, $root*/);
+					$checkuser = $db->getUser($uid);
 					if( $checkuser === false ){
 						//if user with such uid not exists - create user based on $user argument
 						if( isset($user['id']) ) unset($user['id']);
@@ -79,18 +90,30 @@ class vk {
 					}
 					
 					$user['userinfo']['type'] = 'vk';
-					$user['userinfo']['id'] = $uid;
+// 					$user['userinfo']['id'] = $uid;
+					$user['userinfo']['profile.id'] = $vkid;
 					$user['userinfo']['profile.url'] = 'http://vk.com/id'.$vkid;
 					$user['userinfo']['picture'] = $inforesp['photo_rec'];
 					$user['userinfo']['name'] = $inforesp['first_name'].' '.$inforesp['last_name'];
 					if( in_array($vkid, $config['moderatorVkIds']) ) $user['userinfo']['ismoderator'] = '1';
 					else if( isset($user['userinfo']['ismoderator']) ) unset($user['userinfo']['ismoderator']);
 					
- 					$db->getDB()->putObject($user, 'user '.$uid/*, $root*/);
+					$uitypes['type'] = 'str';
+					$uitypes['picture'] = 'str';
+					$uitypes['name'] = 'str';
+					$uitypes['ismoderator'] = 'int';
+					$uitypes['profile.url'] = 'str';
+					$uitypes['profile.id'] = 'str';
+										
+//  					$db->getDB()->putObject($user, 'user '.$uid/*, $root*/);
+					$db->saveUserData($uid, $user['userinfo'], $uitypes);
  					
  					$sess['uid'] = $uid;
-					if( isset($sess['vkauthreq']) ) unset($sess['vkauthreq']);
- 					$db->getDB()->putObject($sess, 'sess auth'/*, $root*/);
+ 					$sess['authed'] = '1';
+					$sess['userdata']['vkauthreq'] = '0';
+					//if( isset($sess['vkauthreq']) ) unset($sess['vkauthreq']);
+//					$db->getDB()->putObject($sess, 'sess auth'/*, $root*/);
+ 					$db->saveSession($sess);
  					
 					$ret['objs']['userinfo'] = $user['userinfo'];
 					$ret['result'] = 'success';
