@@ -4,7 +4,6 @@
 #set_include_path($incl . PATH_SEPARATOR . './site/dvrpc/');
 
 require_once 'config.php';
-require_once 'dvobjfilter.php';
 require_once 'external/estate.php';
 require_once "db/db.php";
 require_once "db/dbinit.php";
@@ -32,7 +31,14 @@ $state['sess'] = $sess;
 
 $state['user'] = $db->getUser('guest');//getObjectByTags('user guest');
 
+// try{
+
 require_once 'hash-bang/index.php';
+
+// } catch ( DBException $ex ){
+// 	$ret['result'] = '->'.$ex->getValue().'<- '.$ex->getTraceAsString();
+// 	echo print_r($ret, true);
+// }
 
 #set_include_path($incl);
 
