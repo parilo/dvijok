@@ -50,7 +50,8 @@ public class Dwidget extends Composite {
 	private String tmplUrl;
 	private String tmplData;
 	private ArrayList<DBObject> params;
-	private HashMap<String, HTMLPanel> modes;
+//	private HashMap<String, HTMLPanel> modes;
+	private HashMap<String, String> modes;
 	private String dbid;
 	private String dwid;
 	private boolean inline;
@@ -70,7 +71,8 @@ public class Dwidget extends Composite {
 	
 	public Dwidget(String templUrl, boolean debug) {
 		this.debug = debug; 
-		this.modes = new HashMap<String, HTMLPanel>();
+//		this.modes = new HashMap<String, HTMLPanel>();
+		this.modes = new HashMap<String, String>();
 		tmplQueue = new LinkedList<String>();
 		isloading = false;
 		this.beforeTmplInit();
@@ -83,7 +85,8 @@ public class Dwidget extends Composite {
 	
 	public Dwidget(String templUrl, SubPanel p, boolean debug) {
 		this.debug = debug; 
-		this.modes = new HashMap<String, HTMLPanel>();
+//		this.modes = new HashMap<String, HTMLPanel>();
+		this.modes = new HashMap<String, String>();
 		tmplQueue = new LinkedList<String>();
 		isloading = false;
 		this.panel = p;
@@ -129,6 +132,7 @@ public class Dwidget extends Composite {
 					} else {
 						tmplUrl = url;
 						tmplData = text;
+						modes.put(tmplUrl, tmplData);
 						createGUI();
 					}
 				}
@@ -181,7 +185,7 @@ public class Dwidget extends Composite {
 		this.main = new HTMLPanel(tmplData);
 		main.addStyleName("tmplcont");
 		if( inline ) main.getElement().getStyle().setDisplay(Display.INLINE);
-		this.modes.put(this.tmplUrl, this.main);
+//		this.modes.put(this.tmplUrl, this.main);
 	}
 	
 	protected void attachTmpl(){
@@ -192,8 +196,12 @@ public class Dwidget extends Composite {
 	
 	protected void changeTmpl(String url){
 		if( this.modes.containsKey(url) ){
-			this.main = this.modes.get(url);
-			this.maincont.setWidget(this.main);
+//Lib.alert(""+this.modes.get(url));
+//			this.main = this.modes.get(url);
+//			this.maincont.setWidget(this.main);
+			tmplUrl = url;
+			tmplData = modes.get(url);
+			createGUI();
 		} else this.loadTmpl(url);
 	}
 	
