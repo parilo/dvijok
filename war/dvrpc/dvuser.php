@@ -21,7 +21,9 @@
 class DvUser {
 
 	public static function ismoderator($user){
-		return isset($user['userinfo']['ismoderator']);
+		$ismod = isset($user['userinfo']['ismoderator']);
+		if( $ismod ) $ismod = ($user['userinfo']['ismoderator'] == '1');
+		return $ismod;
 	}
 	
 	public static function isauthorized($user){

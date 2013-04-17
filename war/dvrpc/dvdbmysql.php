@@ -265,8 +265,10 @@ class DvDBMysql implements DvDB {
 		
 		$user = $this->quoteUser($user);
 		
- 		if( isset($user['id']) )
-		if( $this->userExistsById($user['id']) ){
+		$exists = isset($user['id']);
+		if( $exists ) $exists = $this->userExistsById($user['id']);
+		
+ 		if( $exists ){
 		
 			$id = $user['id'];
 			unset($user['id']);
@@ -278,8 +280,9 @@ class DvDBMysql implements DvDB {
 		} else {
 				
 			$ins = $this->formatInsert($user);
-			$result = $this->db->query('INSERT INTO dvuser ('.$ins['fields'].') VALUES ('.$ins['vals'].')');
-			if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
+			$sql = 'INSERT INTO dvuser ('.$ins['fields'].') VALUES ('.$ins['vals'].')';
+			$result = $this->db->query($sql);
+			if( !$result ) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error.' sql: '.$sql);
 			
 		}
 		

@@ -106,6 +106,9 @@ class vk {
 					$uitypes['profile.id'] = 'str';
 										
 //  					$db->getDB()->putObject($user, 'user '.$uid/*, $root*/);
+					$user['uid'] = $uid;
+					$user['nologin'] = '1';
+					$db->saveUser($user);
 					$db->saveUserData($uid, $user['userinfo'], $uitypes);
  					
  					$sess['uid'] = $uid;
