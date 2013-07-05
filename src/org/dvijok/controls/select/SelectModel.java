@@ -159,6 +159,10 @@ public class SelectModel {
 	public String getSelectedString(){
 		return getValue(this.getSelectedIndex());
 	}
+	
+	public String getSelectedLabel(){
+		return labels.get(getSelectedIndex());
+	}
 
 	public void clear() {
 		labels.clear();
