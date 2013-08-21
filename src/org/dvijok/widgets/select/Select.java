@@ -101,8 +101,26 @@ public class Select extends SubPanelsDwidget {
 		input.setPlaceholder(placeholder);
 	}
 	
+	public void setText(String text){
+		input.setText(text);
+	}
+	
+	public String getText(){
+		return input.getText();
+	}
+	
 	public void setInputReadonly(boolean readonly){
 		input.setInputReadonly(readonly);
+	}
+	
+	public void setEnabled(boolean enabled){
+		input.setEnabled(enabled);
+		icon.setEnabled(enabled);
+		setListOpened(false);
+	}
+	
+	public void setFocus(boolean focused){
+		input.setFocus(focused);
 	}
 	
 	public SelectModel getModel(){
@@ -110,13 +128,18 @@ public class Select extends SubPanelsDwidget {
 	}
 	
 	public void setModel(SelectModel model) {
-//		this.model.removeSelectedChangedListener(selectedChanged);
+		this.model.removeSelectedChangedListener(selectedChanged);
 		this.model.removeItemsChangedListener(itemsChanged);
 		this.model = model;
-//		model.addSelectedChangedListener(selectedChanged);
+		model.addSelectedChangedListener(selectedChanged);
 		model.addItemsChangedListener(itemsChanged);
 		
 		list.setSelectModel(model);
+		updateInput();
+	}
+	
+	private void updateInput(){
+		input.setInputText(model.getSelectedLabel());
 	}
 	
 	private void changeTmpl(){
@@ -127,6 +150,11 @@ public class Select extends SubPanelsDwidget {
 		}
 		icon.setOpened(opened);
 		input.setOpened(opened);
+	}
+	
+	public void setListOpened(boolean opened){
+		this.opened = opened;
+		changeTmpl();
 	}
 
 	@Override
@@ -142,30 +170,29 @@ public class Select extends SubPanelsDwidget {
 		icon.addClickListener(new CustomEventListener(){
 			@Override
 			public void customEventOccurred(CustomEvent evt) {
-				opened = !opened;
-				changeTmpl();
+				setListOpened(!opened);
 			}});
 		
 		list = new SelectList();
 		list.addSelectedListener(new CustomEventListener(){
 			@Override
 			public void customEventOccurred(CustomEvent evt) {
-				opened = false;
-				changeTmpl();
+				setListOpened(false);
 				
-				input.setInputText(model.getSelectedLabel());
+				updateInput();
 				selectedChangedET.invokeListeners();
 			}});
 		
 		model = new SelectModel();
 		
-//		CustomEventListener selectedChanged = new CustomEventListener(){
-//			@Override
-//			public void customEventOccurred(CustomEvent evt) {
-////				redraw();
-////				ul.removeStyleName("show-dropdown");
+		selectedChanged = new CustomEventListener(){
+			@Override
+			public void customEventOccurred(CustomEvent evt) {
+				updateInput();
+//				redraw();
+//				ul.removeStyleName("show-dropdown");
 //				changedET.invokeListeners(evt.getSource());
-//			}};
+			}};
 			
 		itemsChanged = new CustomEventListener(){
 			@Override
@@ -173,7 +200,7 @@ public class Select extends SubPanelsDwidget {
 				list.redraw();
 			}};
 			
-//		model.addSelectedChangedListener(selectedChanged);
+		model.addSelectedChangedListener(selectedChanged);
 		model.addItemsChangedListener(itemsChanged);
 
 		list.setSelectModel(model);

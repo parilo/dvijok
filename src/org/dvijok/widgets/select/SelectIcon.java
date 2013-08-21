@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
 public class SelectIcon extends SubPanelsDwidget {
@@ -40,6 +41,11 @@ public class SelectIcon extends SubPanelsDwidget {
 	
 	private boolean opened;
 	private boolean pushed;
+	
+	private MouseDownHandler mdhandler;
+	private MouseUpHandler muhandler;
+	private HandlerRegistration mdhandlerR;
+	private HandlerRegistration muhandlerR;
 	
 	private CustomEventTool clickET;
 	
@@ -86,6 +92,34 @@ public class SelectIcon extends SubPanelsDwidget {
 		this.opened = opened;
 		choiseTmpl();
 	}
+	
+	public void setEnabled(boolean enabled){
+		setOpened(false);
+		enableHandlers(enabled);
+	}
+	
+	private void enableHandlers(boolean enable){
+
+		if( enable ){
+			
+			mdhandlerR = addDomHandler(mdhandler, MouseDownEvent.getType());
+			muhandlerR = addDomHandler(muhandler, MouseUpEvent.getType());
+			
+		} else {
+
+			if( mdhandlerR != null ){
+				mdhandlerR.removeHandler();
+				mdhandlerR = null;
+			}
+
+			if( muhandlerR != null ){
+				muhandlerR.removeHandler();
+				muhandlerR = null;
+			}
+			
+		}
+		
+	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
@@ -96,21 +130,23 @@ public class SelectIcon extends SubPanelsDwidget {
 		
 		clickET = new CustomEventTool();
 		
-		addDomHandler(new MouseDownHandler(){
+		mdhandler = new MouseDownHandler(){
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 				pushed = true;
 				choiseTmpl();
-			}}, MouseDownEvent.getType());
-		
-		addDomHandler(new MouseUpHandler(){
+			}};
+			
+		muhandler = new MouseUpHandler(){
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				pushed = false;
 				choiseTmpl();
 				clickET.invokeListeners();
-			}}, MouseUpEvent.getType());
+			}};
 		
+		enableHandlers(true);
+			
 	}
 
 	@Override

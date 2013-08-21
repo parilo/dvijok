@@ -53,8 +53,20 @@ public class SelectInput extends SubPanelsDwidget {
 		input.getElement().setAttribute("placeholder", placeholder);
 	}
 	
+	public void setText(String text){
+		input.setText(text);
+	}
+	
+	public String getText(){
+		return input.getText();
+	}
+	
 	public void setInputReadonly(boolean readonly){
 		input.setReadOnly(readonly);
+	}
+	
+	public void setEnabled(boolean enabled){
+		input.setEnabled(enabled);
 	}
 	
 	public boolean isOpened() {
@@ -70,6 +82,10 @@ public class SelectInput extends SubPanelsDwidget {
 	public void setInputText(String text){
 		input.setText(text);
 	}
+	
+	public void setFocus(boolean focused){
+		input.setFocus(focused);
+	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
@@ -82,6 +98,7 @@ public class SelectInput extends SubPanelsDwidget {
 		w = new DivPanel();
 		w.addWidget(input);
 		w.getElement().getStyle().setFloat(Float.LEFT);
+		w.setWidth("100%");
 	}
 
 	@Override

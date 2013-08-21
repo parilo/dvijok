@@ -82,6 +82,10 @@ public class DBObject extends HashMap<String,Serializable> implements Serializab
 		return getString(s).equals("1");
 	}
 	
+	public void setBoolean(String s, boolean val){
+		put(s, val?"1":"0");
+	}
+	
 	public BigDecimal getBigDecimal(String s){
 		try{
 			return BigDecimal.valueOf(Double.parseDouble(this.getString(s)));

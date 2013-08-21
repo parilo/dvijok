@@ -127,4 +127,9 @@ function strEndsWith($haystack, $needle){
     return (substr_compare($haystack, $needle, $a-$b, $b) === 0);
 }
 
+function removeWhitespace($str){
+	return trim(preg_replace( '/[\s|\t]+/', ' ', $str ));
+}
+
+
 ?>
