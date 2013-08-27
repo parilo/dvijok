@@ -65,7 +65,10 @@ public class SelectList extends SubPanelsDwidget {
 	
 	public void setWidth(String width){
 		list.setWidth(width);
-		
+	}
+	
+	public void setZIndex(int zindex){
+		list.getElement().getStyle().setZIndex(zindex);
 	}
 	
 	public void redraw(){

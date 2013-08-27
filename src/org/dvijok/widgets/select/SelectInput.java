@@ -22,9 +22,12 @@ import java.util.ArrayList;
 
 import org.dvijok.controls.DivPanel;
 import org.dvijok.db.DBObject;
+import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 

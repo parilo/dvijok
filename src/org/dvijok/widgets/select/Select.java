@@ -28,6 +28,11 @@ import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Select extends SubPanelsDwidget {
@@ -35,6 +40,7 @@ public class Select extends SubPanelsDwidget {
 	private SelectInput input;
 	private SelectIcon icon;
 	private SelectList list;
+	private FocusPanel iconFP;
 	
 	private SelectModel model;
 	
@@ -90,11 +96,16 @@ public class Select extends SubPanelsDwidget {
 //		list.setItemTemplate("tmpl/app/select/select-list-item.html", "tmpl/app/select/select-list-item-selected.html");
 		
 		setWidth(selectWidth);
+		setListZIndex(10);
 	}
 	
 	public void setWidth(String width){
 		super.setWidth(width);
 		list.setWidth(width);
+	}
+	
+	public void setListZIndex(int zindex){
+		list.setZIndex(zindex);
 	}
 	
 	public void setPlaceholder(String placeholder){
@@ -154,6 +165,13 @@ public class Select extends SubPanelsDwidget {
 	
 	public void setListOpened(boolean opened){
 		this.opened = opened;
+		if( opened ){
+			Scheduler.get().scheduleDeferred(new ScheduledCommand(){
+				@Override
+				public void execute() {
+					iconFP.setFocus(true);
+				}});
+		}
 		changeTmpl();
 	}
 
@@ -183,6 +201,14 @@ public class Select extends SubPanelsDwidget {
 				selectedChangedET.invokeListeners();
 			}});
 		
+		iconFP = new FocusPanel();
+		iconFP.add(list);
+		iconFP.addBlurHandler(new BlurHandler(){
+			@Override
+			public void onBlur(BlurEvent event) {
+				setListOpened(false);
+			}});
+		
 		model = new SelectModel();
 		
 		selectedChanged = new CustomEventListener(){
@@ -210,7 +236,7 @@ public class Select extends SubPanelsDwidget {
 	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
 		if( dwname.equals("input") ) return input;
 		else if( dwname.equals("icon") ) return icon;
-		else if( dwname.equals("list") ) return list;
+		else if( dwname.equals("list") ) return iconFP;
 		else
 			return null;
 	}
