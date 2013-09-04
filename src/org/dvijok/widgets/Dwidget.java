@@ -276,6 +276,10 @@ public class Dwidget extends Composite {
 		inline = isInline;
 		maincont.getElement().getStyle().setDisplay(Display.INLINE);
 	}
+	
+	public void setHeight(String height){
+		main.setHeight(height);
+	}
 
 	/*
 	 * animation
