@@ -131,10 +131,16 @@ public class TimeBox extends TextBox {
 	}
 	
 	public int getAsSeconds(){
-		String hs = ""+time[0]+time[1];
-		String ms = ""+time[2]+time[3];
-		int ret = Lib.getInt(hs)*3600+Lib.getInt(ms)*60;
+		int ret = getHours()*3600+getMinutes()*60;
 		return ret;
+	}
+	
+	public int getHours(){
+		return Lib.getInt(""+time[0]+time[1]);
+	}
+	
+	public int getMinutes(){
+		return Lib.getInt(""+time[2]+time[3]);
 	}
 	
 	public void setTime(int h, int m){
