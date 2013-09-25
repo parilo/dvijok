@@ -31,6 +31,7 @@ import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.Resources;
+import org.dvijok.resources.historywatch.HistoryWatcher;
 import org.dvijok.tmpl.TmplsDB;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.DwidgetCreator;
@@ -78,6 +79,7 @@ public void onModuleLoad() {
 			Resources.getInstance().userData = ((DBObject)evt.getSource()).getDBObject("userdata");
 
 			Resources.getInstance().dwidgets = new Dwidgets();
+			Resources.getInstance().historyWatcher = new HistoryWatcher();
 
 			Resources.getInstance().loader = new Loader();
 			Resources.getInstance().tmpls = new TmplsDB();//this must be init after DataBaseImpl

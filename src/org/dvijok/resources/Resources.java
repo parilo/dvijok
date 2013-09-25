@@ -25,6 +25,7 @@ import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
+import org.dvijok.resources.historywatch.HistoryWatcher;
 import org.dvijok.tmpl.TmplsDB;
 import org.dvijok.widgets.busy.BigBusy;
 import org.dvijok.widgets.busy.Busy;
@@ -42,6 +43,7 @@ public class Resources {
 	public Config conf;
 	public DataBase db;
 	public Dwidgets dwidgets;
+	public HistoryWatcher historyWatcher;
 	public DBObject userInfo = null;
 	public DBObject userData = null;
 	public AuthTool authTool;
@@ -84,7 +86,7 @@ public class Resources {
 	
 	public boolean isAuthorized(){
 		if( userInfo != null ){
-			return userInfo.containsKey("type");
+			return userInfo.containsKey("type") || userInfo.containsKey("role");
 		}
 		return false;
 	}
