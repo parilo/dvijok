@@ -18,10 +18,16 @@
 
 package org.dvijok.resources.historywatch;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
+import org.dvijok.lib.Lib;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -31,10 +37,12 @@ public class HistoryWatcher {
 
 	private HashMap<String, CustomEventTool> historyETs;
 	private HashMap<String, CustomEventTool> historyBeginsWithETs;
+	private ArrayList<String> historyOfTokens;
 	
 	public HistoryWatcher(){
 		historyETs = new HashMap<String, CustomEventTool>();
 		historyBeginsWithETs = new HashMap<String, CustomEventTool>();
+		historyOfTokens = new ArrayList<String>();
 		initHistoryWatching();
 	}
 	
@@ -45,8 +53,11 @@ public class HistoryWatcher {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				String token = event.getValue();
 
+				historyOfTokens.add(0, token);
+				
 				if( historyETs.containsKey(token) ){
 					historyETs.get(token).invokeListeners(token);
+					return;
 				}
 				
 				for( int i=token.length()-1; i>0; i-- ){
@@ -56,7 +67,7 @@ public class HistoryWatcher {
 						strs[0] = tokenpart;
 						strs[1] = token.substring(i);
 						historyBeginsWithETs.get(tokenpart).invokeListeners(strs);
-						break;
+						return;
 					}
 				}
 				
@@ -88,6 +99,28 @@ public class HistoryWatcher {
 	
 	public void removeHistoryWatchBeginsWith(String key, CustomEventListener listener){
 		historyBeginsWithETs.get(key).removeCustomEventListener(listener);
+	}
+	
+	public String getTokenPriorTo(List<String> tokens){
+		Iterator i = historyOfTokens.iterator();
+		while( i.hasNext() ){
+			String token = (String) i.next();
+			if( !tokens.contains(token) ) return token;
+		}
+		return null;
+	}
+	
+	public String getPreviousHistoryToken(){
+		if( historyOfTokens.size() > 1  ) return historyOfTokens.get(1);
+		else return null;
+	}
+	
+	public void changeHistoryToken(String token){
+		changeHistoryToken(token, true);
+	}
+	
+	public void changeHistoryToken(String token, boolean issueEvent){
+		Lib.changeHashToken(token, issueEvent);
 	}
 	
 }

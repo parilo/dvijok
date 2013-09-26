@@ -21,12 +21,22 @@ package org.dvijok.resources;
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
+import org.dvijok.event.CustomEventTool;
 import org.dvijok.handlers.RequestHandler;
-import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 
 public class AuthTool {
 
+	private CustomEventTool authChangedET;
+	private CustomEventTool loginET;
+	private CustomEventTool logoutET;
+	
+	public AuthTool(){
+		authChangedET = new CustomEventTool();
+		loginET = new CustomEventTool();
+		logoutET = new CustomEventTool();
+	}
+	
 	public void logout(){
 		logout(null);
 	}
@@ -38,12 +48,14 @@ public class AuthTool {
 			@Override
 			public void success(DBObject result) {
 				Resources.getInstance().onAuth(new DBObject());
+				authChangedET.invokeListeners(Resources.getInstance().userData);
+				logoutET.invokeListeners(Resources.getInstance().userData);
 				if( onLogout != null ) onLogout.success(result);
 			}
 	
 			@Override
 			public void fail(DBObject result) {
-				onLogout.fail(result);
+				if( onLogout != null ) onLogout.fail(result);
 			}});
 	
 	}
@@ -54,11 +66,15 @@ public class AuthTool {
 	private CustomEventListener onLoginL;
 	private CustomEventListener onLoginFailedL;
 
-	public void doLogin(String login, String pass){
-		doLogin(login, pass, null, null);
+	public void login(String login, String pass){
+		login(login, pass, null, null);
+	}
+
+	public void login(String login, String pass, CustomEventListener onLoginL){
+		login(login, pass, onLoginL, null);
 	}
 	
-	public void doLogin(String login, String pass, CustomEventListener onLoginL, CustomEventListener onLoginFailedL){
+	public void login(String login, String pass, CustomEventListener onLoginL, CustomEventListener onLoginFailedL){
 		
 		this.login = login;
 		this.pass = pass;
@@ -88,6 +104,8 @@ public class AuthTool {
 	private void onAuthSuccess(DBObject result){
 		Resources.getInstance().userData = result.getDBObject("userdata");
 		Resources.getInstance().onAuth(result.getDBObject("userinfo"));
+		authChangedET.invokeListeners(Resources.getInstance().userData);
+		loginET.invokeListeners(Resources.getInstance().userData);
 		if( onLoginL != null ) onLoginL.customEventOccurred(new CustomEvent(Resources.getInstance().userData));
 	}
 
@@ -132,9 +150,33 @@ public class AuthTool {
 		} else if( res.equals("authkey") ){
 			this.authkeychal = result.getDBObject("objects").getString("chal");
 		} else {
-			onLoginFailedL.customEventOccurred(new CustomEvent("login failed"));
+			if( onLoginFailedL != null ) onLoginFailedL.customEventOccurred(new CustomEvent("login failed"));
 		}
 		
+	}
+	
+	public void addAuthChangedListener(CustomEventListener listener){
+		authChangedET.addCustomEventListener(listener);
+	}
+	
+	public void removeAuthChangedListener(CustomEventListener listener){
+		authChangedET.removeCustomEventListener(listener);
+	}
+	
+	public void addLoginListener(CustomEventListener listener){
+		loginET.addCustomEventListener(listener);
+	}
+	
+	public void removeLoginListener(CustomEventListener listener){
+		loginET.removeCustomEventListener(listener);
+	}
+	
+	public void addLogoutListener(CustomEventListener listener){
+		logoutET.addCustomEventListener(listener);
+	}
+	
+	public void removeLogoutListener(CustomEventListener listener){
+		logoutET.removeCustomEventListener(listener);
 	}
 	
 	

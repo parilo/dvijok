@@ -31,7 +31,7 @@ public class CustomEventTool {
     }
 
     public void addCustomEventListener(CustomEventListener l){
-        ls.add(l);
+        if( !ls.contains(l) ) ls.add(l);
     }
 
     public void removeCustomEventListener(CustomEventListener l){
