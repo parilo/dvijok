@@ -183,11 +183,13 @@ class DvDBMysql implements DvDB {
 	
 	public function getUser($uid){
 		
-		$result = $this->db->query("
+		$sql = "
 				SELECT id, uid, pass
 				FROM dvuser
-				WHERE uid='".$this->db->real_escape_string($uid).'\'');
-
+				WHERE uid='".$this->db->real_escape_string($uid).'\'';
+		
+		$result = $this->db->query($sql);
+		
 		if (!$result) throw new DBException('mysql error (' . $this->db->errno . ') '. $this->db->error);
 		if( is_object($result) ){
 				

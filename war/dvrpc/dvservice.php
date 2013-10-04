@@ -258,7 +258,7 @@ class DVService {
 				$login = $inp['login'];
 // 				$loginuser = $this->db->getObjectByVal('uid', $login, 'user', $this->root);
 				$loginuser = $this->db->getUser($login);
-				
+
 				if( ($loginuser != false) && !isset($loginuser['nologin']) ){
 
 					if( isset($inp['response']) ){
