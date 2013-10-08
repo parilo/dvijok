@@ -19,14 +19,10 @@
 package org.dvijok.resources.historywatch;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
 
 import org.dvijok.event.CustomEventListener;
-import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -35,13 +31,17 @@ import com.google.gwt.user.client.History;
 
 public class HistoryWatcher {
 
-	private HashMap<String, CustomEventTool> historyETs;
-	private HashMap<String, CustomEventTool> historyBeginsWithETs;
+	private HistoryWatcherTool historyETs;
+	private HistoryWatcherTool historyBeginsWithETs;
+//	private HashMap<String, CustomEventTool> historyETs;
+//	private HashMap<String, CustomEventTool> historyBeginsWithETs;
 	private ArrayList<String> historyOfTokens;
 	
 	public HistoryWatcher(){
-		historyETs = new HashMap<String, CustomEventTool>();
-		historyBeginsWithETs = new HashMap<String, CustomEventTool>();
+//		historyETs = new HashMap<String, CustomEventTool>();
+//		historyBeginsWithETs = new HashMap<String, CustomEventTool>();
+		historyETs = new HistoryWatcherTool();
+		historyBeginsWithETs = new HistoryWatcherTool();
 		historyOfTokens = new ArrayList<String>();
 		initHistoryWatching();
 	}
@@ -55,18 +55,18 @@ public class HistoryWatcher {
 
 				historyOfTokens.add(0, token);
 				
-				if( historyETs.containsKey(token) ){
-					historyETs.get(token).invokeListeners(token);
+				if( historyETs.getListeners().containsKey(token) ){
+					historyETs.getListeners().get(token).invokeListeners(token);
 					return;
 				}
 				
 				for( int i=token.length()-1; i>0; i-- ){
 					String tokenpart = token.substring(0, i);
-					if( historyBeginsWithETs.containsKey(tokenpart) ){
+					if( historyBeginsWithETs.getListeners().containsKey(tokenpart) ){
 						String[] strs = new String[2];
 						strs[0] = tokenpart;
 						strs[1] = token.substring(i);
-						historyBeginsWithETs.get(tokenpart).invokeListeners(strs);
+						historyBeginsWithETs.getListeners().get(tokenpart).invokeListeners(strs);
 						return;
 					}
 				}
@@ -76,38 +76,48 @@ public class HistoryWatcher {
 	}
 
 	public void addHistoryWatch(String token, CustomEventListener listener){
-		if( !historyETs.containsKey(token) ) historyETs.put(token, new CustomEventTool());
-		historyETs.get(token).addCustomEventListener(listener);
+//		if( !historyETs.containsKey(token) ) historyETs.put(token, new CustomEventTool());
+//		historyETs.get(token).addCustomEventListener(listener);
+		historyETs.addHistoryWatch(token, listener);
 	}
 
 	public void addHistoryWatch(String[] tokens, CustomEventListener listener){
-		for( String token : tokens ) addHistoryWatch(token, listener);
+//		for( String token : tokens ) addHistoryWatch(token, listener);
+		historyETs.addHistoryWatch(tokens, listener);
 	}
 	
-	public void removeHistoryWatch(String key, CustomEventListener listener){
-		historyETs.get(key).removeCustomEventListener(listener);
+	public void removeHistoryWatch(String token, CustomEventListener listener){
+//		historyETs.get(token).removeCustomEventListener(listener);
+		historyETs.removeHistoryWatch(token, listener);
 	}
 
 	public void addHistoryWatchBeginsWith(String token, CustomEventListener listener){
-		if( !historyBeginsWithETs.containsKey(token) ) historyBeginsWithETs.put(token, new CustomEventTool());
-		historyBeginsWithETs.get(token).addCustomEventListener(listener);
+//		if( !historyBeginsWithETs.containsKey(token) ) historyBeginsWithETs.put(token, new CustomEventTool());
+//		historyBeginsWithETs.get(token).addCustomEventListener(listener);
+		historyBeginsWithETs.addHistoryWatch(token, listener);
 	}
 
 	public void addHistoryWatchBeginsWith(String[] tokens, CustomEventListener listener){
-		for( String token : tokens ) addHistoryWatchBeginsWith(token, listener);
+//		for( String token : tokens ) addHistoryWatchBeginsWith(token, listener);
+		historyBeginsWithETs.addHistoryWatch(tokens, listener);
 	}
 	
-	public void removeHistoryWatchBeginsWith(String key, CustomEventListener listener){
-		historyBeginsWithETs.get(key).removeCustomEventListener(listener);
+	public void removeHistoryWatchBeginsWith(String token, CustomEventListener listener){
+//		historyBeginsWithETs.get(key).removeCustomEventListener(listener);
+		historyBeginsWithETs.removeHistoryWatch(token, listener);
 	}
 	
 	public String getTokenPriorTo(List<String> tokens){
-		Iterator i = historyOfTokens.iterator();
+		Iterator<String> i = historyOfTokens.iterator();
 		while( i.hasNext() ){
-			String token = (String) i.next();
+			String token = i.next();
 			if( !tokens.contains(token) ) return token;
 		}
 		return null;
+	}
+	
+	public String getCurrentHistoryToken(){
+		return History.getToken();
 	}
 	
 	public String getPreviousHistoryToken(){

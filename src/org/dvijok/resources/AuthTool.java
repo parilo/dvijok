@@ -23,6 +23,7 @@ import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.handlers.RequestHandler;
+import org.dvijok.lib.Lib;
 import org.dvijok.lib.md5;
 
 public class AuthTool {
@@ -153,6 +154,20 @@ public class AuthTool {
 			if( onLoginFailedL != null ) onLoginFailedL.customEventOccurred(new CustomEvent("login failed"));
 		}
 		
+	}
+	
+	public void reloadUserInfo(){
+		Resources.getInstance().db.checkSession(new DBObject(),  new RequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				Resources.getInstance().userInfo = result.getDBObject("userinfo");
+				Resources.getInstance().userData = result.getDBObject("userdata");
+				authChangedET.invokeListeners(Resources.getInstance().userData);
+			}
+
+			@Override
+			public void fail(DBObject result) {}});
 	}
 	
 	public void addAuthChangedListener(CustomEventListener listener){

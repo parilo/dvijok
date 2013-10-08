@@ -19,6 +19,7 @@
 package org.dvijok.event;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class CustomEventTool {
 
@@ -65,6 +66,10 @@ public class CustomEventTool {
     
     public void removeAllListeners(){
     	ls.clear();
+    }
+    
+    public Iterator<CustomEventListener> iterator(){
+    	return ls.iterator();
     }
 
 }
