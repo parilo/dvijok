@@ -21,6 +21,8 @@ package org.dvijok.resources;
 import org.dvijok.config.Config;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
+import org.dvijok.event.CustomEvent;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.loader.Dwidgets;
@@ -112,13 +114,20 @@ public class Resources {
 //	}
 	
 	public void saveUserData(){
+		saveUserData(null);
+	}
+	
+	public void saveUserData(final CustomEventListener listener){
 		db.saveUserData(userData, new RequestHandler<DBObject>(){
 			
 			@Override
-			public void success(DBObject result) {}
+			public void success(DBObject result) {
+				if( listener != null ) listener.customEventOccurred(new CustomEvent(result));
+			}
 			
 			@Override
 			public void fail(DBObject result) {
+				Lib.alert("saveUserData failed");
 			}
 			
 		});

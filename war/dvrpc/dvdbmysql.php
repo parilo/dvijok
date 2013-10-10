@@ -301,7 +301,8 @@ class DvDBMysql implements DvDB {
 			
 			if( $types[$name] == 'str' ) $value = "'".$this->db->real_escape_string($value)."'";
 			else if( $types[$name] == 'float' ) settype($value, 'float');
-			else settype($value, 'integer');
+			else if( $types[$name] == 'integer' ) settype($value, 'integer');
+			else continue;
 			
 			$set .= ', `'.$name.'` = '.$value;
 		}
