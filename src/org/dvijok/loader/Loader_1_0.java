@@ -26,16 +26,13 @@ import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.SubPanel;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Loader {
+public class Loader_1_0 {
 
 	private DwidgetFactory factory;
 //	private HTMLPanel root;
@@ -44,7 +41,7 @@ public class Loader {
 	private boolean loading;
 	private boolean needLoad;
 	
-	public Loader(){
+	public Loader_1_0(){
 		
 		this.loading = false;
 		this.needLoad = false;
@@ -109,14 +106,21 @@ public class Loader {
 
 			this.loading = true;
 			
-			Document doc = RootPanel.get().getElement().getOwnerDocument();
-			com.google.gwt.dom.client.Element w;
-			while( (w = doc.getElementById("dvijokw")) != null ){
+			com.google.gwt.user.client.Element w;
+			RootPanel wp;
+//			if( (w = html.getElementById("dvijokw")) != null ){
+			while( (wp = RootPanel.get("dvijokw")) != null ){
+//Lib.alert("load1: "+wp);				
+//				w = html.get("dvijokw").getElement();
+				w = wp.getElement();
 				w.setAttribute("id", "dvijokw_l");
 				String name = w.getAttribute("name");
+//				html.add(this.factory.getDwidget(name, new SubPanel(w)), "dvijokw_l");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
-				w.getParentElement().replaceChild(dw.getElement(), w);
-				dw._afterLoad();
+				dw.beforeAttach();
+				wp.add(dw);
+				dw.afterAttach();
+				w.setAttribute("id", "dvijokw_");
 			}
 			
 			this.loading = false;
@@ -140,13 +144,14 @@ public class Loader {
 			HTMLPanel html = widget.getHTMLPanel();
 			com.google.gwt.user.client.Element w;
 			if( (w = html.getElementById("dvijokw")) != null ){
+//Lib.alert("load2: "+w);				
 				w.setAttribute("id", "dvijokw_l");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
 				dw.beforeAttach();
 				html.add(dw, "dvijokw_l");
-				html.addAndReplaceElement(dw, (com.google.gwt.dom.client.Element)w);
 				dw.afterAttach();
+				w.setAttribute("id", "dvijokw_asd");
 			}
 			
 			this.loading = false;

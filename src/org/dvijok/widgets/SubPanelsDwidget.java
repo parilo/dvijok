@@ -75,9 +75,9 @@ public abstract class SubPanelsDwidget extends Dwidget {
 			w.setInnerHTML("");
 			Widget sw = this.genSubWidget(name, params);
 			if( sw == null ) sw = new Label("Sub_Panels_Dwidget: Don't know dwname: ->"+name+"<-");
-			html.add(sw, "dw");
-			w.setAttribute("id", "dw_");
+			html.addAndReplaceElement(sw, (com.google.gwt.dom.client.Element)w);
 		}
+		
 	}
 	
 }

@@ -35,23 +35,22 @@ import org.dvijok.widgets.fx.gfx.FadeOut;
 import org.dvijok.widgets.fx.gfx.GFX;
 import org.dvijok.widgets.fx.gfx.VerticalExpansion;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Dwidget extends /*ComplexPanel*/Composite {
+public class Dwidget_1_0 extends Composite {
 	
 	private String tmplUrl;
 	private String tmplData;
 	private ArrayList<DBObject> params;
+//	private HashMap<String, HTMLPanel> modes;
 	private HashMap<String, String> modes;
 	private String dbid;
 	private String dwid;
@@ -66,12 +65,13 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	private SubPanel panel;
 	private GFX startAnimation = null;
 
-	public Dwidget(String templUrl) {
+	public Dwidget_1_0(String templUrl) {
 		this(templUrl, false);
 	}
 	
-	public Dwidget(String templUrl, boolean debug) {
+	public Dwidget_1_0(String templUrl, boolean debug) {
 		this.debug = debug; 
+//		this.modes = new HashMap<String, HTMLPanel>();
 		this.modes = new HashMap<String, String>();
 		tmplQueue = new LinkedList<String>();
 		isloading = false;
@@ -79,12 +79,13 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 		this.init(templUrl);
 	}
 
-	public Dwidget(String templUrl, SubPanel p) {
+	public Dwidget_1_0(String templUrl, SubPanel p) {
 		this(templUrl, p, false);
 	}
 	
-	public Dwidget(String templUrl, SubPanel p, boolean debug) {
+	public Dwidget_1_0(String templUrl, SubPanel p, boolean debug) {
 		this.debug = debug; 
+//		this.modes = new HashMap<String, HTMLPanel>();
 		this.modes = new HashMap<String, String>();
 		tmplQueue = new LinkedList<String>();
 		isloading = false;
@@ -98,11 +99,6 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 		this.init(templUrl);
 	}
 	
-	public void _afterLoad(){
-	    onAttach();
-	    RootPanel.detachOnWindowClose(this);
-	}
-	
 	protected void beforeTmplInit(){}
 	public void reinit(){}
 	public boolean needAuthReinit(){ return false; }
@@ -111,7 +107,6 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 		inline = false;
 		this.maincont = new SimplePanel();
 		this.initWidget(this.maincont);
-//		setElement(maincont.getElement());
 		loadTmpl(templUrl);
 	}
 	
@@ -196,20 +191,7 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	protected void attachTmpl(){
 		this.maincont.setWidget(this.main);
 //		Resources.getInstance().loader.loadNew();
-		Resources.getInstance().loader.load(this);
-		
-		com.google.gwt.dom.client.Element thisel = getElement();
-		com.google.gwt.dom.client.Element parent = thisel.getParentElement();
-		com.google.gwt.dom.client.Element htmlpanelel = main.getElement();
-
-		com.google.gwt.dom.client.Element subel;
-		com.google.gwt.dom.client.Element prevel = thisel;
-		while( (subel = htmlpanelel.getFirstChildElement()) != null ){
-			htmlpanelel.removeChild(subel);
-			parent.insertAfter(subel, prevel);
-			prevel = subel;
-		}
-		parent.removeChild(thisel);
+//		Resources.getInstance().loader.load(this);
 	}
 	
 	protected void changeTmpl(String url){
@@ -243,7 +225,7 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 			if( height > 150 ) busypane = new BigBusy();
 			else busypane = new SmallBusy();
 			
-			Dwidget bp = (Dwidget) busypane;
+			Dwidget_1_0 bp = (Dwidget_1_0) busypane;
 			bp.setWidth(getOffsetWidth()+"px");
 			bp.setHeight(height+"px");
 //			busypane.setHeight((getOffsetHeight()-20)+"px");
