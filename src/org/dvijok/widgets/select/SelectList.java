@@ -31,8 +31,12 @@ import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -87,21 +91,7 @@ public class SelectList extends SubPanelsDwidget {
 			sli.setIndex(idx);
 			sli.addClickListener(itemClicked);
 			
-//			if( idx == selIdx ){
-//				selectedItem.setText(label);
-//			}
-			
 			list.addWidget(sli);
-			
-//			Anchor a = new Anchor(label);
-//			a.addClickHandler(new ClickHandler(){
-//				@Override
-//				public void onClick(ClickEvent event) {
-//					getSelectModel().setSelectedItem(label);
-//					event.stopPropagation();
-//				}});
-//			LI li = new LI(a);
-//			ul.add(li);
 			
 			idx++;
 		}
@@ -115,10 +105,6 @@ public class SelectList extends SubPanelsDwidget {
 	
 	@Override
 	protected void beforeSubPanelsLoading() {
-//		<input class="calendar-note-textmini calendar-note-text" style="border-bottom-left-radius: 0;" type="text" placeholder="Месяц"/>
-//		input = new TextBox();
-//		input.addStyleName("calendar-note-textmini");
-//		input.addStyleName("calendar-note-text");
 		
 		itemTmpl = "tmpl/widgets/empty.html";
 		
