@@ -139,7 +139,10 @@ class DataBaseFilesDriver implements DataBaseDriver {
 			$res = unserialize($cont);
 			if( $res === false ) {
 				if( $i<10 ) { usleep(100000); return $this->readById2($id, $i+1); }
-				else throw new DBException('res: '.print_r($res));
+				else {
+					unlink($f);
+					throw new DBException('res: '.print_r($res));
+				}
 			}
 			return $res;
 		} else return false;
