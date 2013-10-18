@@ -51,6 +51,9 @@ class DVService {
 
 		$func = $obj['func'];
 
+global $config;
+if( $config['debugrpcfuncs'] ) error_log($func.(isset($obj['obj']['func'])?' '.$obj['obj']['module'].'::'.$obj['obj']['func']:''));
+
 		if( $func == 'initSession' ){
 			return $this->initSession($obj, $ip);
 

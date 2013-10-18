@@ -53,6 +53,9 @@ if( file_exists('../custom/config/config.php') ) require_once '../custom/config/
 //moderator vk ids
 $config['moderatorVkIds'] = array('38844032', '3243536', '3050005');
 
+//send to error_log called functions through rpc
+$config['debugrpcfuncs'] = false;
+
 //modules
 require_once 'modules/vk.php';
 
