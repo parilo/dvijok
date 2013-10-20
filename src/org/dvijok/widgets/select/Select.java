@@ -176,7 +176,7 @@ public class Select extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		
 		opened = false;
 		

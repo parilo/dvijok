@@ -71,7 +71,7 @@ public class EditorTinyMCE extends SubPanelsDwidget implements Editor {
 //	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		ed = new TextArea();
 //		ed.addStyleName("tinymce_ed");
 		ed.getElement().setId("tinymce_ed");

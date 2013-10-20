@@ -70,7 +70,7 @@ public class ProfileSmall extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		username = new Label("");
 		logout = new Anchor("Выход");
 		logout.addClickHandler(new ClickHandler(){

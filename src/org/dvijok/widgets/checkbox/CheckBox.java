@@ -73,7 +73,7 @@ public class CheckBox extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 
 		toggle = new Toggle();
 		

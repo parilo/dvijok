@@ -21,6 +21,7 @@ package org.dvijok.loader;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.Dwidget;
@@ -130,32 +131,40 @@ public class Loader {
 		
 	}
 	
-	public void load(HTMLPanel html){
+	/*
+	 * return count Dwidget that not loaded on attaching
+	 */
+	public ArrayList<Dwidget> load(HTMLPanel html){
 
 		//protecting from simultaneous loading from different threads
-		if(!this.loading){
+//		if(!this.loading){
 
-			this.loading = true;
+//			this.loading = true;
 			
-//			HTMLPanel html = widget.getHTMLPanel();
+			ArrayList<Dwidget> dwidgets = new ArrayList<Dwidget>();
+		
 			com.google.gwt.user.client.Element w;
 			if( (w = html.getElementById("dvijokw")) != null ){
 				w.setAttribute("id", "dvijokw_l");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+				dwidgets.add(dw);
 				dw.beforeAttach();
 				html.addAndReplaceElement(dw, (com.google.gwt.dom.client.Element)w);
 				dw.afterAttach();
 			}
 			
-			this.loading = false;
-
-			if( this.needLoad == true ){
-				this.needLoad = false;
-				this.loadNew();
-			}
+			return dwidgets;
 			
-		} else this.needLoad = true;
+//			this.loading = false;
+
+//			if( this.needLoad == true ){
+//				this.needLoad = false;
+//				this.loadNew();
+//			}
+			
+//		}
+		// else this.needLoad = true;
 		
 	}
 	

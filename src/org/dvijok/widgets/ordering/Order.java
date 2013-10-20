@@ -78,7 +78,7 @@ public class Order extends SubPanelsDwidget {
 	}
 	
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		vals = new ArrayList<Object>();
 		
 		this.objects = new Table();

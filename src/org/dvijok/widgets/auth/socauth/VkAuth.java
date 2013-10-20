@@ -203,7 +203,7 @@ public class VkAuth extends SubPanelsDwidget implements AuthCancelable {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		vk = new Image("/images/social/vk32.png");
 		vk.setTitle("Вконтакте");
 		vk.addClickHandler(new ClickHandler(){

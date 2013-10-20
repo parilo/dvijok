@@ -89,7 +89,7 @@ public class SelectListItem extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		
 		selected = false;
 		

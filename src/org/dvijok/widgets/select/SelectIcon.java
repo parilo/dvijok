@@ -122,7 +122,7 @@ public class SelectIcon extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 //		<div style="border-bottom-right-radius: 0;" class="calendar-note-select-icon"><img src="images/form-select-icon.png"></div>
 		
 		opened = false;

@@ -115,7 +115,7 @@ public class Gallery extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		
 		selected = null;
 		

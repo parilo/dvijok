@@ -45,7 +45,6 @@ public abstract class SubPanelsDwidget extends Dwidget {
 		super(templUrl);
 	}
 	
-	protected abstract void beforeSubPanelsLoading();
 	protected void afterLoading(){}
 	
 //	@Override
@@ -71,23 +70,25 @@ public abstract class SubPanelsDwidget extends Dwidget {
 	protected abstract Widget genSubWidget(String dwname, ArrayList<DBObject> params);
 	
 	@Override
-	protected void beforeLoadingSubDwidgets(HTMLPanel html) {
-//	private void loadSubPanels(){
-		beforeSubPanelsLoading();
+	protected ArrayList<Dwidget> beforeLoadingSubDwidgets(HTMLPanel html) {
+		initInternals();
+
+		ArrayList<Dwidget> dwidgets = new ArrayList<Dwidget>();
 		
 		com.google.gwt.user.client.Element w;
-//		HTMLPanel html = this.getHTMLPanel();
 		
 		while( (w = html.getElementById("dw")) != null ){
 			String name = w.getAttribute("dwname");
 			ArrayList<DBObject> params = Resources.getInstance().loader.getParams(w);
 			w.setInnerHTML("");
 			Widget sw = this.genSubWidget(name, params);
+			if( sw instanceof Dwidget ) dwidgets.add((Dwidget)sw);
 			if( sw == null ) sw = new Label("Sub_Panels_Dwidget: Don't know dwname: ->"+name+"<-");
 			html.addAndReplaceElement(sw, (com.google.gwt.dom.client.Element)w);
 		}
 		
-		super.beforeLoadingSubDwidgets(html);
+//		dwidgets.addAll(super.beforeLoadingSubDwidgets(html));
+		return dwidgets;
 	}
 	
 }

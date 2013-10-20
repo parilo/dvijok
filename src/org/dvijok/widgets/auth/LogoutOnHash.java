@@ -39,7 +39,7 @@ public class LogoutOnHash extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		History.addValueChangeHandler(new ValueChangeHandler<String>(){
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {

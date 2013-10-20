@@ -49,7 +49,7 @@ public class MenuItem extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		actionET = new CustomEventTool();
 		this.l = new Label();
 	}

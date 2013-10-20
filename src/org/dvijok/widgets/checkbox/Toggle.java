@@ -94,7 +94,7 @@ public class Toggle extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		
 		changedET = new CustomEventTool();
 		

@@ -40,7 +40,7 @@ public class BigBusy extends SubPanelsDwidget implements Busy {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		label = new Label("Подождите...");
 	}
 

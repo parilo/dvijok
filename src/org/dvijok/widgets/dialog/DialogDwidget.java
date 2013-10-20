@@ -33,7 +33,7 @@ public abstract class DialogDwidget extends DialogBox {
 		final DialogDwidget me = this;
 		dw = new SubPanelsDwidget(tmpl){
 			@Override
-			protected void beforeSubPanelsLoading() {
+			protected void initInternals() {
 				me.beforeSubPanelsLoading();
 			}
 			

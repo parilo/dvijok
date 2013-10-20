@@ -66,7 +66,7 @@ public class DwidgetFactory {
 			dwidgetLoadET.invokeListeners(d);
 			
 			return d;
-		} else return new Dwidget("tmpl/components/"+name+".html");
+		} else return null;
 	}
 	
 	

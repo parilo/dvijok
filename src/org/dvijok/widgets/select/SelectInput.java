@@ -91,7 +91,7 @@ public class SelectInput extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 //		<input class="calendar-note-select-input calendar-note-select-input-with-list calendar-note-text" type="text" placeholder="Месяц">
 		input = new TextBox();
 		input.addStyleName("calendar-note-textmini");

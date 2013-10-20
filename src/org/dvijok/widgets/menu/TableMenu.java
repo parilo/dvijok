@@ -99,7 +99,7 @@ public class TableMenu extends SubPanelsDwidget {
 	}
 	
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		actionET = new CustomEventTool();
 		this.menu = new Table();
 		this.menu.setStyleName("dwtablemenu");

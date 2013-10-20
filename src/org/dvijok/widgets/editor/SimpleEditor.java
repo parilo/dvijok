@@ -70,7 +70,7 @@ public class SimpleEditor extends SubPanelsDwidget implements Editor {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		textarea = new TextArea();
 		ok = new Button("Принять");
 		cancel = new Button("Отмена");

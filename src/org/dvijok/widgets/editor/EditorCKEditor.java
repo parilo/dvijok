@@ -127,7 +127,7 @@ public class EditorCKEditor extends SubPanelsDwidget implements Editor {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		isReady = false;
 		ready = new CustomEventTool();
 		editor = null;

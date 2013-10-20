@@ -70,7 +70,7 @@ public class AuthLogPass extends SubPanelsDwidget implements AuthCancelable, Foc
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		
 		KeyDownHandler loginkdh = new KeyDownHandler(){
 			@Override

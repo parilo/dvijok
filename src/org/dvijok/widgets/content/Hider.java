@@ -67,7 +67,7 @@ public class Hider extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		hidew = new Anchor("");
 //		hidew.setHTML("&emsp;&#9660;&emsp;");
 		hidew.setHTML("&#9660");

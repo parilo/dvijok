@@ -118,7 +118,7 @@ public class MoreVerticalPanel extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		content = new VerticalPanel();
 		content.addStyleName("dw-moreverticalpanel");
 		more = new Button("Показать еще");

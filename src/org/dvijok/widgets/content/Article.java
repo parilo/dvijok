@@ -37,7 +37,7 @@ public class Article extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		this.content = new HTML();
 	}
 	

@@ -71,7 +71,7 @@ public class AuthCombo extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {}
+	protected void initInternals() {}
 
 	@Override
 	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {

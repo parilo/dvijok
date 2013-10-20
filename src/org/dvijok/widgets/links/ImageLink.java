@@ -38,7 +38,7 @@ public class ImageLink extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		this.im = new Image();
 		this.im.addStyleName("pointer");
 		this.link = new Anchor("");

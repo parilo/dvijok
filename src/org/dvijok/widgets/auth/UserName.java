@@ -72,7 +72,7 @@ public class UserName extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		String name = Resources.getInstance().userInfo.getString("fullname");
 		username = new Label(name.equals("guest")?"":name);
 		backtoadm = new Anchor();

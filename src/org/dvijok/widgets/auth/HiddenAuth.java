@@ -71,7 +71,7 @@ public class HiddenAuth extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		widget = new SimplePanel();
 		
 		switcher = new Anchor();

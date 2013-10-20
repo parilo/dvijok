@@ -112,7 +112,7 @@ public class TopToolbar extends SubPanelsDwidget {
 //	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		username = new InlineHTML("");
 		
 		//<a href="#" class="secondary tiny button radius3 fav">Избранное</a>

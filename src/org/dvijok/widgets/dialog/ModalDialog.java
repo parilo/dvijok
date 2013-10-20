@@ -80,7 +80,7 @@ public class ModalDialog extends SubPanelsDwidget {
 	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 //		w = new Label();
 		wpanel = new SimplePanel();
 		wpanel.setWidget(new Label());

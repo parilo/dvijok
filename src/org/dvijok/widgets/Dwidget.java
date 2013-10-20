@@ -49,19 +49,32 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Dwidget extends /*ComplexPanel*/Composite {
+public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	
 	private String tmplUrl;
 	private String tmplData;
 	private int loadCounter;
+	private boolean loaded;
 	
 	private SimplePanel fakeContent;
-	private HTMLPanel main;
+	private HTMLPanel loadingPanel;
 	
 	private GFX startAnimation = null;
 	
+	private CustomEventListener loadedL;
+	private CustomEventListener subDwidgetsLoadedL;
+	
 	public Dwidget(String templUrl) {
 		this.init(templUrl);
+	}
+	
+	public void setLoadedListener(CustomEventListener loadedListener){
+		if( loaded ){
+			loadedL = null;
+			loadedListener.customEventOccurred(null);
+		} else {
+			loadedL = loadedListener;
+		}
 	}
 	
 	public void _afterLoad(){
@@ -69,15 +82,29 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	    RootPanel.detachOnWindowClose(this);
 	}
 	
-	protected void beforeLoadingSubDwidgets(HTMLPanel htmlPanel){}
+	protected ArrayList<Dwidget> beforeLoadingSubDwidgets(HTMLPanel htmlPanel){return new ArrayList<Dwidget>();}
 	
 	private void init(String templUrl){
+		loaded = false;
 		loadCounter = 0;
+		subDwidgetsLoadedL = new CustomEventListener(){
+			@Override
+			public void customEventOccurred(CustomEvent evt) {
+				subDwidgetsCountLoaded++;
+				tryPlaceElements();
+			}};
+		
+		initInternals();
+			
 		elements = new ArrayList<com.google.gwt.dom.client.Element>();
 		fakeContent = new SimplePanel();
+		fakeContent.getElement().getStyle().setPosition(Position.ABSOLUTE);
+		fakeContent.getElement().getStyle().setDisplay(Display.NONE);
 		this.initWidget(fakeContent);
 		loadTmpl(templUrl);
 	}
+	
+	protected abstract void initInternals();
 	
 	private void loadTmpl(final String url){
 
@@ -101,37 +128,51 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	private void tryLoad(int loadCounterValue){
 		
 		if( loadCounterValue == 2 ){
-		// this Dwidget was attached and tmeplate is loaded
+			//this Dwidget was attached and tmeplate is loaded
+	
+			//loading sub widgets and sub dwidgets
+			//than getting dom elements from fakeContent 
+			//and putting it in fakeContent parent element
 			
-			main = new HTMLPanel(tmplData);
-			fakeContent.setWidget(main);
-			beforeLoadingSubDwidgets(main);
-			Resources.getInstance().loader.load(main);
-			storeElements();
-			placeElements();
-			removeFakeContentWidget();
+			loadingPanel = new HTMLPanel(tmplData);
+			fakeContent.setWidget(loadingPanel);
+			ArrayList<Dwidget> subDw = beforeLoadingSubDwidgets(loadingPanel);
+			subDw.addAll(Resources.getInstance().loader.load(loadingPanel));
+
+			elementsPlaced = false;
+			subDwidgetsCount = subDw.size();
+			subDwidgetsCountLoaded = 0;
+			Iterator<Dwidget> i = subDw.iterator();
+			while( i.hasNext() ){
+				i.next().setLoadedListener(subDwidgetsLoadedL);
+			}
+			
+			tryPlaceElements();
 			
 		}
 		
 	}
 	
-	private void removeFakeContentWidget(){
-		fakeContent.getElement().getParentElement().removeChild(fakeContent.getElement());
-	}
+	private boolean elementsPlaced;
+	private int subDwidgetsCount;
+	private int subDwidgetsCountLoaded;
 	
-	private void addFakeContentWidget(){
-		//always needed to have almost one Element in Template to add FakeContentWidget near it
-		//on tmplChange
-		if( elements.size() > 0 ){
-//Lib.alert("parent: "+getpgetElement().getParentElement());
-			getElement().getParentElement().insertBefore(fakeContent.getElement(), elements.get(0));
-		} else {
-			Lib.alert("always needed to have almost one Element in Template to add FakeContentWidget near it on tmplChange");
-			getElement().getParentElement().appendChild(fakeContent.getElement());
+	private void tryPlaceElements(){
+
+		if( !elementsPlaced && subDwidgetsCount == subDwidgetsCountLoaded ){
+			storeElements();
+			placeElements();
+		
+			elementsPlaced = true;
+			loaded = true;
+			if( loadedL != null ) loadedL.customEventOccurred(null);
+			super.onDetach();
+			super.onAttach();
 		}
+		
 	}
 	
-	protected void tmplLoaded(){
+	private void tmplLoaded(){
 		tryLoad(++loadCounter);
 	}
 	
@@ -147,7 +188,7 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 		
 		elements.clear();
 		
-		com.google.gwt.dom.client.Element htmlpanelel = main.getElement();
+		com.google.gwt.dom.client.Element htmlpanelel = loadingPanel.getElement();
 		com.google.gwt.dom.client.Element subel;
 		while( (subel = htmlpanelel.getFirstChildElement()) != null ){
 			elements.add(subel);
@@ -166,20 +207,19 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 			parent.insertAfter(subel, prevel);
 			prevel = subel;
 		}
-//		parent.removeChild(fakeContent.getElement());
 		
 	}
 	
 	private void removeElements(){
-		com.google.gwt.dom.client.Element parent = getElement().getParentElement();
+		com.google.gwt.dom.client.Element parent = fakeContent.getElement().getParentElement();
 		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
 		while( i.hasNext() ){
-			parent.removeChild(i.next());
+			com.google.gwt.dom.client.Element el = i.next();
+			parent.removeChild(el);
 		}
 	}
 	
 	protected void changeTmpl(String url){
-		addFakeContentWidget();
 		removeElements();
 		loadCounter--;
 		loadTmpl(url);
@@ -190,7 +230,7 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	public void redraw(){
-		tmplLoaded();
+		changeTmpl(tmplUrl);
 	}
 
 	private Busy busypane;
@@ -239,27 +279,6 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 			}
 		}
 	}
-	
-//	public void centerVertical(){
-//		getElement().getStyle().setPosition(Position.RELATIVE);
-//		getElement().getStyle().setTop(50, Unit.PX);
-//		getElement().getStyle().setMarginTop(getOffsetHeight()/2, Unit.PX);
-//	}
-//	
-//	public void centerWidgetPanelVertical(){
-//		this.main.getElement().getStyle().setPosition(Position.RELATIVE);
-//		this.main.getElement().getStyle().setTop(50, Unit.PX);
-//		this.main.getElement().getStyle().setMarginTop(this.main.getOffsetHeight()/2, Unit.PX);
-//	}
-	
-//	public void setInline(boolean isInline){
-//		inline = isInline;
-//		maincont.getElement().getStyle().setDisplay(Display.INLINE);
-//	}
-//	
-//	public void setHeightMain(String height){
-//		main.setHeight(height);
-//	}
 
 	/*
 	 * animation

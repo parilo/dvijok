@@ -59,7 +59,7 @@ public class ChangePassword extends SubPanelsDwidget {
 //	}
 
 	@Override
-	protected void beforeSubPanelsLoading() {
+	protected void initInternals() {
 		
 		KeyDownHandler loginkdh = new KeyDownHandler(){
 			@Override
