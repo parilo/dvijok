@@ -52,16 +52,16 @@ public class HiddenAuth extends SubPanelsDwidget {
 		super("tmpl/widgets/auth/hiddenauth/hiddenauth.html", p);
 	}
 
-	@Override
-	public boolean needAuthReinit() {
-		return true;
-	}
-
-	@Override
-	public void reinit() {
-		super.reinit();
-		checkGuest();
-	}
+//	@Override
+//	public boolean needAuthReinit() {
+//		return true;
+//	}
+//
+//	@Override
+//	public void reinit() {
+//		super.reinit();
+//		checkGuest();
+//	}
 	
 	private void checkGuest(){
 		if( Resources.getInstance().isAuthorized() ){

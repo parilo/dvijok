@@ -46,16 +46,16 @@ public class ProfileSmall extends SubPanelsDwidget {
 		super("tmpl/widgets/profile/profilesmall.html", p);
 	}
 
-	@Override
-	public boolean needAuthReinit() {
-		return true;
-	}
-
-	@Override
-	public void reinit() {
-		super.reinit();
-		initUsername();
-	}
+//	@Override
+//	public boolean needAuthReinit() {
+//		return true;
+//	}
+//
+//	@Override
+//	public void reinit() {
+//		super.reinit();
+//		initUsername();
+//	}
 	
 	private void initUsername(){
 		

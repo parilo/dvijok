@@ -50,16 +50,16 @@ public class AuthCombo extends SubPanelsDwidget {
 		super(pickTmpl(), p);
 	}
 
-	@Override
-	public boolean needAuthReinit() {
-		return true;
-	}
-
-	@Override
-	public void reinit() {
-		super.reinit();
-		checkGuest();
-	}
+//	@Override
+//	public boolean needAuthReinit() {
+//		return true;
+//	}
+//
+//	@Override
+//	public void reinit() {
+//		super.reinit();
+//		checkGuest();
+//	}
 	
 	private static String pickTmpl(){
 		if( Resources.getInstance().isAuthorized() ) return "tmpl/widgets/auth/authcombo/hiddenmode.html";

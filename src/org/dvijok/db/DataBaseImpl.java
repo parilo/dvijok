@@ -50,7 +50,21 @@ public class DataBaseImpl implements DataBase {
 
 			@Override
 			public void success(DBObject result) {
-				inited.customEventOccurred(new CustomEvent(result));
+				final DBObject checkSessionResult = result;
+				
+				getTemplatesCache(new RequestHandler<DBObject>(){
+
+					@Override
+					public void success(DBObject result) {
+						checkSessionResult.put("tmplcache", result.get("tmplcache"));
+						inited.customEventOccurred(new CustomEvent(checkSessionResult));
+					}
+
+					@Override
+					public void fail(DBObject result) {
+						inited.customEventOccurred(new CustomEvent(checkSessionResult));
+					}});
+				
 			}
 
 			@Override
@@ -437,6 +451,34 @@ public class DataBaseImpl implements DataBase {
 			@Override
 			public void fail(DBObject result) {
 				Lib.alert("DataBase: saveUserData B: fail: "+result);
+			}});
+	}
+
+	@Override
+	public void getTemplatesCache(final RequestHandler<DBObject> handler) {
+		DBObject req = new DBObject();
+		req.put("sid", sid);
+		req.put("func", "getTemplatesCache");
+		
+		dbRequest.request(req, new RequestHandler<DBObject>(){
+
+			@Override
+			public void success(DBObject result) {
+				String res = result.getString("result");
+				if( res.equals("success") ){
+					handler.success(result.getDBObject("objs"));
+				} else {
+					checkNotSid(res, new Handler<Boolean>(){
+						@Override
+						public void onHandle(Boolean param) {
+							getTemplatesCache(handler);
+						}});
+				}
+			}
+
+			@Override
+			public void fail(DBObject result) {
+				Lib.alert("DataBase: getTemplatesCache B: fail: "+result);
 			}});
 	}
 

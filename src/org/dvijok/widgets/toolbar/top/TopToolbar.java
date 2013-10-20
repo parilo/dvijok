@@ -100,16 +100,16 @@ public class TopToolbar extends SubPanelsDwidget {
 		username.setText(Resources.getInstance().userInfo.getString("name"));
 	}
 
-	@Override
-	public boolean needAuthReinit() {
-		return true;
-	}
-
-	@Override
-	public void reinit() {
-		super.reinit();
-		pickMode();
-	}
+//	@Override
+//	public boolean needAuthReinit() {
+//		return true;
+//	}
+//
+//	@Override
+//	public void reinit() {
+//		super.reinit();
+//		pickMode();
+//	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {

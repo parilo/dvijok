@@ -42,6 +42,8 @@ class DVRPCProto {
 	}
 	
 	private function strlen($str){
+// 		$enc = mb_detect_encoding($str);
+// 		return mb_strlen($str, $enc?$enc:'UTF-8');
 		return mb_strlen($str, mb_detect_encoding($str));
 	}
 	
@@ -114,7 +116,9 @@ class DVRPCProto {
 // 			if( is_string($val) ){
 // 				$ret .= mb_strlen($key).",".$key."STR".mb_strlen($val).",".$val;
 // 			} else
-			if( is_array($val) && array_key_exists('_isarr',$val) ){
+			if( is_array($val) && array_key_exists('_nocode',$val) ){
+				$ret .= $this->strlen($key).",".$key.$val['_nocodedata'];
+			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
 				$str = $this->arrayCode($val);
 				$ret .= $this->strlen($key).",".$key."DBA".$this->strlen($str).",".$str;
 			} else if( is_array($val) ){
@@ -125,6 +129,11 @@ class DVRPCProto {
 			}
 		}
 		return $ret;
+	}
+
+	public function hashMapCodeWrapped($hashMap){
+		$str = $this->hashMapCode($hashMap);
+		return 'DBO'.$this->strlen($str).",".$str;
 	}
 	
 	public function arrayDecode($data){

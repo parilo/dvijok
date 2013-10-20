@@ -45,18 +45,18 @@ public class UserName extends SubPanelsDwidget {
 		checkIsAdminSession();
 	}
 
-	@Override
-	public boolean needAuthReinit() {
-		return true;
-	}
-
-	@Override
-	public void reinit() {
-		super.reinit();
-		String name = Resources.getInstance().userInfo.getString("fullname");
-		username.setText(name.equals("guest")?"":name);
-		checkIsAdminSession();
-	}
+//	@Override
+//	public boolean needAuthReinit() {
+//		return true;
+//	}
+//
+//	@Override
+//	public void reinit() {
+//		super.reinit();
+//		String name = Resources.getInstance().userInfo.getString("fullname");
+//		username.setText(name.equals("guest")?"":name);
+//		checkIsAdminSession();
+//	}
 	
 	private void checkIsAdminSession(){
 		if( Resources.getInstance().userInfo.getString("isadmin").equals("1") ){

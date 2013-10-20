@@ -22,8 +22,6 @@ import org.dvijok.config.Config;
 import org.dvijok.db.DBObject;
 import org.dvijok.db.DataBase;
 import org.dvijok.handlers.RequestHandler;
-import org.dvijok.lib.Lib;
-import org.dvijok.loader.Dwidgets;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.historywatch.HistoryWatcher;
 import org.dvijok.tmpl.TmplsDB;
@@ -42,7 +40,7 @@ public class Resources {
 	public Loader loader;
 	public Config conf;
 	public DataBase db;
-	public Dwidgets dwidgets;
+//	public Dwidgets dwidgets;
 	public HistoryWatcher historyWatcher;
 	public DBObject userInfo = null;
 	public DBObject userData = null;
@@ -60,7 +58,7 @@ public class Resources {
 		this.loader = null;
 		this.conf = null;
 		this.db = null;
-		this.dwidgets = null;
+//		this.dwidgets = null;
 		authTool = new AuthTool();
 		
 		userInfo = new DBObject();
@@ -168,7 +166,7 @@ public class Resources {
 
 	public void onAuth(DBObject userinfo){
 		this.userInfo = userinfo;
-		Resources.getInstance().dwidgets.authReload();
+//		Resources.getInstance().dwidgets.authReload();
 	}
 	
 //	public void onAuth(String loginStr){

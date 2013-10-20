@@ -68,7 +68,10 @@ class DVService {
 
 		} else if( $func == "checkSession" ){
 			return $this->checkSession($obj, $ip, 'checkSessionFunc');
-						
+
+		} else if( $func == 'getTemplatesCache' ){
+			return $this->checkSession($obj, $ip, 'getTemplatesCache');
+					
 		} else if( $func == "external" ){
 			return $this->checkSession($obj, $ip, 'external');
 
@@ -333,6 +336,55 @@ class DVService {
 		}
 
 		return $ret;
+	}
+
+	private function getTemplatesCache($inp, $user, $sess){
+		
+		global $config;
+		if( isset($config['tmplDir']) ){
+			
+			$tmplCacheFilePath = $config['tmplDir'].'/cache/tmplcache.dvproto';
+			if( is_file($tmplCacheFilePath) ){
+				
+				$tmplCacheData = file_get_contents($tmplCacheFilePath);
+				$tmplCache = array(
+					'_nocode' => '1',
+					'_nocodedata' => $tmplCacheData
+				);
+				
+			} else {
+			
+				$tmplCache = array();
+				$path = realpath($config['tmplDir']);
+				$pathlen = strlen($path)-4;
+				
+				$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::FOLLOW_SYMLINKS), RecursiveIteratorIterator::LEAVES_ONLY);
+				$tmplCache = array();
+				foreach($objects as $name => $object){
+					if( substr($name, -5) == '.html' )
+					if( !$object->isDir() ){
+						$tmplCache[substr($name,$pathlen)] = file_get_contents($name);
+					}
+				}
+				
+				$proto = new DVRPCProto();
+				file_put_contents(
+					$tmplCacheFilePath,
+					$proto->hashMapCodeWrapped($tmplCache),
+					LOCK_EX
+				);
+			
+			}
+
+			$ret['objs']['tmplcache'] = $tmplCache;
+			$ret['result'] = 'success';
+			return $ret;
+				
+		}
+		
+		$ret['result'] = 'no tmplDir specifed';
+		return $ret;
+		
 	}
 	
 	private function external($inp, $user, $sess){

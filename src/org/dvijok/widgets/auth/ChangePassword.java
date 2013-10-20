@@ -53,10 +53,10 @@ public class ChangePassword extends SubPanelsDwidget {
 		super("tmpl/widgets/auth/change_password/change_password.html", p);
 	}
 
-	@Override
-	public boolean needAuthReinit() {
-		return true;
-	}
+//	@Override
+//	public boolean needAuthReinit() {
+//		return true;
+//	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {

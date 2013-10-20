@@ -20,6 +20,6 @@ package org.dvijok.widgets;
 
 public interface DwidgetCreator {
 	
-	public Dwidget getDwidget(SubPanel p);
+	public Dwidget getDwidget();
 
 }

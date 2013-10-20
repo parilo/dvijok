@@ -130,21 +130,20 @@ public class Loader {
 		
 	}
 	
-	public void load(Dwidget widget){
+	public void load(HTMLPanel html){
 
 		//protecting from simultaneous loading from different threads
 		if(!this.loading){
 
 			this.loading = true;
 			
-			HTMLPanel html = widget.getHTMLPanel();
+//			HTMLPanel html = widget.getHTMLPanel();
 			com.google.gwt.user.client.Element w;
 			if( (w = html.getElementById("dvijokw")) != null ){
 				w.setAttribute("id", "dvijokw_l");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
 				dw.beforeAttach();
-				html.add(dw, "dvijokw_l");
 				html.addAndReplaceElement(dw, (com.google.gwt.dom.client.Element)w);
 				dw.afterAttach();
 			}

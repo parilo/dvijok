@@ -52,7 +52,7 @@ public class SelectIcon extends SubPanelsDwidget {
 	public SelectIcon(){
 		super("tmpl/widgets/empty.html");
 		
-		setInline(true);
+//		setInline(true);
 	}
 
 	public void setTemplate(

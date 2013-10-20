@@ -41,7 +41,7 @@ public class SelectInput extends SubPanelsDwidget {
 	public SelectInput(){
 		super("tmpl/widgets/empty.html");
 		
-		setInline(true);
+//		setInline(true);
 	}
 
 	public void setTemplate(String tmpl){

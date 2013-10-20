@@ -49,20 +49,47 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Dwidget extends /*ComplexPanel*/Composite {
+public class Dwidget_ extends /*ComplexPanel*/Composite {
 	
 	private String tmplUrl;
 	private String tmplData;
-	private int loadCounter;
+//	private ArrayList<DBObject> params;
+	private HashMap<String, String> modes;
+//	private String dbid;
+//	private String dwid;
+//	private boolean inline;
+//	private LinkedList<String> tmplQueue;
+//	private boolean isloading;
 	
+//	private SimplePanel maincont;
 	private SimplePanel fakeContent;
 	private HTMLPanel main;
 	
+//	private SubPanel panel;
 	private GFX startAnimation = null;
 	
-	public Dwidget(String templUrl) {
+	public Dwidget_(String templUrl) {
+		this.modes = new HashMap<String, String>();
+//		tmplQueue = new LinkedList<String>();
+//		isloading = false;
+//		this.beforeLoadingSubDwidgets(main);
 		this.init(templUrl);
 	}
+	
+//	public Dwidget(String templUrl, SubPanel p) {
+//		this.modes = new HashMap<String, String>();
+//		tmplQueue = new LinkedList<String>();
+//		isloading = false;
+//		this.panel = p;
+//		this.readParams();
+//		this.readDbid();
+//		this.readDwid();
+		
+//		this.panel.clear();
+//		this.panel.getElement().setInnerHTML("");
+//		this.beforeLoadingSubDwidgets(main);
+//		this.init(templUrl);
+//	}
 	
 	public void _afterLoad(){
 	    onAttach();
@@ -72,7 +99,8 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	protected void beforeLoadingSubDwidgets(HTMLPanel htmlPanel){}
 	
 	private void init(String templUrl){
-		loadCounter = 0;
+//		inline = false;
+//		this.maincont = new SimplePanel();
 		elements = new ArrayList<com.google.gwt.dom.client.Element>();
 		fakeContent = new SimplePanel();
 		this.initWidget(fakeContent);
@@ -80,70 +108,91 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	private void loadTmpl(final String url){
+//		tmplQueue.add(url);
+//		this.getTmpl();
+//	}
+//	
+//	private void getTmpl(){
 
-		Resources.getInstance().tmpls.getTemplate(url, new CustomEventListener(){
-
-			@Override
-			public void customEventOccurred(CustomEvent evt) {
-				String text = (String)evt.getSource();
-				if( evt.isFailed() ){
-					Lib.alert("cannot get template "+url+" : "+text);
-				} else {
-					tmplUrl = url;
-					tmplData = text;
-					tmplLoaded();
+//		if( isloading == false && tmplQueue.size() > 0 ){
+			
+//			isloading = true;
+			
+//			final String url = tmplQueue.poll();
+			Resources.getInstance().tmpls.getTemplate(url, new CustomEventListener(){
+	
+				@Override
+				public void customEventOccurred(CustomEvent evt) {
+					String text = (String)evt.getSource();
+					if( evt.isFailed() ){
+						Lib.alert("cannot get template "+url+" : "+text);
+					} else {
+						tmplUrl = url;
+						tmplData = text;
+						modes.put(tmplUrl, tmplData);
+						createGUI();
+					}
 				}
-			}
-		});
+			});
+		
+//		}
 		
 	}
 	
-	private void tryLoad(int loadCounterValue){
+//	private void readParams(){
+//		this.params = Resources.getInstance().loader.getParams(this.panel);
+//	}
+//	
+//	public ArrayList<DBObject> getParams(){
+//		return this.params;
+//	}
+//	
+//	private void readDbid(){
+//		this.dbid = Resources.getInstance().loader.getAttribute(this.panel, "dbid");
+//	}
+//	
+//	private void readDwid(){
+//		this.dwid = Resources.getInstance().loader.getAttribute(this.panel, "dwid");
+//	}
+//	
+//	public String getDbid(){
+//		return this.dbid;
+//	}
+//	
+//	public String getDwid(){
+//		return this.dwid;
+//	}
+	
+//	public HTMLPanel getHTMLPanel(){
+//		return this.main;
+//	}
+	
+	protected void createGUI(){
 		
-		if( loadCounterValue == 2 ){
-		// this Dwidget was attached and tmeplate is loaded
-			
-			main = new HTMLPanel(tmplData);
-			fakeContent.setWidget(main);
-			beforeLoadingSubDwidgets(main);
-			Resources.getInstance().loader.load(main);
-			storeElements();
-			placeElements();
-			removeFakeContentWidget();
-			
-		}
+//		1. initWidget(Label)
+//		2. templ -> HTMLPanel
+//		3. HTMLPanel -> tmp
+//		4. loading HTMLPanel
+//		5. store HTMLPanel inner Elements
+//		6. remove HTMLPanel from tmp
+//		7. onAttach: remove Label from this Widget and place all stored Elements
 		
-	}
-	
-	private void removeFakeContentWidget(){
-		fakeContent.getElement().getParentElement().removeChild(fakeContent.getElement());
-	}
-	
-	private void addFakeContentWidget(){
-		//always needed to have almost one Element in Template to add FakeContentWidget near it
-		//on tmplChange
-		if( elements.size() > 0 ){
-//Lib.alert("parent: "+getpgetElement().getParentElement());
-			getElement().getParentElement().insertBefore(fakeContent.getElement(), elements.get(0));
-		} else {
-			Lib.alert("always needed to have almost one Element in Template to add FakeContentWidget near it on tmplChange");
-			getElement().getParentElement().appendChild(fakeContent.getElement());
-		}
-	}
-	
-	protected void tmplLoaded(){
-		tryLoad(++loadCounter);
-	}
-	
-	@Override
-	protected void onAttach() {
-		super.onAttach();
-		tryLoad(++loadCounter);
+		main = new HTMLPanel(tmplData);
+		Resources.getInstance().addToTmp(main);
+		beforeLoadingSubDwidgets(main);
+		Resources.getInstance().loader.load(main);
+		fakeContent.setWidget(main);
+		Resources.getInstance().removeFromTmp(main);
+		storeHTMLPanelElements();
+		
+//		this.initTmpl();
+//		this.attachTmpl();
+//		continiueLoadTmpl();
 	}
 	
 	private ArrayList<com.google.gwt.dom.client.Element> elements;
 	
-	private void storeElements(){
+	private void storeHTMLPanelElements(){
 		
 		elements.clear();
 		
@@ -156,7 +205,9 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 		
 	}
 	
-	private void placeElements(){
+	@Override
+	protected void onAttach() {
+		super.onAttach();
 
 		com.google.gwt.dom.client.Element parent = fakeContent.getElement().getParentElement();
 		com.google.gwt.dom.client.Element prevel = fakeContent.getElement();
@@ -166,23 +217,62 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 			parent.insertAfter(subel, prevel);
 			prevel = subel;
 		}
-//		parent.removeChild(fakeContent.getElement());
-		
+		parent.removeChild(fakeContent.getElement());
+
 	}
 	
-	private void removeElements(){
-		com.google.gwt.dom.client.Element parent = getElement().getParentElement();
-		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
-		while( i.hasNext() ){
-			parent.removeChild(i.next());
-		}
-	}
+//	@Override
+//	protected void doAttachChildren() {
+//		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
+//		while( i.hasNext() ){
+//		}		
+//		super.doAttachChildren();
+//	}
+//
+//	@Override
+//	protected void doDetachChildren() {
+//		super.doDetachChildren();
+//	}
 	
+//	protected void continiueLoadTmpl(){
+//		isloading = false;
+//		getTmpl();
+//	}
+
+//	protected void initTmpl(){
+//		main = new HTMLPanel(tmplData);
+////		main.addStyleName("tmplcont");
+////		if( inline ) main.getElement().getStyle().setDisplay(Display.INLINE);
+////		this.modes.put(this.tmplUrl, this.main);
+//	}
+	
+//	protected void attachTmpl(){
+////		this.maincont.setWidget(this.main);
+//		Resources.getInstance().addToTmp(this);
+////		Resources.getInstance().loader.loadNew();
+//		Resources.getInstance().loader.load(this);
+//		
+//		com.google.gwt.dom.client.Element thisel = getElement();
+//		com.google.gwt.dom.client.Element parent = thisel.getParentElement();
+//		com.google.gwt.dom.client.Element htmlpanelel = main.getElement();
+//		
+//		com.google.gwt.dom.client.Element subel;
+//		com.google.gwt.dom.client.Element prevel = thisel;
+//		while( (subel = htmlpanelel.getFirstChildElement()) != null ){
+//			htmlpanelel.removeChild(subel);
+//Lib.alert("aaa1: "+parent+"  :  "+subel+"  :  "+prevel);
+//			parent.insertAfter(subel, prevel);
+//			prevel = subel;
+//		}
+//		parent.removeChild(thisel);
+//	}
+
 	protected void changeTmpl(String url){
-		addFakeContentWidget();
-		removeElements();
-		loadCounter--;
-		loadTmpl(url);
+		if( this.modes.containsKey(url) ){
+			tmplUrl = url;
+			tmplData = modes.get(url);
+			createGUI();
+		} else this.loadTmpl(url);
 	}
 	
 	protected String getTmplUrl() {
@@ -190,7 +280,7 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	public void redraw(){
-		tmplLoaded();
+		createGUI();
 	}
 
 	private Busy busypane;
@@ -205,7 +295,7 @@ public class Dwidget extends /*ComplexPanel*/Composite {
 			if( height > 150 ) busypane = new BigBusy();
 			else busypane = new SmallBusy();
 			
-			Dwidget bp = (Dwidget) busypane;
+			Dwidget_ bp = (Dwidget_) busypane;
 			bp.setWidth(getOffsetWidth()+"px");
 			bp.setHeight(height+"px");
 //			busypane.setHeight((getOffsetHeight()-20)+"px");

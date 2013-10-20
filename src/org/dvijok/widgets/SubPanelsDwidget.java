@@ -34,40 +34,49 @@ public abstract class SubPanelsDwidget extends Dwidget {
 	}
 	
 	public SubPanelsDwidget(String templUrl, boolean debug){
-		super(templUrl, debug);
+		super(templUrl);
 	}
 	
 	public SubPanelsDwidget(String templUrl, SubPanel panel){
-		super(templUrl, panel);
+		super(templUrl);
 	}
 	
 	public SubPanelsDwidget(String templUrl, SubPanel panel, boolean debug){
-		super(templUrl, panel, debug);
+		super(templUrl);
 	}
 	
 	protected abstract void beforeSubPanelsLoading();
 	protected void afterLoading(){}
 	
-	@Override
-	protected void beforeTmplInit(){
-		this.beforeSubPanelsLoading();
-	}
-	
-	@Override
-	protected void createGUI(){
-		this.initTmpl();
-		this.loadSubPanels();
-		this.attachTmpl();
-		continiueLoadTmpl();
-		afterLoading();
-	}
+//	@Override
+//	protected void beforeTmplInit(){
+//		this.beforeSubPanelsLoading();
+//	}
+//	
+//	@Override
+//	protected void createGUI(){
+//		this.initTmpl();
+//		this.loadSubPanels();
+//		this.attachTmpl();
+//		continiueLoadTmpl();
+//		afterLoading();
+//	}
+
+//	@Override
+//	protected void beforeLoadingSubDwidgets(HTMLPanel htmlPanel) {
+//		// TODO Auto-generated method stub
+//		super.beforeLoadingSubDwidgets(htmlPanel);
+//	}
 	
 	protected abstract Widget genSubWidget(String dwname, ArrayList<DBObject> params);
 	
-	private void loadSubPanels(){
+	@Override
+	protected void beforeLoadingSubDwidgets(HTMLPanel html) {
+//	private void loadSubPanels(){
+		beforeSubPanelsLoading();
 		
 		com.google.gwt.user.client.Element w;
-		HTMLPanel html = this.getHTMLPanel();
+//		HTMLPanel html = this.getHTMLPanel();
 		
 		while( (w = html.getElementById("dw")) != null ){
 			String name = w.getAttribute("dwname");
@@ -78,6 +87,7 @@ public abstract class SubPanelsDwidget extends Dwidget {
 			html.addAndReplaceElement(sw, (com.google.gwt.dom.client.Element)w);
 		}
 		
+		super.beforeLoadingSubDwidgets(html);
 	}
 	
 }

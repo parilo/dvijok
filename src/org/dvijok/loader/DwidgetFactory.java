@@ -52,13 +52,16 @@ public class DwidgetFactory {
 	public Dwidget getDwidget(String name, SubPanel p){
 		if( this.creators.containsKey(name) ){
 			DwidgetCreator dc = this.creators.get(name);
-			Dwidget d = dc.getDwidget(p);
+			Dwidget d = dc.getDwidget();
 			
-			String dwid = d.getDwid();
-			if( dwid != null )
-				if(!dwid.equals("")) Resources.getInstance().dwidgets.addDwidedDwidget(dwid, d);
+			p.clear();
+			p.getElement().setInnerHTML("");
+			
+//			String dwid = d.getDwid();
+//			if( dwid != null )
+//				if(!dwid.equals("")) Resources.getInstance().dwidgets.addDwidedDwidget(dwid, d);
 					
-			if( d.needAuthReinit() ) Resources.getInstance().dwidgets.addOnAuthReload(d);
+//			if( d.needAuthReinit() ) Resources.getInstance().dwidgets.addOnAuthReload(d);
 			
 			dwidgetLoadET.invokeListeners(d);
 			

@@ -19,12 +19,15 @@
 package org.dvijok.tmpl;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
+import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.HttpFunctions;
+import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 
 import com.google.gwt.http.client.Request;
@@ -77,6 +80,14 @@ public class TmplsDB {
 			
 			}
 
+		}
+	}
+	
+	public void addToTemplates(DBObject templates){
+		Iterator<String> i = templates.keySet().iterator();
+		while( i.hasNext() ){
+			String key = i.next();
+			tmpls.put(key, templates.getString(key));
 		}
 	}
 

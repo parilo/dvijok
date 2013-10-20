@@ -32,6 +32,7 @@ public interface DataBase {
 //	public void getObjects(DBObject params, final DVRequestHandler<DBArray> handler);
 //	public void putObject(DBObject params, final DVRequestHandler<DBObject> handler);
 //	public void delObject(DBObject params, final DVRequestHandler<DBObject> handler);
+	public void getTemplatesCache(final RequestHandler<DBObject> handler);
 	public void external(DBObject params, final RequestHandler<DBObject> handler);
 	
 	public void addEventListener(DBObject params, DataBaseEventListener listener);

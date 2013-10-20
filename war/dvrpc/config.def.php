@@ -37,14 +37,14 @@ $config['ipcfilesdir'] = dirname(__FILE__).'/ipcfiles/';
 $config['ipcsystimeout'] = 600;//in seconds
 $config['ipcusertimeout'] = 600;//in seconds
 
-$config['dbtype'] = 'dbfiles';
-$config['dbfilesdir'] = dirname(__FILE__).'/dbfiles/';
+#$config['dbtype'] = 'dbfiles';
+#$config['dbfilesdir'] = dirname(__FILE__).'/dbfiles/';
 
-#$config['dbtype'] = 'mysql';
-#$config['MYSQLHOST'] = "localhost";
-#$config['MYSQLUSER'] = "dvijok";
-#$config['MYSQLPASS'] = "dvijok";
-#$config['MYSQLDBNAME'] = "dvijok";
+$config['dbtype'] = 'mysql';
+$config['MYSQLHOST'] = "localhost";
+$config['MYSQLUSER'] = "dvijok";
+$config['MYSQLPASS'] = "dvijok";
+$config['MYSQLDBNAME'] = "dvijok";
 
 date_default_timezone_set('Asia/Yekaterinburg');
 

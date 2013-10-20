@@ -55,18 +55,8 @@ try {
 	$dvrpc->callService($requestData, get_client_ip_address());
 
 } catch ( DBException $ex ){
-	//echo "aaaaaaaaaaaaaaaaaaa\n";
-	//echo $ex->getTraceAsString();
-	//$ret['result'] = 'notdb';
 	$ret['result'] = '->'.$ex->getValue().'<- '.$ex->getTraceAsString();
 	echo $proto->hashMapCode($ret)."\n";
 }
-
-/*$headers = apache_request_headers();
-
-system( "echo \"\" > /home/www/saas/lastreq.xml" );
-foreach ($headers as $header => $value) {
-	system( "echo \"$header: $value\n\" >> /home/www/saas/lastreq.xml" );
-}*/
 
 ?>
