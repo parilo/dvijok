@@ -33,9 +33,13 @@ import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
@@ -51,6 +55,7 @@ public class SelectList extends SubPanelsDwidget {
 	private SelectModel model;
 	
 	private CustomEventListener itemClicked;
+	private CustomEventListener listClicked;
 	private CustomEventTool selectedET;
 	
 	public SelectList(){
@@ -103,6 +108,10 @@ public class SelectList extends SubPanelsDwidget {
 		redraw();
 	}
 	
+	public void setListClicked(CustomEventListener listClicked) {
+		this.listClicked = listClicked;
+	}
+
 	@Override
 	protected void beforeSubPanelsLoading() {
 		
@@ -113,6 +122,24 @@ public class SelectList extends SubPanelsDwidget {
 		//class="calendar-note-select-list"
 		list = new DivPanel();
 		list.addStyleName("calendar-note-select-list");
+		list.addDomHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+System.out.println("click");	
+				listClicked.customEventOccurred(null);
+			}}, ClickEvent.getType());
+
+//		list.addDomHandler(new BlurHandler(){
+//			@Override
+//			public void onBlur(BlurEvent event) {
+//System.out.println("blur");				
+//			}}, BlurEvent.getType());
+//
+//		list.addDomHandler(new KeyDownHandler(){
+//			@Override
+//			public void onKeyDown(KeyDownEvent event) {
+//System.out.println("key");				
+//			}}, KeyDownEvent.getType());
 		
 		itemClicked = new CustomEventListener(){
 			@Override

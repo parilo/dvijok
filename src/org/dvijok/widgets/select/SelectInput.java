@@ -22,14 +22,21 @@ import java.util.ArrayList;
 
 import org.dvijok.controls.DivPanel;
 import org.dvijok.db.DBObject;
+import org.dvijok.event.CustomEventListener;
 import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class SelectInput extends SubPanelsDwidget {
 
@@ -37,6 +44,9 @@ public class SelectInput extends SubPanelsDwidget {
 	private TextBox input;
 
 	private boolean opened;
+	
+	private CustomEventListener blurL;
+	private CustomEventListener blurByTabL;
 	
 	public SelectInput(){
 		super("tmpl/widgets/empty.html");
@@ -89,14 +99,47 @@ public class SelectInput extends SubPanelsDwidget {
 	public void setFocus(boolean focused){
 		input.setFocus(focused);
 	}
+	
+//	public HandlerRegistration addBlurHandler(BlurHandler handler){
+//		return input.addBlurHandler(handler);
+//	}
+	
+	public void setBlurListener(CustomEventListener listener){
+		blurL = listener;
+	}
+	
+	public void setBlurByTabListener(CustomEventListener listener){
+		blurByTabL = listener;
+	}
 
 	@Override
 	protected void beforeSubPanelsLoading() {
-//		<input class="calendar-note-select-input calendar-note-select-input-with-list calendar-note-text" type="text" placeholder="Месяц">
 		input = new TextBox();
 		input.addStyleName("calendar-note-textmini");
 		input.addStyleName("calendar-note-text");
 		input.setWidth("100%");
+
+		input.addBlurHandler(new BlurHandler(){
+			@Override
+			public void onBlur(BlurEvent event) {
+				blurL.customEventOccurred(null);
+			}});
+		
+		input.addKeyDownHandler(new KeyDownHandler(){
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+		      switch (event.getNativeKeyCode()) {
+//		        case KeyCodes.KEY_ENTER:
+		        case KeyCodes.KEY_TAB:
+		        	blurByTabL.customEventOccurred(null);
+		        	break;
+//		        case KeyCodes.KEY_ESCAPE:
+//		        case KeyCodes.KEY_UP:
+//		          break;
+//		        case KeyCodes.KEY_DOWN:
+//		          break;
+		      }
+			}});
 		
 		w = new DivPanel();
 		w.addWidget(input);

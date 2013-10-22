@@ -25,10 +25,14 @@ import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
+import org.dvijok.lib.Lib;
 import org.dvijok.widgets.SubPanelsDwidget;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -189,6 +193,12 @@ public class Select extends SubPanelsDwidget {
 				updateInput();
 				selectedChangedET.invokeListeners();
 			}});
+		
+		list.setListClicked(new CustomEventListener(){
+			@Override
+			public void customEventOccurred(CustomEvent evt) {
+				iconFP.setFocus(true);
+			}});
 
 		addDomHandler(new MouseOverHandler(){
 			@Override
@@ -202,6 +212,31 @@ public class Select extends SubPanelsDwidget {
 				isMouseIn = false;
 			}}, MouseOutEvent.getType());
 		
+//		addDomHandler(new BlurHandler(){
+//			@Override
+//			public void onBlur(BlurEvent event) {
+//				Lib.alert("blur");
+//			}}, BlurEvent.getType());
+
+//		input.addBlurHandler(new BlurHandler(){
+//			@Override
+//			public void onBlur(BlurEvent event) {
+//				System.out.println("blur");
+//				if( !isMouseIn ) setListOpened(false);
+//			}});
+		
+		input.setBlurByTabListener(new CustomEventListener(){
+			@Override
+			public void customEventOccurred(CustomEvent evt) {
+				setListOpened(false);
+			}});
+
+		input.setBlurListener(new CustomEventListener(){
+			@Override
+			public void customEventOccurred(CustomEvent evt) {
+				if( !isMouseIn ) setListOpened(false);
+			}});
+		
 		iconFP = new FocusPanel();
 		iconFP.add(list);
 		iconFP.addBlurHandler(new BlurHandler(){
@@ -214,6 +249,16 @@ public class Select extends SubPanelsDwidget {
 			@Override
 			public void onAttachOrDetach(AttachEvent event) {
 				if( opened ) iconFP.setFocus(true);
+			}});
+
+		iconFP.addKeyDownHandler(new KeyDownHandler(){
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+		      switch (event.getNativeKeyCode()) {
+		        case KeyCodes.KEY_TAB:
+		        	setListOpened(false);
+		        	break;
+		      }
 			}});
 		
 		model = new SelectModel();
