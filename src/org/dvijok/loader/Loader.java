@@ -19,6 +19,7 @@
 package org.dvijok.loader;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
@@ -28,6 +29,7 @@ import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.SubPanel;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Element;
@@ -39,133 +41,97 @@ import com.google.gwt.user.client.ui.Widget;
 public class Loader {
 
 	private DwidgetFactory factory;
-//	private HTMLPanel root;
-//	private RootPanel root;
-	
-	private boolean loading;
-	private boolean needLoad;
 	
 	public Loader(){
-		
-		this.loading = false;
-		this.needLoad = false;
-//		this.root = null;
 		this.factory = new DwidgetFactory();
-		
 	}
 	
 	public DwidgetFactory getDwidgetFactory(){
 		return this.factory;
 	}
 	
-	private DBObject getParam(com.google.gwt.dom.client.Element pel){
-		com.google.gwt.dom.client.Element chel = pel.getNextSiblingElement();
-		if( chel != null ){
-			DBObject param = new DBObject();
-			while( chel != null ){
-				if( chel.getNodeName().equals("PARAM") ){ return param; }
-				param.put(chel.getNodeName(), chel.getInnerHTML());
-				chel = chel.getNextSiblingElement();
-			}
-			return param;
-		}
-		return null;
-	}
-	
-	public String getAttribute(SubPanel p, String name){
-		return p.getElement().getAttribute(name);
-	}
-	
-	public ArrayList<DBObject> getParams(SubPanel p){
-		return this.getParams(p.getElement());
-	}
-	
-	public ArrayList<DBObject> getParams(Element el){
-
-		com.google.gwt.dom.client.Element chel = el.getFirstChildElement();
-		if( chel != null ){
-			ArrayList<DBObject> params = new ArrayList<DBObject>();
-			while( chel != null ){
-				if( chel.getNodeName().equals("PARAM") ) params.add(this.getParam(chel));
-				chel = chel.getNextSiblingElement();
-			}
-			return params;
-		}
-		
-		return null;
-	}
-	
+	/**
+	 * load page dwidgets
+	 */
 	public void load(){
-		Load();
-	}
-	
-	public void loadNew(){
-		Load();
-	}
-	
-	private void Load(){
-
-		//protecting from simultaneous loading from different threads
-		if(!this.loading){
-
-			this.loading = true;
 			
 			Document doc = RootPanel.get().getElement().getOwnerDocument();
-			com.google.gwt.dom.client.Element w;
-			while( (w = doc.getElementById("dvijokw")) != null ){
-				w.setAttribute("id", "dvijokw_l");
+			
+			NodeList<com.google.gwt.dom.client.Element> dvdwidgetEls = doc.getElementsByTagName("dvdwidget");
+			int len = dvdwidgetEls.getLength();
+			for(int i=0; i<len; i++){
+				com.google.gwt.dom.client.Element w = dvdwidgetEls.getItem(i);
+				w.setAttribute("loading", "true");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
 				w.getParentElement().replaceChild(dw.getElement(), w);
-				dw._afterLoad();
+				dw._afterLoadedByLoader();
 			}
-			
-			this.loading = false;
-
-			if( this.needLoad == true ){
-				this.needLoad = false;
-				this.loadNew();
-			}
-			
-		} else this.needLoad = true;
 		
 	}
 	
-	/*
-	 * return count Dwidget that not loaded on attaching
+	/**
+	 * loads sub dwidgets into given HTMLPanel
+	 * @param HTMLPanel html
+	 * @return ArrayList<Dwidget> - array of found sub dwidgets
 	 */
-	public ArrayList<Dwidget> load(HTMLPanel html){
+	public ArrayList<Dwidget> loadSubDwidgets(HTMLPanel html){
 
-		//protecting from simultaneous loading from different threads
-//		if(!this.loading){
-
-//			this.loading = true;
-			
 			ArrayList<Dwidget> dwidgets = new ArrayList<Dwidget>();
-		
-			com.google.gwt.user.client.Element w;
-			if( (w = html.getElementById("dvijokw")) != null ){
-				w.setAttribute("id", "dvijokw_l");
+			
+			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "dvdwidget").iterator();				
+			while( i.hasNext() ){
+			
+				com.google.gwt.dom.client.Element w = i.next();
+				w.setAttribute("loading", "true");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
 				dwidgets.add(dw);
-				dw.beforeAttach();
-				html.addAndReplaceElement(dw, (com.google.gwt.dom.client.Element)w);
-				dw.afterAttach();
+//				dw.beforeAttach();
+				html.addAndReplaceElement(dw, w);
+//				dw.afterAttach();
+				
 			}
 			
 			return dwidgets;
-			
-//			this.loading = false;
-
-//			if( this.needLoad == true ){
-//				this.needLoad = false;
-//				this.loadNew();
-//			}
-			
-//		}
-		// else this.needLoad = true;
 		
+	}
+	
+	/**
+	 * loads sub widgets into given HTMLPanel
+	 * @param HTMLPanel html
+	 * @return ArrayList<Dwidget> - array of found sub dwidgets
+	 */
+	public ArrayList<Dwidget> loadSubWidgets(HTMLPanel html, SubWidgetsFactory subWidgetsFactory) {
+		
+		ArrayList<Dwidget> dwidgets = new ArrayList<Dwidget>();
+		
+		// NodeList is live. So we need store found elements in ArrayList and process them after
+		Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "dvsubwidget").iterator();
+		while( i.hasNext() ){
+				com.google.gwt.dom.client.Element w = i.next();
+				String name = w.getAttribute("name");
+				w.setInnerHTML("");
+				Widget sw = subWidgetsFactory.getSubWidget(name);
+				if( sw instanceof Dwidget ) dwidgets.add((Dwidget)sw);
+				if( sw == null ) sw = new Label("Loader: Don't know sub dwidget with name: ->"+name+"<-");
+				String replid = "dw"+Resources.getInstance().globalseq++;
+				w.setId(replid);
+				html.addAndReplaceElement(sw, replid);
+		}
+
+		return dwidgets;
+	}
+	
+	// NodeList is live. So we need store found elements in ArrayList and process them after
+	private ArrayList<com.google.gwt.dom.client.Element> getElementsByTagName(HTMLPanel html, String tagName){
+		NodeList<com.google.gwt.dom.client.Element> foundNL = html.getElement().getElementsByTagName(tagName);
+		ArrayList<com.google.gwt.dom.client.Element> foundAL = new ArrayList<com.google.gwt.dom.client.Element>();
+		int len = foundNL.getLength();
+		for(int i=0; i<len; i++){
+			foundAL.add(foundNL.getItem(i));
+		}
+		return foundAL;
 	}
 	
 }

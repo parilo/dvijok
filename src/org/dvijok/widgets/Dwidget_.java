@@ -180,7 +180,7 @@ public class Dwidget_ extends /*ComplexPanel*/Composite {
 		main = new HTMLPanel(tmplData);
 		Resources.getInstance().addToTmp(main);
 		beforeLoadingSubDwidgets(main);
-		Resources.getInstance().loader.load(main);
+		Resources.getInstance().loader.loadSubDwidgets(main);
 		fakeContent.setWidget(main);
 		Resources.getInstance().removeFromTmp(main);
 		storeHTMLPanelElements();

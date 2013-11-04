@@ -28,6 +28,7 @@ import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
+import org.dvijok.loader.SubWidgetsFactory;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.busy.BigBusy;
 import org.dvijok.widgets.busy.Busy;
@@ -40,6 +41,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -59,7 +61,9 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	private SimplePanel fakeContent;
 	private HTMLPanel loadingPanel;
 	
-	private GFX startAnimation = null;
+//	private GFX startAnimation = null;
+	
+	private SubWidgetsFactory subWidgetsFactory;
 	
 	private CustomEventListener loadedL;
 	private CustomEventListener subDwidgetsLoadedL;
@@ -67,6 +71,11 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	public Dwidget(String templUrl) {
 		this.init(templUrl);
 	}
+	
+	private Dwidget getMe(){ return this; }
+	
+	protected abstract void initInternals();
+	protected abstract Widget getSubWidget(String name);
 	
 	public void setLoadedListener(CustomEventListener loadedListener){
 		if( loaded ){
@@ -77,12 +86,13 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 		}
 	}
 	
-	public void _afterLoad(){
+	/**
+	 * This function must be called only by org.dvijok.loader.Loader
+	 */
+	public void _afterLoadedByLoader(){
 	    onAttach();
 	    RootPanel.detachOnWindowClose(this);
 	}
-	
-	protected ArrayList<Dwidget> beforeLoadingSubDwidgets(HTMLPanel htmlPanel){return new ArrayList<Dwidget>();}
 	
 	private void init(String templUrl){
 		loaded = false;
@@ -94,6 +104,12 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 				tryPlaceElements();
 			}};
 		
+		subWidgetsFactory = new SubWidgetsFactory(){
+			@Override
+			public Widget getSubWidget(String name) {
+				return getMe().getSubWidget(name);
+			}};
+			
 		initInternals();
 			
 		elements = new ArrayList<com.google.gwt.dom.client.Element>();
@@ -103,8 +119,6 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 		this.initWidget(fakeContent);
 		loadTmpl(templUrl);
 	}
-	
-	protected abstract void initInternals();
 	
 	private void loadTmpl(final String url){
 
@@ -131,14 +145,23 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 			//this Dwidget was attached and tmeplate is loaded
 	
 			//loading sub widgets and sub dwidgets
-			//than getting dom elements from fakeContent 
+			//then getting dom elements from fakeContent 
 			//and putting it in fakeContent parent element
+			//just after fakeContent element, fakeContent element is
+			//display none and position absolute
+			//so it doesn't interfere with page html and
+			//is anchor for this dwidget. So dwidget elements can be
+			//put back in fakeContent element before detaching
 			
 			loadingPanel = new HTMLPanel(tmplData);
 			fakeContent.setWidget(loadingPanel);
-			ArrayList<Dwidget> subDw = beforeLoadingSubDwidgets(loadingPanel);
-			subDw.addAll(Resources.getInstance().loader.load(loadingPanel));
-
+			ArrayList<Dwidget> subDw = Resources.getInstance().loader.loadSubWidgets(loadingPanel, subWidgetsFactory);
+			subDw.addAll(Resources.getInstance().loader.loadSubDwidgets(loadingPanel));
+			
+			//before replacing Elements of this Dwidget out of fakeContent
+			//element we must know that all sub dwidgets is loaded and attached
+			//thats why we need to count sub dwidgets and
+			//wait all is loaded
 			elementsPlaced = false;
 			subDwidgetsCount = subDw.size();
 			subDwidgetsCountLoaded = 0;
@@ -166,8 +189,6 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 			elementsPlaced = true;
 			loaded = true;
 			if( loadedL != null ) loadedL.customEventOccurred(null);
-			super.onDetach();
-			super.onAttach();
 		}
 		
 	}
@@ -178,14 +199,38 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	
 	@Override
 	protected void onAttach() {
+
+		//before detaching elements must be placed
+		//back in loadingPanel and then
+		//must be placed out from loadingPanel
+		//on attach
+		if( loaded ){
+			storeElements();
+			placeElements();
+		}
+
 		super.onAttach();
-		tryLoad(++loadCounter);
+		if( !loaded ) tryLoad(++loadCounter);
 	}
 	
+	@Override
+	protected void onDetach() {
+
+		//before detaching elements must be placed
+		//back in loadingPanel and then
+		//must be placed out from loadingPanel
+		//on attach
+		if( loaded ){
+			removeElements();
+			placeBackElementsToFakeContent();
+		}
+
+		super.onDetach();
+	}
+
 	private ArrayList<com.google.gwt.dom.client.Element> elements;
 	
 	private void storeElements(){
-		
 		elements.clear();
 		
 		com.google.gwt.dom.client.Element htmlpanelel = loadingPanel.getElement();
@@ -198,7 +243,6 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	private void placeElements(){
-
 		com.google.gwt.dom.client.Element parent = fakeContent.getElement().getParentElement();
 		com.google.gwt.dom.client.Element prevel = fakeContent.getElement();
 		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
@@ -207,7 +251,18 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 			parent.insertAfter(subel, prevel);
 			prevel = subel;
 		}
-		
+	}
+	
+	private void placeBackElementsToFakeContent(){
+		com.google.gwt.dom.client.Element parent = loadingPanel.getElement();
+		com.google.gwt.dom.client.Element prevel = null;
+		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
+		while( i.hasNext() ){
+			com.google.gwt.dom.client.Element subel = i.next();
+			if( prevel == null ) parent.appendChild(subel);
+			else parent.insertAfter(subel, prevel);
+			prevel = subel;
+		}
 	}
 	
 	private void removeElements(){
@@ -215,12 +270,13 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
 		while( i.hasNext() ){
 			com.google.gwt.dom.client.Element el = i.next();
-			parent.removeChild(el);
+			if( parent.isOrHasChild(el) ) parent.removeChild(el);
 		}
 	}
 	
 	protected void changeTmpl(String url){
 		removeElements();
+		placeBackElementsToFakeContent();
 		loadCounter--;
 		loadTmpl(url);
 	}
@@ -232,6 +288,23 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	public void redraw(){
 		changeTmpl(tmplUrl);
 	}
+	
+	public Element getFirstInnerElement() {
+		if( elements.size() > 0 ){
+			return (com.google.gwt.user.client.Element)elements.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	private Busy busypane;
 	
@@ -283,31 +356,31 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	/*
 	 * animation
 	 */
-	public void performAnimation(GFX gfx){
-		addStyleName("tmp");
-		gfx.setWidget(this);
-		gfx.init();
-		removeStyleName("tmp");
-		gfx.start();
-	}
-	
-	public void setStartAnimation(GFX gfx){
-		gfx.setWidget(this);
-		startAnimation = gfx;
-	}
-	
-	public void beforeAttach(){
-		if( startAnimation != null ) {
-			addStyleName("tmp");
-		}
-	}
-	
-	public void afterAttach(){
-		if( startAnimation != null ) {
-			startAnimation.init();
-			removeStyleName("tmp");
-			startAnimation.start();
-		}
-	}
+//	public void performAnimation(GFX gfx){
+//		addStyleName("tmp");
+//		gfx.setWidget(this);
+//		gfx.init();
+//		removeStyleName("tmp");
+//		gfx.start();
+//	}
+//	
+//	public void setStartAnimation(GFX gfx){
+//		gfx.setWidget(this);
+//		startAnimation = gfx;
+//	}
+//	
+//	public void beforeAttach(){
+//		if( startAnimation != null ) {
+//			addStyleName("tmp");
+//		}
+//	}
+//	
+//	public void afterAttach(){
+//		if( startAnimation != null ) {
+//			startAnimation.init();
+//			removeStyleName("tmp");
+//			startAnimation.start();
+//		}
+//	}
 
 }

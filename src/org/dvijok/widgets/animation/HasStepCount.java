@@ -16,10 +16,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.widgets.gallery;
+package org.dvijok.widgets.animation;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
-public interface GalleryBigItem extends IsWidget {
+public interface HasStepCount {
+	
+	public void setStepCount(int stepCount);
+	public int getStepCount();
 	
 }

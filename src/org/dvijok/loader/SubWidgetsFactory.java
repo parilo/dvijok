@@ -16,42 +16,12 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.widgets.gallery;
+package org.dvijok.loader;
 
-import org.dvijok.db.DBArray;
-import org.dvijok.event.CustomEventListener;
-import org.dvijok.event.CustomEventTool;
+import com.google.gwt.user.client.ui.Widget;
 
-public class GalleryModel {
+public interface SubWidgetsFactory {
 
-	private DBArray photo;
-	
-	private CustomEventTool photoChanged;
-	
-	public GalleryModel(){
-		photoChanged = new CustomEventTool();
-		photo = new DBArray();
-	}
-	
-	/*
-	 * DBArray items must be DBObjects and have field 'src'
-	 */
-	public void setDBA(DBArray dba){
-		photo = dba;
-		photoChanged.invokeListeners();
-	}
-	
-	public DBArray getDBA(){
-		return photo;
-	}
-
-	public void addPhotoChangedListener(CustomEventListener listener){
-		photoChanged.addCustomEventListener(listener);
-	}
-	
-	public void removePhotoChangedListener(CustomEventListener listener){
-		photoChanged.removeCustomEventListener(listener);
-	}
+	public Widget getSubWidget(String name);
 	
 }
-

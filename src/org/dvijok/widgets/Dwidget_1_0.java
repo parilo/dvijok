@@ -143,7 +143,7 @@ public class Dwidget_1_0 extends Composite {
 	}
 	
 	private void readParams(){
-		this.params = Resources.getInstance().loader.getParams(this.panel);
+//		this.params = Resources.getInstance().loader.getParams(this.panel);
 	}
 	
 	public ArrayList<DBObject> getParams(){
@@ -151,11 +151,11 @@ public class Dwidget_1_0 extends Composite {
 	}
 	
 	private void readDbid(){
-		this.dbid = Resources.getInstance().loader.getAttribute(this.panel, "dbid");
+//		this.dbid = Resources.getInstance().loader.getAttribute(this.panel, "dbid");
 	}
 	
 	private void readDwid(){
-		this.dwid = Resources.getInstance().loader.getAttribute(this.panel, "dwid");
+//		this.dwid = Resources.getInstance().loader.getAttribute(this.panel, "dwid");
 	}
 	
 	public String getDbid(){

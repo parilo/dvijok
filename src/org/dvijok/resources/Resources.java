@@ -51,9 +51,14 @@ public class Resources {
 	private Busy busy;
 	private int busycount;
 	
+	public int globalseq;
+	
 	private static VerticalPanel tmpcont;
 	
 	public Resources(){
+		
+		globalseq = 0;
+		
 		this.tmpls = null;
 		this.loader = null;
 		this.conf = null;

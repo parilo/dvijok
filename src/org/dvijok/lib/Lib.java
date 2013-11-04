@@ -144,4 +144,7 @@ public class Lib {
 		return url.substring(0, dotpos)+postfix+url.substring(dotpos);
 	}
 	
+	public static void printStackTrace(){
+		new Throwable().printStackTrace();		
+	}
 }

@@ -21,12 +21,12 @@ package org.dvijok.widgets.busy;
 import java.util.ArrayList;
 
 import org.dvijok.db.DBObject;
-import org.dvijok.widgets.SubPanelsDwidget;
+import org.dvijok.widgets.Dwidget;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SmallBusy extends SubPanelsDwidget implements Busy {
+public class SmallBusy extends Dwidget implements Busy {
 
 	private Label label;
 	
@@ -45,7 +45,7 @@ public class SmallBusy extends SubPanelsDwidget implements Busy {
 	}
 
 	@Override
-	protected Widget genSubWidget(String dwname, ArrayList<DBObject> params) {
+	protected Widget getSubWidget(String dwname) {
 		return label;
 	}
 	

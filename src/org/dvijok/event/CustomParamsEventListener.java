@@ -8,7 +8,7 @@ import org.dvijok.db.DBObject;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
 import org.dvijok.widgets.SubPanel;
-import org.dvijok.widgets.SubPanelsDwidget;
+import org.dvijok.widgets.Dwidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
