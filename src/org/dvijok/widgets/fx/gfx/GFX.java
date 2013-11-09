@@ -18,8 +18,8 @@
 
 package org.dvijok.widgets.fx.gfx;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
+import org.dvijok.rpc.DBObject;
 
 import com.google.gwt.user.client.ui.Widget;
 

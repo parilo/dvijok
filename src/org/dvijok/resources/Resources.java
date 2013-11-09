@@ -19,11 +19,11 @@
 package org.dvijok.resources;
 
 import org.dvijok.config.Config;
-import org.dvijok.db.DBObject;
-import org.dvijok.db.DataBase;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.loader.Loader;
 import org.dvijok.resources.historywatch.HistoryWatcher;
+import org.dvijok.rpc.DBObject;
+import org.dvijok.rpc.RPC;
 import org.dvijok.tmpl.TmplsDB;
 import org.dvijok.widgets.busy.BigBusy;
 import org.dvijok.widgets.busy.Busy;
@@ -39,7 +39,7 @@ public class Resources {
 	public TmplsDB tmpls;
 	public Loader loader;
 	public Config conf;
-	public DataBase db;
+	public RPC db;
 //	public Dwidgets dwidgets;
 	public HistoryWatcher historyWatcher;
 	public DBObject userInfo = null;

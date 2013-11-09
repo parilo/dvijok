@@ -16,29 +16,25 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.rpc;
 
-import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.handlers.RequestHandler;
+import org.dvijok.rpc.event.DataBaseEventListener;
 
-public interface DataBase {
+public interface RPC {
 
 	public String getSid();
+	public void checkSession(DBObject params, final RequestHandler<DBObject> handler);
 	public void login(DBObject params, final RequestHandler<DBObject> handler);
-	public void sendKey(DBObject params, final RequestHandler<DBObject> handler);
+	public void sendLoginKey(DBObject params, final RequestHandler<DBObject> handler);
 	public void logout(DBObject params, final RequestHandler<DBObject> handler);
 	public void saveUserData(DBObject userData, final RequestHandler<DBObject> handler);
-//	public void getObject(DBObject params, final DVRequestHandler<DBObject> handler);
-//	public void getObjects(DBObject params, final DVRequestHandler<DBArray> handler);
-//	public void putObject(DBObject params, final DVRequestHandler<DBObject> handler);
-//	public void delObject(DBObject params, final DVRequestHandler<DBObject> handler);
 	public void getTemplatesCache(final RequestHandler<DBObject> handler);
 	public void external(DBObject params, final RequestHandler<DBObject> handler);
 	
 	public void addEventListener(DBObject params, DataBaseEventListener listener);
 	public void removeEventListener(DBObject params, DataBaseEventListener listener);
 	public void listenForEvents(DBObject params, final RequestHandler<DBObject> handler);
-	public void checkSession(DBObject params, final RequestHandler<DBObject> handler);
 	public void stopListenForEvents();
 	public void pauseListenForEvents();
 	public void resumeListenForEvents();

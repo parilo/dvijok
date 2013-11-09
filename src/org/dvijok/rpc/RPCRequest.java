@@ -16,13 +16,41 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.event;
+package org.dvijok.rpc;
 
-import org.dvijok.db.DBObject;
+import org.dvijok.lib.HttpClient;
 
-public interface DataBaseEventsInterface {
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
 
-	public void addEventListener(DBObject params, DataBaseEventListener listener);
-	public void removeEventListener(DBObject params, DataBaseEventListener listener);
+public class RPCRequest {
+
+	private Request request;
+	private RequestCallback callback;
+	private HttpClient httpClient;
+	private String data;
+	
+	public RPCRequest(Request request, String data, RequestCallback callback, HttpClient httpClient){
+		this.request = request;
+		this.callback = callback;
+		this.httpClient = httpClient;
+		this.data = data;
+	}
+	
+	public void cancel() {
+		request.cancel();
+	}
+
+	public void pause(){
+		request.cancel();
+	}
+	
+	public void resume(){
+		request = httpClient.doPost( data, callback);
+	}
+
+	public boolean isPending() {
+		return request.isPending();
+	}
 	
 }

@@ -1,5 +1,5 @@
 //    dvijok - cms written in gwt
-//    Copyright (C) 2010-2011  Pechenko Anton Vladimirovich aka Parilo
+//    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,14 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.rpc;
 
-import org.dvijok.handlers.RequestHandler;
+import java.util.Date;
 
-public interface DBRequestMaker {
+public interface RPCConfig {
+
+	public String getRpcUrl();
+	public String getRpcType();
+	public Date getSessionExpTime();
 	
-	public DBRequest request(DBObject data, RequestHandler<DBObject> handler);
-
 }

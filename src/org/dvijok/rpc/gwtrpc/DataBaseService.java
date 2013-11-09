@@ -16,26 +16,23 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.rpc.gwtrpc;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-public class DBArray extends ArrayList<Serializable> implements Serializable {
+import org.dvijok.rpc.DBObject;
 
-	private static final long serialVersionUID = 1L;
+@RemoteServiceRelativePath("data")
+public interface DataBaseService extends RemoteService{
 
-	public DBArray(){
-		super();
-	}
-	
-	public DBArray(Collection<? extends Serializable> c){
-		super(c);
-	}
-	
-	public DBObject getDBObject(int index){
-		return (DBObject)get(index);
-	}
+	DBObject getSession();
+	DBObject auth(DBObject params);
+	DBObject sendKey(DBObject params);
+	DBObject logout(DBObject params);
+	DBObject getObject(DBObject params);
+	DBObject getObjects(DBObject params);
+	DBObject putObject(DBObject params);
+	DBObject delObject(DBObject params);
 	
 }

@@ -3,10 +3,10 @@
  * @author Dmitry Zubanov, 2011
  */
 
-package org.dvijok.db.event;
+package org.dvijok.rpc.event;
 
-import org.dvijok.db.DBArray;
-import org.dvijok.db.DBObject;
+import org.dvijok.rpc.DBArray;
+import org.dvijok.rpc.DBObject;
 
 
 public abstract class DataBaseEventListener {

@@ -16,27 +16,27 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.event;
+package org.dvijok.rpc.event;
 
-import org.dvijok.db.DBArray;
-import org.dvijok.db.DBObject;
-import org.dvijok.db.DataBase;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
+import org.dvijok.rpc.DBArray;
+import org.dvijok.rpc.DBObject;
+import org.dvijok.rpc.RPC;
 
 /**
  * Class for delivery database events through DataBase class, it means through method used by DataBase
  * @author Pechenko Anton Vladimirovich aka Parilo.   mailto: forpost78 at gmail dououououot com
  *
  */
-public class DataBaseEventsDB implements DataBaseEventsInterface {
+public class RPCEventsDB implements DataBaseEventsInterface {
 
-	private DataBase db;
+	private RPC db;
 	private DBArray allParams;
 	private DataBaseEventTool evTool;
 	private String queueid = "";
 	
-	public DataBaseEventsDB(DataBase db){
+	public RPCEventsDB(RPC db){
 		this.db = db;
 		this.evTool = new DataBaseEventTool();
 		allParams = new DBArray();

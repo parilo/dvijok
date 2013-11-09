@@ -16,30 +16,28 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.rpc;
 
-import org.dvijok.db.DBObject;
-import org.dvijok.db.DBRequest;
-import org.dvijok.db.DBRequestMaker;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.HttpClient;
 import org.dvijok.lib.Lib;
+import org.dvijok.rpc.dvrpc.DVRPCProto;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
 
-public class DBRequestMakerDVRPC implements DBRequestMaker {
+public class RPCRequestMaker {
 	
 	private HttpClient httpClient;
-	private DVRPCProto proto;
+	private RPCProto proto;
 	
-	public DBRequestMakerDVRPC(String url){
+	public RPCRequestMaker(String url, RPCProto proto){
 		httpClient = new HttpClient(url);
-		proto = new DVRPCProto();
+		this.proto = proto;
 	}
 	
-	public DBRequest request(DBObject data, final RequestHandler<DBObject> handler){
+	public RPCRequest request(DBObject data, final RequestHandler<DBObject> handler){
 
 		RequestCallback rcb = new RequestCallback(){
 
@@ -51,14 +49,14 @@ public class DBRequestMakerDVRPC implements DBRequestMaker {
 			@Override
 			public void onError(Request request, Throwable exception) {
 				DBObject obj = new DBObject();
-				Lib.alert("DBRequestDVRPC: onError: "+exception.getMessage());
-				obj.put("result", "DBRequestDVRPC: onError: "+exception.getMessage());
+				Lib.alert("RPCRequestDVRPC: onError: "+exception.getMessage());
+				obj.put("result", "RPCRequestDVRPC: onError: "+exception.getMessage());
 				handler.fail(obj);
 			}};
 		
 		String datastr = proto.code(data);
 			
-		return new DBRequestDVRPC( httpClient.doPost( datastr, rcb), datastr, rcb, httpClient);
+		return new RPCRequest( httpClient.doPost( datastr, rcb), datastr, rcb, httpClient);
 		
 	}
 

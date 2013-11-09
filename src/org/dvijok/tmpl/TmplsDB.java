@@ -21,7 +21,6 @@ package org.dvijok.tmpl;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
@@ -29,6 +28,7 @@ import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.HttpFunctions;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
+import org.dvijok.rpc.DBObject;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;

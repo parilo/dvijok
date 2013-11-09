@@ -20,7 +20,7 @@ package org.dvijok.widgets.busy;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DBObject;
+import org.dvijok.rpc.DBObject;
 import org.dvijok.widgets.Dwidget;
 
 import com.google.gwt.user.client.ui.Label;

@@ -18,12 +18,12 @@
 
 package org.dvijok.resources;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.md5;
+import org.dvijok.rpc.DBObject;
 
 public class AuthTool {
 

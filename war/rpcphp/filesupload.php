@@ -18,11 +18,6 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 require_once 'config.php';
-/*
-require_once "config.def.php";
-require_once "dvrpc.php";
-require_once "dvservice.php";
-*/
 
 function get_client_ip_address(){
 	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -34,29 +29,33 @@ function get_client_ip_address(){
 	}
 }
 
-$requestData = file_get_contents('php://input');
-//$requestData = $HTTP_RAW_POST_DATA;
-//$GLOBALS['HTTP_RAW_POST_DATA'] 
+if( isset($_FILES['fileupload']) ){
 
-//system( "echo '$request_xml' > /home/www/saas/lastreq-".date("H-i-s-u")."-".md5($request_xml).".xml" );
-global $config;
-if( isset($config['lastreq']) ){
-	$lastreq = $config['lastreq'];
-	system( "echo '$requestData' > $lastreq" );
-}
+	global $config;
 
-try {
+	$uploaddir = $config['uploaddir'];
+	$uploadfile = $uploaddir .'/'. basename($_FILES['fileupload']['name']);
 	
-	$proto = new DVRPCProto(); 
-	$dvservice = new DVService();
-	$dvrpc = new DVRPC();
-	$dvrpc->setProto($proto);
-	$dvrpc->registerService($dvservice);
-	$dvrpc->callService($requestData, get_client_ip_address());
+	if (move_uploaded_file($_FILES['fileupload']['tmp_name'], $uploadfile)) {
+		
+		require_once "dbget.php";
+		$db = getDB();
+		$mdb = $db->getDB();
+		
+		$sid = $mdb->real_escape_string($_POST['sid']);
+		$fileid = $mdb->real_escape_string($_POST['fileid']);
+		$filename = $mdb->real_escape_string($uploadfile);
+		
+		$sql = "INSERT INTO dvuploadedfiles(filename, sid, fileid) VALUES ('$filename', '$sid', '$fileid')";
+		$result = $mdb->query($sql);
+		if (!$result) throw new DBException('mysql error (' . $mdb->errno . ') '. $mdb->error. '  '.$sql);
+				
+		echo "uploaded\n";
+	} else {
+		echo "failed\n";
+// 		echo "Возможная атака с помощью файловой загрузки!\n";
+	}
 
-} catch ( DBException $ex ){
-	$ret['result'] = '->'.$ex->getValue().'<- '.$ex->getTraceAsString();
-	echo $proto->hashMapCode($ret)."\n";
 }
 
 ?>

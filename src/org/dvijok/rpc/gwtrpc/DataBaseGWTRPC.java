@@ -16,22 +16,22 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.gwtrpc;
+package org.dvijok.rpc.gwtrpc;
 
 import java.util.Date;
 
-import org.dvijok.db.DBArray;
-import org.dvijok.db.DBObject;
-import org.dvijok.db.DataBase;
-import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
+import org.dvijok.rpc.DBArray;
+import org.dvijok.rpc.DBObject;
+import org.dvijok.rpc.RPC;
+import org.dvijok.rpc.event.DataBaseEventListener;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class DataBaseGWTRPC implements DataBase {
+public class DataBaseGWTRPC implements RPC {
 
 	private DBObject session;
 	
@@ -68,7 +68,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 	
 	protected void storeSession(){
-		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sessExpTime.getTime());
+		Date exp_time = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sessionExpTime.getTime());
 		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", session.getString("sid"), exp_time, Lib.getDomain(), "/", false);
 	}
 	
@@ -123,7 +123,7 @@ public class DataBaseGWTRPC implements DataBase {
 	}
 
 	@Override
-	public void sendKey(final DBObject params, final RequestHandler<DBObject> handler) {
+	public void sendLoginKey(final DBObject params, final RequestHandler<DBObject> handler) {
 		
 		final DBObject allparams = new DBObject();
 		allparams.put("session", this.session);
@@ -146,7 +146,7 @@ public class DataBaseGWTRPC implements DataBase {
 
 						@Override
 						public void success(Integer result) {
-							sendKey(params, handler);
+							sendLoginKey(params, handler);
 						}
 
 						@Override

@@ -1,0 +1,5 @@
+{
+	"rpcUrl": "dvrpc/rpc.php",
+	"rpcType" : "dvrpc",
+	"sessionExpirationTime" : 86400000
+}

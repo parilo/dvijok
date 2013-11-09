@@ -4,9 +4,9 @@ package org.dvijok.event;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
+import org.dvijok.rpc.DBObject;
 import org.dvijok.widgets.SubPanel;
 import org.dvijok.widgets.Dwidget;
 

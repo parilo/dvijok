@@ -16,46 +16,26 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.rpc;
 
-import org.dvijok.db.DBRequest;
-import org.dvijok.lib.HttpClient;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestCallback;
+public class DBArray extends ArrayList<Serializable> implements Serializable {
 
-public class DBRequestDVRPC implements DBRequest {
+	private static final long serialVersionUID = 1L;
 
-	private Request request;
-	private RequestCallback callback;
-	private HttpClient httpClient;
-	private String data;
-	
-	public DBRequestDVRPC(Request request, String data, RequestCallback callback, HttpClient httpClient){
-		this.request = request;
-		this.callback = callback;
-		this.httpClient = httpClient;
-		this.data = data;
+	public DBArray(){
+		super();
 	}
 	
-	@Override
-	public void cancel() {
-		request.cancel();
-	}
-
-	@Override
-	public void pause(){
-		request.cancel();
+	public DBArray(Collection<? extends Serializable> c){
+		super(c);
 	}
 	
-	@Override
-	public void resume(){
-		request = httpClient.doPost( data, callback);
-	}
-
-	@Override
-	public boolean isPending() {
-		return request.isPending();
+	public DBObject getDBObject(int index){
+		return (DBObject)get(index);
 	}
 	
 }

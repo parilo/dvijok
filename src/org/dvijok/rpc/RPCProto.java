@@ -16,23 +16,32 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.gwtrpc;
+package org.dvijok.rpc;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import java.io.Serializable;
 
-import org.dvijok.db.DBObject;
+import org.dvijok.rpc.DBArray;
+import org.dvijok.rpc.DBObject;
 
-@RemoteServiceRelativePath("data")
-public interface DataBaseService extends RemoteService{
-
-	DBObject getSession();
-	DBObject auth(DBObject params);
-	DBObject sendKey(DBObject params);
-	DBObject logout(DBObject params);
-	DBObject getObject(DBObject params);
-	DBObject getObjects(DBObject params);
-	DBObject putObject(DBObject params);
-	DBObject delObject(DBObject params);
+public interface RPCProto {
 	
+	public DBObject dboDecode(String indata);
+	public String dboCode(DBObject dbo);
+	
+	public DBArray dbaDecode(String indata);
+	public String dbaCode(DBArray arr);
+
+	/**
+	 * can code DBObject or DBArray
+	 * @param DBObject or DBArray
+	 * @return string encoded object 
+	 */
+	public String code(Serializable obj);
+	
+	/**
+	 * can decode only DBObject representation
+	 * @param string encoded DBObject
+	 * @return 
+	 */
+	public DBObject decode(String data);
 }

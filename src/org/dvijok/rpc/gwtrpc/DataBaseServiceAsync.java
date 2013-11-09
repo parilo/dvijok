@@ -16,24 +16,21 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.event;
+package org.dvijok.rpc.gwtrpc;
 
-import org.dvijok.db.DBObject;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class DataBaseEvent {
+import org.dvijok.rpc.DBObject;
 
-	private DBObject params;
-	
-	public DataBaseEvent(DBObject params){
-		this.params = params;
-	}
+public interface DataBaseServiceAsync {
 
-	public DBObject getParams() {
-		return params;
-	}
-
-	public void setParams(DBObject params) {
-		this.params = params;
-	}
+	void getSession(AsyncCallback<DBObject> callback);
+	void auth(DBObject params, AsyncCallback<DBObject> callback);
+	void sendKey(DBObject params, AsyncCallback<DBObject> callback);
+	void logout(DBObject params, AsyncCallback<DBObject> callback);
+	void getObject(DBObject params, AsyncCallback<DBObject> callback);
+	void getObjects(DBObject params, AsyncCallback<DBObject> callback);
+	void putObject(DBObject params, AsyncCallback<DBObject> callback);
+	void delObject(DBObject params, AsyncCallback<DBObject> callback);
 	
 }

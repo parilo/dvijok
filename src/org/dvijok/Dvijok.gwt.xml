@@ -12,6 +12,7 @@
 
   <!-- Other module inherits                                      -->
   <!-- inherits name='com.fredhat.gwt.xmlrpc.XMLRPC'/ -->
+  <inherits name="com.google.gwt.json.JSON" /> 
   
   <!-- Specify the app entry point class.                         -->
   <!-- entry-point class='org.dvijok.client.Dvijok'/ -->
@@ -24,7 +25,7 @@
   <source path='handlers'/>
   <source path='resources'/>
   <source path='widgets'/>
-  <source path='db'/>
+  <source path='rpc'/>
   <source path='config'/>
   <source path='controls'/>
   <source path='event'/>

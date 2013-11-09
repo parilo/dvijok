@@ -21,10 +21,10 @@ package org.dvijok.loader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
+import org.dvijok.rpc.DBObject;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.SubPanel;
 

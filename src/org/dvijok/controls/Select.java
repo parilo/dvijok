@@ -20,7 +20,7 @@ package org.dvijok.controls;
 
 import java.util.HashMap;
 
-import org.dvijok.db.DBObject;
+import org.dvijok.rpc.DBObject;
 
 import com.google.gwt.user.client.ui.ListBox;
 

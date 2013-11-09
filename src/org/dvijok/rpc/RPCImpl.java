@@ -16,33 +16,41 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.rpc;
 
 import java.util.Date;
 
-import org.dvijok.db.dvrpc.DBRequestMakerDVRPC;
-import org.dvijok.db.event.DataBaseEventListener;
-import org.dvijok.db.event.DataBaseEventsDB;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.handlers.Handler;
 import org.dvijok.lib.Lib;
-import org.dvijok.resources.Resources;
+import org.dvijok.rpc.dvrpc.DVRPCProto;
+import org.dvijok.rpc.event.DataBaseEventListener;
+import org.dvijok.rpc.event.RPCEventsDB;
+import org.dvijok.rpc.json.JSONProto;
 
-public class DataBaseImpl implements DataBase {
+public class RPCImpl implements RPC {
 
-	private DBRequestMaker dbRequest;
 	private String sid;
-	private DataBaseEventsDB dbe;
-	private DBRequest dbEventsRequest;
+
+	private RPCConfig config;
+	private RPCRequestMaker rpcRequest;
+	private RPCEventsDB rpce;
+	private RPCRequest rpcEventsRequest;
 	private CustomEventListener inited;
 	
-	public DataBaseImpl(CustomEventListener inited){
-		dbRequest = new DBRequestMakerDVRPC(Resources.getInstance().conf.dbUrl);
-		dbe = new DataBaseEventsDB(this);
+	public RPCImpl(RPCConfig config, CustomEventListener inited){
+		this.config = config;
+		rpcRequest = new RPCRequestMaker(config.getRpcUrl(), initProto());
+		rpce = new RPCEventsDB(this);
 		this.inited = inited;
 		if( restoreSession() ) checkSession();
+	}
+	
+	private RPCProto initProto(){
+		if( config.getRpcType().equals("json") ) return new JSONProto();
+		else return new DVRPCProto();
 	}
 	
 	private void checkSession(){
@@ -72,7 +80,7 @@ public class DataBaseImpl implements DataBase {
 	}
 	
 	protected void storeSession(){
-		Date expTime = new Date(System.currentTimeMillis()+Resources.getInstance().conf.sessExpTime.getTime());
+		Date expTime = new Date(System.currentTimeMillis()+config.getSessionExpTime().getTime());
 		com.google.gwt.user.client.Cookies.setCookie("dvijok.session", sid, expTime, Lib.getDomain(), "/", false);
 	}
 	
@@ -98,7 +106,7 @@ public class DataBaseImpl implements DataBase {
 		DBObject dbo = new DBObject();
 		dbo.put("func", "initSession");
 		
-		dbRequest.request(dbo, new RequestHandler<DBObject>(){
+		rpcRequest.request(dbo, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -127,7 +135,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("func", "login");
 		req.put("obj", params);
 		
-		dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -150,7 +158,7 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	@Override
-	public void sendKey(DBObject params, RequestHandler<DBObject> handler) {
+	public void sendLoginKey(DBObject params, RequestHandler<DBObject> handler) {
 	}
 
 	@Override
@@ -160,7 +168,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("sid", sid);
 		req.put("func", "logout");
 		
-		dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -309,7 +317,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("func", "listenForEvents");
 		req.put("obj", params);
 		
-		dbEventsRequest = dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcEventsRequest = rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -332,25 +340,25 @@ public class DataBaseImpl implements DataBase {
 	}
 
 	public void stopListenForEvents(){
-		if( dbEventsRequest != null ) if( dbEventsRequest.isPending() ) dbEventsRequest.cancel();
+		if( rpcEventsRequest != null ) if( rpcEventsRequest.isPending() ) rpcEventsRequest.cancel();
 	}
 	
 	public void pauseListenForEvents(){
-		dbEventsRequest.pause();
+		rpcEventsRequest.pause();
 	}
 	
 	public void resumeListenForEvents(){
-		dbEventsRequest.resume();
+		rpcEventsRequest.resume();
 	}
 
 	@Override
 	public void addEventListener(DBObject params, DataBaseEventListener listener) {
-		dbe.addEventListener(params, listener);
+		rpce.addEventListener(params, listener);
 	}
 
 	@Override
 	public void removeEventListener(DBObject params, DataBaseEventListener listener) {
-		dbe.removeEventListener(params, listener);
+		rpce.removeEventListener(params, listener);
 	}
 
 	@Override
@@ -360,7 +368,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("func", "checkSession");
 		req.put("obj", params);
 		
-		dbEventsRequest = dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcEventsRequest = rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -391,7 +399,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("func", "external");
 		req.put("obj", params);
 		
-		dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -427,7 +435,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("func", "saveUserData");
 		req.put("userdata", userData);
 		
-		dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {
@@ -460,7 +468,7 @@ public class DataBaseImpl implements DataBase {
 		req.put("sid", sid);
 		req.put("func", "getTemplatesCache");
 		
-		dbRequest.request(req, new RequestHandler<DBObject>(){
+		rpcRequest.request(req, new RequestHandler<DBObject>(){
 
 			@Override
 			public void success(DBObject result) {

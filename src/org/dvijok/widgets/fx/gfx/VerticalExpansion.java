@@ -18,10 +18,10 @@
 
 package org.dvijok.widgets.fx.gfx;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.lib.Lib;
+import org.dvijok.rpc.DBObject;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Timer;

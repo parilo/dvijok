@@ -16,15 +16,16 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.dvrpc;
+package org.dvijok.rpc.dvrpc;
 
 import java.io.Serializable;
 import java.util.Iterator;
 
-import org.dvijok.db.DBArray;
-import org.dvijok.db.DBObject;
+import org.dvijok.rpc.DBArray;
+import org.dvijok.rpc.DBObject;
+import org.dvijok.rpc.RPCProto;
 
-public class DVRPCProto {
+public class DVRPCProto implements RPCProto {
 
 	private int i;
 	private String data;

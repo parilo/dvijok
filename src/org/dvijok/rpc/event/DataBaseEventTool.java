@@ -16,11 +16,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db.event;
+package org.dvijok.rpc.event;
 
 import java.util.ArrayList;
 
-import org.dvijok.db.DBArray;
+import org.dvijok.rpc.DBArray;
 
 public class DataBaseEventTool {
 

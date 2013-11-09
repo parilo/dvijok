@@ -3,7 +3,7 @@
  * @author Dmitry Zubanov, 2011
  */
 
-package org.dvijok.db.event;
+package org.dvijok.rpc.event;
 
 
 public abstract class DataBaseEventAdapter extends DataBaseEventListener{

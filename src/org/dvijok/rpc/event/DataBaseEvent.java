@@ -16,13 +16,24 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.rpc.event;
 
-public interface DBRequest {
+import org.dvijok.rpc.DBObject;
 
-	public void cancel();
-	public void pause();
-	public void resume();
-	public boolean isPending();
+public class DataBaseEvent {
+
+	private DBObject params;
+	
+	public DataBaseEvent(DBObject params){
+		this.params = params;
+	}
+
+	public DBObject getParams() {
+		return params;
+	}
+
+	public void setParams(DBObject params) {
+		this.params = params;
+	}
 	
 }

@@ -20,8 +20,8 @@ package org.dvijok.controls.select;
 
 import java.util.HashMap;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEventListener;
+import org.dvijok.rpc.DBObject;
 
 import com.google.gwt.user.client.ui.ListBox;
 

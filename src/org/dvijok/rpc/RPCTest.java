@@ -16,16 +16,16 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.db;
+package org.dvijok.rpc;
 
-import org.dvijok.db.event.DataBaseEvent;
-import org.dvijok.db.event.DataBaseEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
+import org.dvijok.rpc.event.DataBaseEvent;
+import org.dvijok.rpc.event.DataBaseEventListener;
 
-public class DataBaseTest {
+public class RPCTest {
 
-	public DataBaseTest(DataBase db){
+	public RPCTest(RPC db){
 		
 //putObject test
 //		

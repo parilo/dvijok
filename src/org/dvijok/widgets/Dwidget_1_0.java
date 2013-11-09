@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.dvijok.db.DBObject;
 import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
 import org.dvijok.resources.Resources;
+import org.dvijok.rpc.DBObject;
 import org.dvijok.widgets.busy.BigBusy;
 import org.dvijok.widgets.busy.Busy;
 import org.dvijok.widgets.busy.SmallBusy;

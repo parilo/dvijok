@@ -20,23 +20,68 @@ package org.dvijok.config;
 
 import java.util.Date;
 
-public class Config {
+import org.dvijok.event.CustomEventListener;
+import org.dvijok.lib.HttpFunctions;
+import org.dvijok.lib.Lib;
+import org.dvijok.rpc.DBObject;
+import org.dvijok.rpc.RPCConfig;
+import org.dvijok.rpc.json.JSONProto;
 
-	public String dbUrl;
-	public Date sessExpTime;
-	
-	//vk auth see http://vk.com/developers.php?oid=-1&p=%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F_%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2
-	public String appid;
-	public String settings;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.Response;
+
+public class Config implements RPCConfig {
+
+	public String rpcUrl;
+	public String rpcType;
+	public Date sessionExpTime;
+	public JSONProto jsonProto;
 	
 	public Config(){
 
-//		this.dbUrl = "http://127.0.0.1:8888/dvrpc/rpc.php";
-		this.dbUrl = "dvrpc/rpc.php";
-		this.sessExpTime = new Date(365*24*60*60*1000); //cookie exp time
+		this.rpcUrl = "dvrpc/rpc.php";
+		this.sessionExpTime = new Date(365*24*60*60*1000); //cookie exp time
+		jsonProto = new JSONProto();
 		
-		this.appid = "2977906";
-		this.settings = "notify";
+	}
+	
+	public void load(final CustomEventListener listener){
+		
+		HttpFunctions.doGet("clientconfig.json", new RequestCallback(){
+			
+			@Override
+			public void onError(Request request, Throwable exception) {
+				Lib.alert("cannot get clientconfig");
+			}
+
+			@Override
+			public void onResponseReceived(Request request, Response response) {
+				String text = response.getText();
+				fillData(jsonProto.decode(text));
+				listener.customEventOccurred(null);
+			}
+			
+		});
+		
+	}
+	
+	private void fillData(DBObject dbo){
+		rpcType = dbo.getString("rpcType");
+		rpcUrl = dbo.getString("rpcUrl");
+		sessionExpTime = new Date(dbo.getLong("sessionExpirationTime"));
+	}
+
+	public String getRpcUrl() {
+		return rpcUrl;
+	}
+
+	public String getRpcType() {
+		return rpcType;
+	}
+
+	public Date getSessionExpTime() {
+		return sessionExpTime;
 	}
 	
 }
