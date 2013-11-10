@@ -122,4 +122,9 @@ public class JSONProto implements RPCProto {
 	public DBObject decode(String data){
 		return dboDecode(data);
 	}
+
+	@Override
+	public String getName() {
+		return "json";
+	}
 }

@@ -31,6 +31,18 @@ class RPC {
 		}
 	}
 	
+	public static function getProto(){
+		global $config;
+		if( isset($config['rpcType']) ){
+			if( $config['rpcType'] == 'json' ){
+				require_once "jsonproto.php";
+				return new JSONProto();
+			}
+			else return new DVRPCProto();
+		} else return new DVRPCProto();
+		
+	}
+	
 	public function process(){
 
 		$requestData = file_get_contents('php://input');
@@ -44,11 +56,10 @@ class RPC {
 		}
 		
 		try {
-			
-			$proto = new DVRPCProto(); 
+			 
 			$dvservice = new DVService();
 			$dvrpc = new DVRPC();
-			$dvrpc->setProto($proto);
+			$dvrpc->setProto(RPC::getProto());
 			$dvrpc->registerService($dvservice);
 			$dvrpc->callService($requestData, $this->getClientIPAddress());
 		

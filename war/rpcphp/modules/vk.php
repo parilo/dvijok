@@ -20,6 +20,10 @@
 require_once 'lib.php';
 require_once 'config.def.php';
 
+// //vkontakte
+// $config['appid'] = '';
+// $config['appsecret'] = '';
+
 class vk {
 
 	//set auth requested by the user

@@ -67,7 +67,8 @@ public class Dvijok implements EntryPoint {
 			
 						Resources.getInstance().loader = new Loader();
 						Resources.getInstance().tmpls = new TmplsDB();//this must be init after DataBaseImpl
-			//			if( initData.containsKey("tmplcache") ) Resources.getInstance().tmpls.addToTemplates(initData.getDBObject("tmplcache"));
+//						Lib.alert(""+initData.getDBObject("tmplcache"));
+						if( initData.containsKey("tmplcache") ) Resources.getInstance().tmpls.addToTemplates(initData.getDBObject("tmplcache"));
 						
 						registerDwidgets();
 						

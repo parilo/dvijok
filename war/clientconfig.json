@@ -1,5 +1,5 @@
 {
-	"rpcUrl": "dvrpc/rpc.php",
-	"rpcType" : "dvrpc",
+	"rpcUrl": "rpcphp/rpc.php",
+	"rpcType" : "json",
 	"sessionExpirationTime" : 86400000
 }

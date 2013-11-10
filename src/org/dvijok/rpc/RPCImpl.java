@@ -24,17 +24,23 @@ import org.dvijok.event.CustomEvent;
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.handlers.Handler;
+import org.dvijok.lib.HttpFunctions;
 import org.dvijok.lib.Lib;
 import org.dvijok.rpc.dvrpc.DVRPCProto;
 import org.dvijok.rpc.event.DataBaseEventListener;
 import org.dvijok.rpc.event.RPCEventsDB;
 import org.dvijok.rpc.json.JSONProto;
 
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.Response;
+
 public class RPCImpl implements RPC {
 
 	private String sid;
 
 	private RPCConfig config;
+	private RPCProto proto;
 	private RPCRequestMaker rpcRequest;
 	private RPCEventsDB rpce;
 	private RPCRequest rpcEventsRequest;
@@ -49,8 +55,9 @@ public class RPCImpl implements RPC {
 	}
 	
 	private RPCProto initProto(){
-		if( config.getRpcType().equals("json") ) return new JSONProto();
-		else return new DVRPCProto();
+		if( config.getRpcType().equals("json") ) proto = new JSONProto();
+		else proto = new DVRPCProto();
+		return proto;
 	}
 	
 	private void checkSession(){
@@ -64,7 +71,7 @@ public class RPCImpl implements RPC {
 
 					@Override
 					public void success(DBObject result) {
-						checkSessionResult.put("tmplcache", result.get("tmplcache"));
+						checkSessionResult.put("tmplcache", result);
 						inited.customEventOccurred(new CustomEvent(checkSessionResult));
 					}
 
@@ -464,6 +471,22 @@ public class RPCImpl implements RPC {
 
 	@Override
 	public void getTemplatesCache(final RequestHandler<DBObject> handler) {
+		
+		loadExistingTemplatesCache(new RequestHandler<String>(){
+
+			@Override
+			public void success(String result) {
+				handler.success(proto.dboDecode(result));
+			}
+
+			@Override
+			public void fail(String result) {
+				createAndLoadTemplatesCache(handler);
+			}});
+	}
+	
+	private void createAndLoadTemplatesCache(final RequestHandler<DBObject> handler){
+		
 		DBObject req = new DBObject();
 		req.put("sid", sid);
 		req.put("func", "getTemplatesCache");
@@ -474,7 +497,7 @@ public class RPCImpl implements RPC {
 			public void success(DBObject result) {
 				String res = result.getString("result");
 				if( res.equals("success") ){
-					handler.success(result.getDBObject("objs"));
+					handler.success(result.getDBObject("objs").getDBObject("tmplcache"));
 				} else {
 					checkNotSid(res, new Handler<Boolean>(){
 						@Override
@@ -488,7 +511,26 @@ public class RPCImpl implements RPC {
 			public void fail(DBObject result) {
 				Lib.alert("DataBase: getTemplatesCache B: fail: "+result);
 			}});
+		
 	}
+	
+	private void loadExistingTemplatesCache(final RequestHandler<String> handler){
+		HttpFunctions.doGet("tmpl/cache/tmplcache."+proto.getName(), new RequestCallback(){
+			
+			@Override
+			public void onError(Request request, Throwable exception) {
+				handler.fail("");
+			}
+
+			@Override
+			public void onResponseReceived(Request request, Response response) {
+				if( response.getStatusCode() > 399 ) handler.fail("");
+				else handler.success(response.getText());
+			}
+			
+		});
+	}
+
 
 	@Override
 	public String getSid() {

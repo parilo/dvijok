@@ -17,7 +17,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-class DVRPCProto {
+require_once 'rpcproto.php';
+
+class DVRPCProto implements RPCProto {
 
 	private $i;
 	private $req;
@@ -82,7 +84,7 @@ class DVRPCProto {
 		return $this->hashMapGetIdent();	
 	}
 	
-	public function hashMapDecode($data){
+	public function dboDecode($data){
 		$this->setData($data);
 		$ret = array();
 		while(
@@ -95,13 +97,13 @@ class DVRPCProto {
 			} else if( $type == "DBO" ){
 				$currI = $this->i;
 				$currReq = $this->req;
-				$ret[$ident] = $this->hashMapDecode($val);
+				$ret[$ident] = $this->dboDecode($val);
 				$this->i = $currI;
 				$this->req = $currReq;
 			} else if( $type == "DBA" ){
 				$currI = $this->i;
 				$currReq = $this->req;
-				$ret[$ident] = $this->arrayDecode($val);
+				$ret[$ident] = $this->dbaDecode($val);
 				$this->i = $currI;
 				$this->req = $currReq;
 			}
@@ -110,7 +112,7 @@ class DVRPCProto {
 		return $ret;
 	}
 	
-	public function hashMapCode($hashMap){
+	public function dboCode($hashMap){
 		$ret = "";
 		foreach( $hashMap as $key => $val ){
 // 			if( is_string($val) ){
@@ -119,10 +121,10 @@ class DVRPCProto {
 			if( is_array($val) && array_key_exists('_nocode',$val) ){
 				$ret .= $this->strlen($key).",".$key.$val['_nocodedata'];
 			} else if( is_array($val) && array_key_exists('_isarr',$val) ){
-				$str = $this->arrayCode($val);
+				$str = $this->dbaCode($val);
 				$ret .= $this->strlen($key).",".$key."DBA".$this->strlen($str).",".$str;
 			} else if( is_array($val) ){
-				$str = $this->hashMapCode($val);
+				$str = $this->dboCode($val);
 				$ret .= $this->strlen($key).",".$key."DBO".$this->strlen($str).",".$str;
 			} else {
 				$ret .= $this->strlen($key).",".$key."STR".$this->strlen($val).",$val";
@@ -131,12 +133,12 @@ class DVRPCProto {
 		return $ret;
 	}
 
-	public function hashMapCodeWrapped($hashMap){
-		$str = $this->hashMapCode($hashMap);
+	public function dboCodeWrapped($hashMap){
+		$str = $this->dboCode($hashMap);
 		return 'DBO'.$this->strlen($str).",".$str;
 	}
 	
-	public function arrayDecode($data){
+	public function dbaDecode($data){
 		$this->setData($data);
 		$ret = array();
 		while(
@@ -148,13 +150,13 @@ class DVRPCProto {
 			} else if( $type == "DBO" ){
 				$currI = $this->i;
 				$currReq = $this->req;
-				$ret[] = $this->hashMapDecode($val);
+				$ret[] = $this->dboDecode($val);
 				$this->i = $currI;
 				$this->req = $currReq;
 			} else if( $type == "DBA" ){
 				$currI = $this->i;
 				$currReq = $this->req;
-				$ret[] = $this->arrayDecode($val);
+				$ret[] = $this->dbaDecode($val);
 				$this->i = $currI;
 				$this->req = $currReq;
 			}
@@ -164,17 +166,17 @@ class DVRPCProto {
 		return $ret;
 	}
 	
-	public function arrayCode($array){
+	public function dbaCode($array){
 		$ret = "";
 		foreach( $array as $key => $val ){
 // 			if( is_string($val) && $key != "_isarr" ){
 // 				$ret .= "STR".mb_strlen($val).",".$val;
 // 			} else
 			if( is_array($val) && array_key_exists('_isarr',$val) ){
-				$str = $this->arrayCode($val);
+				$str = $this->dbaCode($val);
 				$ret .= "DBA".$this->strlen($str).",".$str;
 			} else if( is_array($val) ){
-				$str = $this->hashMapCode($val);
+				$str = $this->dboCode($val);
 				$ret .= "DBO".$this->strlen($str).",".$str;
 			} else if( "$key" != '_isarr' ) {
 				$ret .= "STR".$this->strlen($val).",$val";
@@ -183,6 +185,11 @@ class DVRPCProto {
 		
 		return $ret;
 	}
+	
+	public function getName(){
+		return "dvrpc";
+	}
+	
 }
 
 ?>

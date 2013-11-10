@@ -1,3 +1,5 @@
+<?php
+
 //    dvijok - cms written in gwt
 //    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
@@ -14,36 +16,37 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
-//
 
-package org.dvijok.rpc;
+class JSONProto implements RPCProto {
 
-import java.io.Serializable;
-
-import org.dvijok.rpc.DBArray;
-import org.dvijok.rpc.DBObject;
-
-public interface RPCProto {
+	private function removeIsArr($obj){
+		foreach ($obj as $key => $val) {
+			if( is_array($val) ) $obj[$key] = $this->removeIsArr($val);
+			else if( $key == '_isarr' ) unset($obj[$key]);
+		}
+		return $obj;
+	}
 	
-	public DBObject dboDecode(String indata);
-	public String dboCode(DBObject dbo);
+	public function dboDecode($data){
+		return json_decode($data, true);
+	}
 	
-	public DBArray dbaDecode(String indata);
-	public String dbaCode(DBArray arr);
+	public function dboCode($dbo){
+		return json_encode($this->removeIsArr($dbo));
+	}
+	
+	public function dbaDecode($data){
+		return json_decode($data, true);
+	}
+	
+	public function dbaCode($array){
+		return json_encode($this->removeIsArr($array));
+	}
 
-	/**
-	 * can code DBObject or DBArray
-	 * @param DBObject or DBArray
-	 * @return string encoded object 
-	 */
-	public String code(Serializable obj);
+	public function getName(){
+		return "json";
+	}
 	
-	/**
-	 * can decode only DBObject representation
-	 * @param string encoded DBObject
-	 * @return 
-	 */
-	public DBObject decode(String data);
-	
-	public String getName();
 }
+
+?>

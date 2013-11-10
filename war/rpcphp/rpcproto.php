@@ -1,3 +1,5 @@
+<?php
+
 //    dvijok - cms written in gwt
 //    Copyright (C) 2010  Pechenko Anton Vladimirovich aka Parilo
 //    mailto: forpost78 at gmail dot com
@@ -14,36 +16,39 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
-//
 
-package org.dvijok.rpc;
-
-import java.io.Serializable;
-
-import org.dvijok.rpc.DBArray;
-import org.dvijok.rpc.DBObject;
-
-public interface RPCProto {
-	
-	public DBObject dboDecode(String indata);
-	public String dboCode(DBObject dbo);
-	
-	public DBArray dbaDecode(String indata);
-	public String dbaCode(DBArray arr);
-
-	/**
-	 * can code DBObject or DBArray
-	 * @param DBObject or DBArray
-	 * @return string encoded object 
-	 */
-	public String code(Serializable obj);
+interface RPCProto {
 	
 	/**
-	 * can decode only DBObject representation
-	 * @param string encoded DBObject
-	 * @return 
+	 * dbo - dictionary type object
+	 * string -> php array
+	 * @param unknown $data
 	 */
-	public DBObject decode(String data);
+	public function dboDecode($data);
 	
-	public String getName();
+	/**
+	 * dbo - dictionary type object
+	 * php array -> string
+	 * @param unknown $dbo
+	 */
+	public function dboCode($dbo);
+	
+	/**
+	 * dba - array type object
+	 * string -> php array
+	 * @param unknown $data
+	 */
+	public function dbaDecode($data);
+	
+	/**
+	 * dba - array type object
+	 * php array -> string
+	 * @param unknown $array
+	 */
+	public function dbaCode($array);
+	
+	public function getName();
+	
 }
+
+?>

@@ -35,11 +35,11 @@ class DVRPC {
 	}
 	
 	private function requestParse($request, $ip){
-		$req = $this->proto->hashMapDecode($request);
+		$req = $this->proto->dboDecode($request);
 		
 		$retobj = $this->dvservice->call($req, $ip);
 		
-		$ret = $this->proto->hashMapCode($retobj);
+		$ret = $this->proto->dboCode($retobj);
 		echo "$ret\n";
 	}
 	

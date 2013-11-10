@@ -29,10 +29,6 @@ $config['SESSION_EXPIRATION_TIME_AUTH_SHORT'] = 5; //if not
 
 #$config['shmemkey'] = 100;
 
-//vkontakte
-$config['appid'] = '2977906';
-$config['appsecret'] = '7PrS5eoa08XuZFuUitrj';
-
 $config['ipcfilesdir'] = dirname(__FILE__).'/ipcfiles/';
 $config['ipcsystimeout'] = 600;//in seconds
 $config['ipcusertimeout'] = 600;//in seconds
@@ -45,6 +41,8 @@ $config['MYSQLHOST'] = "localhost";
 $config['MYSQLUSER'] = "dvijok";
 $config['MYSQLPASS'] = "dvijok";
 $config['MYSQLDBNAME'] = "dvijok";
+
+$config['rpcType'] = 'json';
 
 date_default_timezone_set('Asia/Yekaterinburg');
 
