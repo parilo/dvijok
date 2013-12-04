@@ -16,42 +16,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>
 //
 
-package org.dvijok.controls;
+package org.dvijok.widgets.animation;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HasFocus;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
-
-public class DivPanel extends ComplexPanel {
-
-	private Element div;
+public interface HasStepCount {
 	
-	public DivPanel(){
-		div = DOM.createDiv();
-		setElement(div);
-	}
-	
-	@Override
-	public void add(Widget child) {
-		addWidget(child);
-	}
-
-	@Override
-	public void add(IsWidget child) {
-		addWidget(child.asWidget());
-	}
-
-	public void addWidget(Widget w){
-		add(w, div);
-	}
-	
-	public void replaceWidget(Widget from, Widget to){
-		int i = getWidgetIndex(from);
-		insert(to, div, i, true);
-		remove(from);
-	}
+	public void setStepCount(int stepCount);
+	public int getStepCount();
 	
 }

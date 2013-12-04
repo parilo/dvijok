@@ -38,6 +38,7 @@ import org.dvijok.widgets.fx.gfx.VerticalExpansion;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -100,6 +101,7 @@ public class Dwidget extends Composite {
 	}
 	
 	protected void beforeTmplInit(){}
+	protected void afterInitWidget(){}
 	public void reinit(){}
 	public boolean needAuthReinit(){ return false; }
 	
@@ -108,6 +110,7 @@ public class Dwidget extends Composite {
 		this.maincont = new SimplePanel();
 		this.initWidget(this.maincont);
 		loadTmpl(templUrl);
+		afterInitWidget();
 	}
 	
 	private void loadTmpl(String url){
@@ -181,6 +184,10 @@ public class Dwidget extends Composite {
 		getTmpl();
 	}
 	
+	public boolean isloading() {
+		return isloading;
+	}
+
 	protected void initTmpl(){
 		this.main = new HTMLPanel(tmplData);
 		main.addStyleName("tmplcont");
@@ -309,6 +316,18 @@ public class Dwidget extends Composite {
 			removeStyleName("tmp");
 			startAnimation.start();
 		}
+	}
+	
+	public ComputedStyle getComputedStyle(){
+		return new ComputedStyle(getElement());
+	}
+
+	/**
+	 * dvijok 2.0 compat
+	 * @return
+	 */
+	public Element getFirstInnerElement() {
+		return getElement();
 	}
 
 }
