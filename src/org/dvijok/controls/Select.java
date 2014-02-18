@@ -22,6 +22,11 @@ import java.util.HashMap;
 
 import org.dvijok.db.DBObject;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.user.client.ui.ListBox;
 
 public class Select extends ListBox {
@@ -73,6 +78,19 @@ public class Select extends ListBox {
 	public void setSelectedItem(String label){
 		if( this.labelToIdx.containsKey(label) ) super.setSelectedIndex(this.labelToIdx.get(label));
 		else if( this.getItemCount() > 0 ) super.setSelectedIndex(0);
+	}
+	
+//	public void setOpened(){
+////		NativeEvent ev = Document.get().createClickEvent(1, getElement().getOffsetTop(), getElement().getOffsetLeft(), getAbsoluteTop(), getAbsoluteLeft(), false, false, false, false);
+////		NativeEvent ev = Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false);
+////		DomEvent.fireNativeEvent(ev, this);
+////		fireEvent(new ClickEvent(){});
+//		setFocus(true);
+//		fireEvent(new MouseDownEvent(){});
+//	}
+	
+	public void fireChanged(){
+		DomEvent.fireNativeEvent(Document.get().createChangeEvent(), this);
 	}
 
 	@Override
