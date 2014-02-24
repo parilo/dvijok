@@ -30,6 +30,7 @@
   <source path='controls'/>
   <source path='event'/>
   <source path='granat'/>
+  <source path='auth'/>
 
 
 </module>

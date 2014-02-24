@@ -57,10 +57,10 @@ public class Loader {
 			
 			Document doc = RootPanel.get().getElement().getOwnerDocument();
 			
-			NodeList<com.google.gwt.dom.client.Element> dvdwidgetEls = doc.getElementsByTagName("dvdwidget");
-			int len = dvdwidgetEls.getLength();
-			for(int i=0; i<len; i++){
-				com.google.gwt.dom.client.Element w = dvdwidgetEls.getItem(i);
+			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(doc, "dvdwidget").iterator();				
+			while( i.hasNext() ){
+
+				com.google.gwt.dom.client.Element w = i.next();
 				w.setAttribute("loading", "true");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
@@ -126,6 +126,16 @@ public class Loader {
 	// NodeList is live. So we need store found elements in ArrayList and process them after
 	private ArrayList<com.google.gwt.dom.client.Element> getElementsByTagName(HTMLPanel html, String tagName){
 		NodeList<com.google.gwt.dom.client.Element> foundNL = html.getElement().getElementsByTagName(tagName);
+		ArrayList<com.google.gwt.dom.client.Element> foundAL = new ArrayList<com.google.gwt.dom.client.Element>();
+		int len = foundNL.getLength();
+		for(int i=0; i<len; i++){
+			foundAL.add(foundNL.getItem(i));
+		}
+		return foundAL;
+	}
+
+	private ArrayList<com.google.gwt.dom.client.Element> getElementsByTagName(Document html, String tagName){
+		NodeList<com.google.gwt.dom.client.Element> foundNL = html.getElementsByTagName(tagName);
 		ArrayList<com.google.gwt.dom.client.Element> foundAL = new ArrayList<com.google.gwt.dom.client.Element>();
 		int len = foundNL.getLength();
 		for(int i=0; i<len; i++){

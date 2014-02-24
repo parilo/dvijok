@@ -36,17 +36,20 @@ class DVRPCProto implements RPCProto {
 #		echo "n: ->$needle<-, o: $offset len: ".strlen($haystack)." mblen: ".mb_strlen($haystack, mb_detect_encoding($haystack));
 #		echo " enc: ".mb_detect_encoding($haystack)."\n";
 #		echo "hs: $haystack, n: $needle, o: $offset\n";
-		return mb_strpos($haystack, $needle, $offset, mb_detect_encoding($haystack));
+#		return mb_strpos($haystack, $needle, $offset, mb_detect_encoding($haystack));
+		return mb_strpos($haystack, $needle, $offset, 'UTF-8');
 	}
 	
 	private function substr($str, $start ,$length){
-		return mb_substr($str, $start ,$length, mb_detect_encoding($str));
+#		return mb_substr($str, $start ,$length, mb_detect_encoding($str));
+		return mb_substr($str, $start ,$length, 'UTF-8');
 	}
 	
 	private function strlen($str){
 // 		$enc = mb_detect_encoding($str);
 // 		return mb_strlen($str, $enc?$enc:'UTF-8');
-		return mb_strlen($str, mb_detect_encoding($str));
+#		return mb_strlen($str, mb_detect_encoding($str));
+		return mb_strlen($str, 'UTF-8');
 	}
 	
 	private function extractLen(){

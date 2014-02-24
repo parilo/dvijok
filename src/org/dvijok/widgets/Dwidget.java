@@ -41,7 +41,13 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -95,6 +101,7 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	private void init(String templUrl){
+		this.tmplUrl = templUrl;
 		loaded = false;
 		loadCounter = 0;
 		subDwidgetsLoadedL = new CustomEventListener(){
@@ -117,7 +124,7 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 		fakeContent.getElement().getStyle().setPosition(Position.ABSOLUTE);
 		fakeContent.getElement().getStyle().setDisplay(Display.NONE);
 		this.initWidget(fakeContent);
-		loadTmpl(templUrl);
+		loadTmpl(this.tmplUrl);
 	}
 	
 	private void loadTmpl(final String url){
@@ -254,6 +261,7 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	private void placeBackElementsToFakeContent(){
+//		if( loadingPanel == null ) return;
 		com.google.gwt.dom.client.Element parent = loadingPanel.getElement();
 		com.google.gwt.dom.client.Element prevel = null;
 		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
@@ -266,6 +274,7 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	private void removeElements(){
+//		if( fakeContent == null ) return;
 		com.google.gwt.dom.client.Element parent = fakeContent.getElement().getParentElement();
 		Iterator<com.google.gwt.dom.client.Element> i = elements.iterator();
 		while( i.hasNext() ){
@@ -275,6 +284,12 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 	}
 	
 	protected void changeTmpl(String url){
+		
+		if( !loaded ){
+			this.tmplUrl = url;
+			return;
+		}
+		
 		removeElements();
 		placeBackElementsToFakeContent();
 		loadCounter--;
@@ -296,8 +311,27 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 			return null;
 		}
 	}
-	
-	
+
+//	/**
+//	 * 
+//	 *	Event.sinkEvents(buttonElement, Event.ONCLICK);
+//     *	Event.setEventListener(buttonElement, new EventListener());
+//	 * 
+//	 */
+//	public void addEventListener(int eventBits, EventListener listener) {
+//		
+////		EventListener l = new EventListener() {
+////			@Override
+////			public void onBrowserEvent(Event event) {
+////				listener.customEventOccurred(new CustomEvent(event));
+////			}};
+//		
+//		for( com.google.gwt.dom.client.Element el : elements ){
+//			Event.sinkEvents(el, eventBits);
+//			Event.setEventListener(el, listener);
+//		}
+//		
+//	}
 	
 	
 	

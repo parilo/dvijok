@@ -19,8 +19,10 @@
 package org.dvijok.rpc.json;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Iterator;
 
+import org.dvijok.lib.Lib;
 import org.dvijok.rpc.DBArray;
 import org.dvijok.rpc.DBObject;
 import org.dvijok.rpc.RPCProto;
@@ -50,7 +52,15 @@ public class JSONProto implements RPCProto {
 			else if( val.isArray() != null ) ret.put(key, dbaDecode(val.isArray()));
 			else if( val.isBoolean() != null ) ret.put(key, val.isBoolean().booleanValue()?"1":"0");
 			else if( val.isNull() != null ) ret.put(key, "");
-			else if( val.isNumber() != null ) ret.put(key, ""+val.isNumber().doubleValue());
+			else if( val.isNumber() != null ){
+				double v = val.isNumber().doubleValue();
+				if( (v == Math.floor(v)) && !Double.isInfinite(v) ){
+					int vv = (int) v;
+					ret.put(key, ""+vv);
+				} else {
+					ret.put(key, ""+v);
+				}
+			}
 			else if( val.isString() != null ) ret.put(key, val.isString().stringValue());
 		}
 		
@@ -90,7 +100,15 @@ public class JSONProto implements RPCProto {
 			else if( val.isArray() != null ) ret.add(dbaDecode(val.isArray()));
 			else if( val.isBoolean() != null ) ret.add(val.isBoolean().booleanValue()?"1":"0");
 			else if( val.isNull() != null ) ret.add("");
-			else if( val.isNumber() != null ) ret.add(""+val.isNumber().doubleValue());
+			else if( val.isNumber() != null ){
+				double v = val.isNumber().doubleValue();
+				if( (v == Math.floor(v)) && !Double.isInfinite(v) ){
+					int vv = (int) v;
+					ret.add(""+vv);
+				} else {
+					ret.add(""+v);
+				}
+			}
 			else if( val.isString() != null ) ret.add(val.isString().stringValue());
 		}
 		return ret;

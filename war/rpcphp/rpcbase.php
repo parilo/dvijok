@@ -65,7 +65,7 @@ class RPC {
 		
 		} catch ( DBException $ex ){
 			$ret['result'] = '->'.$ex->getValue().'<- '.$ex->getTraceAsString();
-			echo $proto->hashMapCode($ret)."\n";
+			echo RPC::getProto()->dboCode($ret)."\n";
 		}
 
 	}

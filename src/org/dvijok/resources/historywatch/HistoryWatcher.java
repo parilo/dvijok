@@ -37,11 +37,13 @@ public class HistoryWatcher {
 
 	private HashMap<String, CustomEventTool> historyETs;
 	private HashMap<String, CustomEventTool> historyBeginsWithETs;
+	private CustomEventTool historyElseET;
 	private ArrayList<String> historyOfTokens;
 	
 	public HistoryWatcher(){
 		historyETs = new HashMap<String, CustomEventTool>();
 		historyBeginsWithETs = new HashMap<String, CustomEventTool>();
+		historyElseET = new CustomEventTool();
 		historyOfTokens = new ArrayList<String>();
 		initHistoryWatching();
 	}
@@ -71,6 +73,8 @@ public class HistoryWatcher {
 					}
 				}
 				
+				historyElseET.invokeListeners(token);
+				
 			}});
 		
 	}
@@ -99,6 +103,14 @@ public class HistoryWatcher {
 	
 	public void removeHistoryWatchBeginsWith(String key, CustomEventListener listener){
 		historyBeginsWithETs.get(key).removeCustomEventListener(listener);
+	}
+
+	public void addHistoryElseWatch(CustomEventListener listener){
+		historyElseET.addCustomEventListener(listener);
+	}
+	
+	public void removeHistoryWatch(CustomEventListener listener){
+		historyElseET.removeCustomEventListener(listener);
 	}
 	
 	public String getTokenPriorTo(List<String> tokens){
