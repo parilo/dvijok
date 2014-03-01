@@ -18,26 +18,12 @@
 
 package org.dvijok.auth.socauth;
 
-import java.util.ArrayList;
-
 import org.dvijok.event.CustomEventListener;
 import org.dvijok.event.CustomEventTool;
 import org.dvijok.handlers.RequestHandler;
 import org.dvijok.lib.Lib;
-import org.dvijok.lib.md5;
 import org.dvijok.resources.Resources;
 import org.dvijok.rpc.DBObject;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 
 public class VkAuth {
 
@@ -101,8 +87,8 @@ public class VkAuth {
 //						"&display=page"+
 //						"&response_type=token";
 				
-				testredirect(redir);
-//				Lib.redirect(redir);
+//				testredirect(redir);
+				Lib.redirect(redir);
 			}
 
 			@Override

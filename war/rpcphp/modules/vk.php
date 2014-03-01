@@ -73,8 +73,8 @@ class vk {
 			global $config;
 			$acctokenurl = "https://oauth.vk.com/access_token?client_id=".$config['appid']."&client_secret=".$config['appsecret']."&code=".$code;
 			
-// 			$resp = curlGetContent($acctokenurl);
-			$resp = '{"access_token":"533bacf01e11f55b536a565b57531ac114461ae8736d6506a3", "expires_in":43200, "user_id":6492}';
+			$resp = curlGetContent($acctokenurl);
+// 			$resp = '{"access_token":"533bacf01e11f55b536a565b57531ac114461ae8736d6506a3", "expires_in":43200, "user_id":6492}';
 			$resp = json_decode($resp, true);
 			
 			if( isset($resp['error']) )
@@ -88,8 +88,8 @@ class vk {
 				
 				//getting info from http://vk.com/developers.php?oid=-1&p=users.get
 				$infourl = 'https://api.vk.com/method/users.get?uids='.$resp['user_id'].'&fields=first_name,last_name,photo_rec&access_token='.$resp['access_token'];
-// 				$inforesp = curlGetContent($infourl);
-				$inforesp = '{"response":[{"uid":"1","first_name":"Павел","last_name":"Дуров","photo_rec":"http:\/\/cs109.vkontakte.ru\/u00001\/c_df2abf56.jpg"}]}';
+				$inforesp = curlGetContent($infourl);
+// 				$inforesp = '{"response":[{"uid":"1","first_name":"Павел","last_name":"Дуров","photo_rec":"http:\/\/cs109.vkontakte.ru\/u00001\/c_df2abf56.jpg"}]}';
 				$inforesp = json_decode($inforesp, true);
 				$inforesp = $inforesp['response'][0];
 				
