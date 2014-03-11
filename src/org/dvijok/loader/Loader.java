@@ -19,6 +19,7 @@
 package org.dvijok.loader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.dvijok.event.CustomEventListener;
@@ -28,7 +29,9 @@ import org.dvijok.rpc.DBObject;
 import org.dvijok.widgets.Dwidget;
 import org.dvijok.widgets.SubPanel;
 
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -41,9 +44,11 @@ import com.google.gwt.user.client.ui.Widget;
 public class Loader {
 
 	private DwidgetFactory factory;
+	private HashMap<Dwidget, DBObject> loadingDwidetsDataAttributes;
 	
 	public Loader(){
 		this.factory = new DwidgetFactory();
+		loadingDwidetsDataAttributes = new HashMap<Dwidget, DBObject>();
 	}
 	
 	public DwidgetFactory getDwidgetFactory(){
@@ -64,6 +69,7 @@ public class Loader {
 				w.setAttribute("loading", "true");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+				dw.setDataAttributes(readDataAttributes(w));
 				w.getParentElement().replaceChild(dw.getElement(), w);
 				dw._afterLoadedByLoader();
 			}
@@ -86,6 +92,7 @@ public class Loader {
 				w.setAttribute("loading", "true");
 				String name = w.getAttribute("name");
 				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+				dw.setDataAttributes(readDataAttributes(w));
 				dwidgets.add(dw);
 //				dw.beforeAttach();
 				html.addAndReplaceElement(dw, w);
@@ -143,5 +150,29 @@ public class Loader {
 		}
 		return foundAL;
 	}
+	
+	// http://stackoverflow.com/questions/5126429/in-gwt-how-can-i-get-all-attributes-of-an-element-in-the-html-dom
+	private DBObject readDataAttributes(com.google.gwt.dom.client.Element el){
+		
+		DBObject dataAttributes = new DBObject();
+		
+		JsArray<Node> attributes = getAttributes(el);
+		for (int i = 0; i < attributes.length(); i ++) {
+		    Node node = attributes.get(i);
+		    String attributeName = node.getNodeName();
+
+		    if( attributeName.length() > 4 )
+		    if( attributeName.substring(0, 5).equals("data-") ){
+		    	dataAttributes.put(attributeName, node.getNodeValue());
+		    }
+		    
+		}
+		
+		return dataAttributes;
+	}
+	
+	public static native JsArray<Node> getAttributes(com.google.gwt.dom.client.Element elem) /*-{
+	   return elem.attributes;
+	}-*/;
 	
 }

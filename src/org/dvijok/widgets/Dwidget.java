@@ -78,6 +78,8 @@ public abstract class Dwidget extends /*ComplexPanel*/Composite {
 		this.init(templUrl);
 	}
 	
+	public void setDataAttributes(DBObject dataAttributes) {}
+
 	private Dwidget getMe(){ return this; }
 	
 	protected abstract void initInternals();
