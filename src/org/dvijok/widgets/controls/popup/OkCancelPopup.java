@@ -27,6 +27,18 @@ public class OkCancelPopup {
 	private OkCancelFormForPopup form;
 	
 	public OkCancelPopup(OkCancelFormForPopup form){
+		initPopup(form);
+	}
+	
+	public OkCancelPopup(String question, String okTitle, String cancelTitle){
+		OkCancelForm f = new OkCancelForm();
+		f.setHTML(question);
+		f.setOkTitle(okTitle);
+		f.setCancelTitle(cancelTitle);
+		initPopup(f);
+	}
+	
+	private void initPopup(OkCancelFormForPopup form){
 		popup = new Popup();
 		this.form = form;
 		popup.setContent(form.asWidget());

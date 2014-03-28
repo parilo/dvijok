@@ -147,4 +147,8 @@ public class Lib {
 	public static void printStackTrace(){
 		new Throwable().printStackTrace();		
 	}
+	
+	public static void reloadPage(){
+		Window.Location.reload();
+	}
 }
