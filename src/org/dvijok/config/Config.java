@@ -36,6 +36,9 @@ public class Config implements RPCConfig {
 	public String rpcUrl;
 	public String rpcType;
 	public Date sessionExpTime;
+	
+	public String vkauthAppid;
+	
 	public JSONProto jsonProto;
 	
 	public Config(){
@@ -70,6 +73,7 @@ public class Config implements RPCConfig {
 		rpcType = dbo.getString("rpcType");
 		rpcUrl = dbo.getString("rpcUrl");
 		sessionExpTime = new Date(dbo.getLong("sessionExpirationTime"));
+		vkauthAppid = dbo.getString("vkauthAppid");
 	}
 
 	public String getRpcUrl() {

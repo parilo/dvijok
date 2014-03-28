@@ -34,7 +34,7 @@ public class VkAuth {
 	private CustomEventTool cancelET;
 	
 	public VkAuth(){
-		this.appid = "2977906";
+		this.appid = Resources.getInstance().conf.vkauthAppid;
 		this.settings = "notify";
 
 		checkCode();
