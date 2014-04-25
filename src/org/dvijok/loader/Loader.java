@@ -62,16 +62,20 @@ public class Loader {
 			
 			Document doc = RootPanel.get().getElement().getOwnerDocument();
 			
-			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(doc, "dvdwidget").iterator();				
+//			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(doc, "dvdwidget").iterator();				
+			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(doc, "div").iterator();				
 			while( i.hasNext() ){
 
 				com.google.gwt.dom.client.Element w = i.next();
-				w.setAttribute("loading", "true");
-				String name = w.getAttribute("name");
-				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
-				dw.setDataAttributes(readDataAttributes(w));
-				w.getParentElement().replaceChild(dw.getElement(), w);
-				dw._afterLoadedByLoader();
+				if( w.hasAttribute("data-dvijok-dwidget-name") ){
+					w.setAttribute("loading", "true");
+//					String name = w.getAttribute("name");
+					String name = w.getAttribute("data-dvijok-dwidget-name");
+					Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+					dw.setDataAttributes(readDataAttributes(w));
+					w.getParentElement().replaceChild(dw.getElement(), w);
+					dw._afterLoadedByLoader();
+				}
 			}
 		
 	}
@@ -85,18 +89,22 @@ public class Loader {
 
 			ArrayList<Dwidget> dwidgets = new ArrayList<Dwidget>();
 			
-			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "dvdwidget").iterator();				
+//			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "dvdwidget").iterator();				
+			Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "div").iterator();				
 			while( i.hasNext() ){
 			
 				com.google.gwt.dom.client.Element w = i.next();
-				w.setAttribute("loading", "true");
-				String name = w.getAttribute("name");
-				Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
-				dw.setDataAttributes(readDataAttributes(w));
-				dwidgets.add(dw);
+				if( w.hasAttribute("data-dvijok-dwidget-name") ){
+					w.setAttribute("loading", "true");
+//					String name = w.getAttribute("name");
+					String name = w.getAttribute("data-dvijok-dwidget-name");
+					Dwidget dw = this.factory.getDwidget(name, new SubPanel(w));
+					dw.setDataAttributes(readDataAttributes(w));
+					dwidgets.add(dw);
 //				dw.beforeAttach();
-				html.addAndReplaceElement(dw, w);
+					html.addAndReplaceElement(dw, w);
 //				dw.afterAttach();
+				}
 				
 			}
 			
@@ -114,17 +122,21 @@ public class Loader {
 		ArrayList<Dwidget> dwidgets = new ArrayList<Dwidget>();
 		
 		// NodeList is live. So we need store found elements in ArrayList and process them after
-		Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "dvsubwidget").iterator();
+//		Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "dvsubwidget").iterator();
+		Iterator<com.google.gwt.dom.client.Element> i = getElementsByTagName(html, "div").iterator();
 		while( i.hasNext() ){
 				com.google.gwt.dom.client.Element w = i.next();
-				String name = w.getAttribute("name");
-				w.setInnerHTML("");
-				Widget sw = subWidgetsFactory.getSubWidget(name);
-				if( sw instanceof Dwidget ) dwidgets.add((Dwidget)sw);
-				if( sw == null ) sw = new Label("Loader: Don't know sub dwidget with name: ->"+name+"<-");
-				String replid = "dw"+Resources.getInstance().globalseq++;
-				w.setId(replid);
-				html.addAndReplaceElement(sw, replid);
+				if( w.hasAttribute("data-dvijok-subwidget-name") ){
+//					String name = w.getAttribute("name");
+					String name = w.getAttribute("data-dvijok-subwidget-name");
+					w.setInnerHTML("");
+					Widget sw = subWidgetsFactory.getSubWidget(name);
+					if( sw instanceof Dwidget ) dwidgets.add((Dwidget)sw);
+					if( sw == null ) sw = new Label("Loader: Don't know sub dwidget with name: ->"+name+"<-");
+					String replid = "dw"+Resources.getInstance().globalseq++;
+					w.setId(replid);
+					html.addAndReplaceElement(sw, replid);
+				}
 		}
 
 		return dwidgets;
