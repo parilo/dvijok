@@ -1,6 +1,6 @@
 <?php
 
-require_once 'subpanels_dwidget.php';
+require_once 'dwidget.php';
 
 class Loader {
 
@@ -31,14 +31,15 @@ class Loader {
 	do{
 	    $this->found = false;
 	    $cont = preg_replace_callback(
-		'/<div[\w\d\s="\'_]*id=["\']dvijokw["\'][\w\d\s="\'_]*name=["\']([\w\d_]+)["\'][\w\d\s="\'_]*>[^<]*<\/div>/',
+//		'/<div[\w\d\s="\'_]*id=["\']dvijokw["\'][\w\d\s="\'_]*name=["\']([\w\d_]+)["\'][\w\d\s="\'_]*>[^<]*<\/div>/',
+		'/<div[\w\d\s-="\'_]*data-dvijok-dwidget-name=["\']([\w\d_]+)["\'][\w\d\s-="\'_]*>[^<]*<\/div>/',
 		array($this, 'load_dwidget'),
 		$cont);
 	
-	    $cont = preg_replace_callback(
-		'/<div[\w\d\s="\'_]*name=["\']([\w\d_]+)["\'][\w\d\s="\'_]*id=["\']dvijokw["\'][\w\d\s="\'_]*>[^<]*<\/div>/',
-		array($this, 'load_dwidget'),
-		$cont);
+//	    $cont = preg_replace_callback(
+//		'/<div[\w\d\s="\'_]*name=["\']([\w\d_]+)["\'][\w\d\s="\'_]*id=["\']dvijokw["\'][\w\d\s="\'_]*>[^<]*<\/div>/',
+//		array($this, 'load_dwidget'),
+//		$cont);
 	
 	} while($this->found == true);
 	
@@ -48,11 +49,31 @@ class Loader {
     public function load_dwidget($matches){
 	$this->found = true;
 	$name = $matches[1];
-	$div = str_replace('dvijokw', 'dvijokw_', $matches[0]);
+	$div = str_replace('data-dvijok-dwidget-name', 'data-dvijok-dwidget-name_', $matches[0]);
 	if( class_exists($name) ){
 	    $dwidget = new $name();
-	    return preg_replace('/>[^<]*</', '>'.$dwidget->getHTML().'<', $div);
-	} else return $div;
+		$dwidget->setHTMLTagAttributes($this->readAttributes($matches[0]));
+	    return $dwidget->getHTML();
+	} else {
+error_log(print_r($matches, true));
+		return $div;
+	}
+    }
+    
+    private function readAttributes($htmltag){
+    	
+    	preg_match_all(
+    	"/[\s<>]*([^\s<>]*)=['\"]*([^\s<>'\"]*)['\"]*[\s<>]*/",
+    	$htmltag,
+    	$out, PREG_PATTERN_ORDER);
+    	
+    	$attrs = array();
+		for( $i=0; $i<count($out[1]); $i++ ){
+			$attrs[$out[1][$i]] = $out[2][$i]; 
+		}
+				
+		return $attrs;
+		
     }
 
 }

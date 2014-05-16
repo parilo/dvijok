@@ -4,7 +4,7 @@
 #set_include_path($incl . PATH_SEPARATOR . './site/dvrpc/');
 
 require_once 'config.php';
-require_once 'external/estate.php';
+#require_once 'external/estate.php';
 require_once "db/db.php";
 require_once "db/dbinit.php";
 require_once 'config.def.php';
@@ -20,9 +20,12 @@ $db = getDB();
 
 global $state;
 $state['db'] = $db;
+$state['page'] = $_GET['page'];
+$state['key'] = $_GET['key'];
+$state['val'] = $_GET['val'];
 
-$estate = new estate();
-$state['estate'] = $estate;
+#$estate = new estate();
+#$state['estate'] = $estate;
 
 $sess['sid'] = 'hash-bang';
 $sess['uid'] = 'guest';
